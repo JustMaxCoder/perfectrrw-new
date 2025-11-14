@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs"
 import { ArrowLeft, ShoppingCart, Minus, Plus } from "lucide-react";
 import { useState } from "react";
 import type { Product } from "../../../shared/schema";
+import ProductReviews from "../components/ProductReviews";
 
 export default function ProductDetail({
   onAddToCart,
@@ -19,6 +20,9 @@ export default function ProductDetail({
   const { data: product, isLoading } = useQuery<Product>({
     queryKey: [`/api/products/${id}`],
   });
+
+  // Extract productId for the reviews component
+  const productId = id ?? "";
 
   if (isLoading) {
     return (
@@ -63,8 +67,8 @@ export default function ProductDetail({
           {/* Product Image */}
           <div className="bg-white rounded-lg shadow-md p-3 sm:p-4 md:p-8">
             <div className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-              <img 
-                src={product.image} 
+              <img
+                src={product.image}
                 alt={product.name}
                 className="w-full h-full object-cover"
                 onError={(e) => {
@@ -84,7 +88,7 @@ export default function ProductDetail({
             <Badge className="mb-2 sm:mb-3 md:mb-4 text-[10px] sm:text-xs md:text-sm" data-testid="badge-category">
               {product.category}
             </Badge>
-            
+
             <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-2 sm:mb-3 md:mb-4" data-testid="text-product-name">
               {product.name}
             </h1>
@@ -178,13 +182,13 @@ export default function ProductDetail({
                 Specyfikacja
               </TabsTrigger>
             </TabsList>
-            
+
             <TabsContent value="description" className="pt-4 sm:pt-6">
               <p className="text-sm sm:text-base leading-relaxed" data-testid="text-description">
                 {product.description}
               </p>
             </TabsContent>
-            
+
             <TabsContent value="specifications" className="pt-4 sm:pt-6">
               <div className="space-y-2 sm:space-y-3">
                 <div className="flex flex-col sm:flex-row border-b pb-2 gap-1 sm:gap-0">
@@ -202,6 +206,11 @@ export default function ProductDetail({
               </div>
             </TabsContent>
           </Tabs>
+        </div>
+
+        {/* Reviews Section */}
+        <div className="mt-8">
+          <ProductReviews productId={productId} />
         </div>
       </div>
     </div>

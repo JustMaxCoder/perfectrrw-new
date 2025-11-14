@@ -382,6 +382,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
         ...validatedData,
         status: "pending",
       });
+
+      // Send email notification (log to console for now)
+      console.log("\n=== ORDER CONFIRMATION EMAIL ===");
+      console.log(`To: ${order.customerEmail}`);
+      console.log(`Subject: Potwierdzenie zamówienia #${order.id.slice(0, 8)}`);
+      console.log(`\nSzanowny/a ${order.customerName},`);
+      console.log(`\nDziękujemy za złożenie zamówienia w BHP Perfect!`);
+      console.log(`\nNumer zamówienia: ${order.id}`);
+      console.log(`Kwota: ${order.total} zł`);
+      console.log(`Adres dostawy: ${order.customerAddress}`);
+      console.log(`Status: Oczekuje na realizację`);
+      console.log("\nSkontaktujemy się z Tobą wkrótce.");
+      console.log("================================\n");
+
       res.status(201).json(order);
     } catch {
       res.status(400).json({ error: "Invalid order data" });
@@ -597,6 +611,75 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(setting);
     } catch (error) {
       res.status(400).json({ error: "Failed to update setting" });
+    }
+  });
+
+  // Reviews routes
+  app.get("/api/products/:productId/reviews", async (req, res) => {
+    try {
+      const reviews = await storage.getProductReviews(req.params.productId);
+      res.json(reviews);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch reviews" });
+    }
+  });
+
+  app.post("/api/products/:productId/reviews", async (req, res) => {
+    try {
+      const review = await storage.createReview({
+        productId: req.params.productId,
+        userId: req.body.userId || null,
+        customerName: req.body.customerName,
+        rating: parseInt(req.body.rating),
+        comment: req.body.comment,
+      });
+      res.status(201).json(review);
+    } catch (error) {
+      res.status(400).json({ error: "Failed to create review" });
+    }
+  });
+
+  app.delete("/api/reviews/:id", authMiddleware, adminMiddleware, async (req, res) => {
+    try {
+      await storage.deleteReview(req.params.id);
+      res.json({ success: true });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to delete review" });
+    }
+  });
+
+  // Wishlist routes
+  app.get("/api/wishlist", authMiddleware, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      const wishlist = await storage.getUserWishlist(user.id);
+      const productIds = wishlist.map((w: any) => w.productId);
+      const products = await Promise.all(
+        productIds.map((id: string) => storage.getProduct(id))
+      );
+      res.json(products.filter(Boolean));
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch wishlist" });
+    }
+  });
+
+  app.post("/api/wishlist/:productId", authMiddleware, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      const item = await storage.addToWishlist(user.id, req.params.productId);
+      res.status(201).json(item);
+    } catch (error) {
+      res.status(400).json({ error: "Failed to add to wishlist" });
+    }
+  });
+
+  app.delete("/api/wishlist/:productId", authMiddleware, async (req, res) => {
+    try {
+      const user = (req as any).user;
+      await storage.removeFromWishlist(user.id, req.params.productId);
+      res.json({ success: true });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to remove from wishlist" });
     }
   });
 

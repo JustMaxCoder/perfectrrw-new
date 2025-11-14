@@ -1,4 +1,3 @@
-
 import { Link, useLocation } from "wouter";
 import { ShoppingCart, Menu, X } from "lucide-react";
 import { Button } from "./ui/button";
@@ -102,7 +101,7 @@ export function Header({ cartItemCount = 0 }: { cartItemCount?: number }) {
             <div className="px-4 mb-4">
               <SearchBar />
             </div>
-            
+
             {navItems.map((item) => (
               <Link
                 key={item.href}

@@ -39,6 +39,16 @@ export interface IStorage {
   getSetting(key: string): Promise<Settings | undefined>;
   setSetting(key: string, value: string): Promise<Settings>;
   getAllSettings(): Promise<Settings[]>;
+
+  // Reviews
+  createReview(data: any): Promise<any>;
+  getProductReviews(productId: string): Promise<any[]>;
+  deleteReview(id: string): Promise<void>;
+
+  // Wishlist
+  addToWishlist(userId: string, productId: string): Promise<any>;
+  getUserWishlist(userId: string): Promise<any[]>;
+  removeFromWishlist(userId: string, productId: string): Promise<void>;
 }
 
 export class MemStorage implements IStorage {
@@ -47,6 +57,8 @@ export class MemStorage implements IStorage {
   private orders: Map<string, Order>;
   private gallery: Map<string, Gallery>;
   private settings: Map<string, Settings>;
+  private reviews: Map<string, any>;
+  private wishlist: Map<string, any>;
 
   constructor() {
     this.users = new Map();
@@ -54,6 +66,8 @@ export class MemStorage implements IStorage {
     this.orders = new Map();
     this.gallery = new Map();
     this.settings = new Map();
+    this.reviews = new Map();
+    this.wishlist = new Map();
     this.seedData();
     this.seedSettings();
     this.seedGallery();
@@ -198,9 +212,9 @@ export class MemStorage implements IStorage {
 
     sampleProducts.forEach((product) => {
       const id = randomUUID();
-      this.products.set(id, { 
-        ...product, 
-        id, 
+      this.products.set(id, {
+        ...product,
+        id,
         stock: product.stock ?? 0,
         images: [],
         available: true,
@@ -284,7 +298,7 @@ export class MemStorage implements IStorage {
   async updateProduct(id: string, productUpdate: Partial<InsertProduct>): Promise<Product | undefined> {
     const existing = this.products.get(id);
     if (!existing) return undefined;
-    
+
     const updated: Product = {
       ...existing,
       ...productUpdate,
@@ -333,7 +347,7 @@ export class MemStorage implements IStorage {
       this.settings.set(existing.id, existing);
       return existing;
     }
-    
+
     const id = randomUUID();
     const setting: Settings = { id, key, value };
     this.settings.set(id, setting);
@@ -385,6 +399,54 @@ export class MemStorage implements IStorage {
       const uploadedAt = new Date().toISOString();
       this.gallery.set(id, { id, ...image, uploadedAt });
     });
+  }
+
+  // Reviews
+  async createReview(data: any) {
+    const review = {
+      id: randomUUID(),
+      ...data,
+      createdAt: new Date().toISOString(),
+    };
+    this.reviews.set(review.id, review);
+    return review;
+  }
+
+  async getProductReviews(productId: string) {
+    return Array.from(this.reviews.values()).filter(
+      (review) => review.productId === productId
+    );
+  }
+
+  async deleteReview(id: string) {
+    this.reviews.delete(id);
+  }
+
+  // Wishlist
+  async addToWishlist(userId: string, productId: string) {
+    const item = {
+      id: randomUUID(),
+      userId,
+      productId,
+      createdAt: new Date().toISOString(),
+    };
+    this.wishlist.set(item.id, item);
+    return item;
+  }
+
+  async getUserWishlist(userId: string) {
+    return Array.from(this.wishlist.values()).filter(
+      (item) => item.userId === userId
+    );
+  }
+
+  async removeFromWishlist(userId: string, productId: string) {
+    const item = Array.from(this.wishlist.values()).find(
+      (w) => w.userId === userId && w.productId === productId
+    );
+    if (item) {
+      this.wishlist.delete(item.id);
+    }
   }
 }
 

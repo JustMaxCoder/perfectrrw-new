@@ -52,6 +52,23 @@ export const settings = pgTable("settings", {
   value: text("value").notNull(),
 });
 
+export const reviews = pgTable("reviews", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  productId: varchar("product_id").notNull(),
+  userId: varchar("user_id"),
+  customerName: text("customer_name").notNull(),
+  rating: integer("rating").notNull(),
+  comment: text("comment").notNull(),
+  createdAt: text("created_at").notNull(),
+});
+
+export const wishlist = pgTable("wishlist", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: varchar("user_id").notNull(),
+  productId: varchar("product_id").notNull(),
+  createdAt: text("created_at").notNull(),
+});
+
 // Insert schemas
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
@@ -74,6 +91,16 @@ export const insertGallerySchema = createInsertSchema(gallery).omit({
 
 export const insertSettingsSchema = createInsertSchema(settings).omit({
   id: true,
+});
+
+export const insertReviewSchema = createInsertSchema(reviews).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertWishlistSchema = createInsertSchema(wishlist).omit({
+  id: true,
+  createdAt: true,
 });
 
 // Auth schemas
@@ -108,6 +135,10 @@ export type InsertGallery = z.infer<typeof insertGallerySchema>;
 export type Gallery = typeof gallery.$inferSelect;
 export type InsertSettings = z.infer<typeof insertSettingsSchema>;
 export type Settings = typeof settings.$inferSelect;
+export type InsertReview = z.infer<typeof insertReviewSchema>;
+export type Review = typeof reviews.$inferSelect;
+export type InsertWishlist = z.infer<typeof insertWishlistSchema>;
+export type WishlistItem = typeof wishlist.$inferSelect;
 export type LoginData = z.infer<typeof loginSchema>;
 export type RegisterData = z.infer<typeof registerSchema>;
 export type CartItem = z.infer<typeof cartItemSchema>;

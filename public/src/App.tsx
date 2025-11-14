@@ -18,6 +18,7 @@ import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import AdminLogin from "./pages/AdminLogin";
 import AdminPanel from "./pages/AdminPanel";
+import OrderHistory from "./pages/OrderHistory";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Gallery from "./pages/Gallery";
@@ -112,9 +113,7 @@ function Router() {
           />
           <Route path="/admin/login" component={AdminLogin} />
           <Route path="/admin" component={AdminPanel} />
-          <Route path="/o-nas" component={About} />
-          <Route path="/kontakt" component={Contact} />
-          <Route path="/galeria" component={Gallery} />
+          <Route path="/zamowienia" component={OrderHistory} />
           <Route component={NotFound} />
         </Switch>
       </main>
