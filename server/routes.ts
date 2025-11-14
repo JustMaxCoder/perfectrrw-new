@@ -113,6 +113,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get("/api/products/search", async (req, res) => {
+    try {
+      const query = req.query.q as string;
+      if (!query || query.trim() === '') {
+        return res.json([]);
+      }
+
+      const allProducts = await storage.getAllProducts();
+      const searchTerm = query.toLowerCase().trim();
+      
+      const filtered = allProducts.filter(product => 
+        product.name.toLowerCase().includes(searchTerm) ||
+        product.description.toLowerCase().includes(searchTerm) ||
+        product.category.toLowerCase().includes(searchTerm)
+      );
+
+      res.json(filtered.slice(0, 8));
+    } catch {
+      res.status(500).json({ error: "Failed to search products" });
+    }
+  });
+
   app.get("/api/products/:id", async (req, res) => {
     try {
       const product = await storage.getProduct(req.params.id);

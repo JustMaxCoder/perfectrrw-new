@@ -3,6 +3,7 @@ import { Link, useLocation } from "wouter";
 import { ShoppingCart, Menu, X } from "lucide-react";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
+import { SearchBar } from "./SearchBar";
 import { useState } from "react";
 
 export function Header({ cartItemCount = 0 }: { cartItemCount?: number }) {
@@ -52,6 +53,11 @@ export function Header({ cartItemCount = 0 }: { cartItemCount?: number }) {
             ))}
           </nav>
 
+          {/* Search Bar - Desktop */}
+          <div className="hidden md:block flex-1 max-w-md mx-4">
+            <SearchBar />
+          </div>
+
           {/* Cart & Mobile Menu */}
           <div className="flex items-center gap-2">
             <Link href="/koszyk" data-testid="link-cart">
@@ -92,6 +98,11 @@ export function Header({ cartItemCount = 0 }: { cartItemCount?: number }) {
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
           <nav className="md:hidden py-4 border-t border-white/10 max-h-[calc(100vh-4rem)] overflow-y-auto">
+            {/* Mobile Search */}
+            <div className="px-4 mb-4">
+              <SearchBar />
+            </div>
+            
             {navItems.map((item) => (
               <Link
                 key={item.href}
