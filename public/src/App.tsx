@@ -19,6 +19,7 @@ import Checkout from "./pages/Checkout";
 import AdminLogin from "./pages/AdminLogin";
 import AdminPanel from "./pages/AdminPanel";
 import OrderHistory from "./pages/OrderHistory";
+import TrackOrder from "./pages/TrackOrder";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Gallery from "./pages/Gallery";
@@ -114,6 +115,7 @@ function Router() {
           <Route path="/admin/login" component={AdminLogin} />
           <Route path="/admin" component={AdminPanel} />
           <Route path="/zamowienia" component={OrderHistory} />
+          <Route path="/sledzenie" component={TrackOrder} />
           <Route component={NotFound} />
         </Switch>
       </main>

@@ -82,17 +82,30 @@ export default function Checkout({
         <h1 className="text-4xl font-bold mb-4" data-testid="text-order-success">
           Zamówienie złożone!
         </h1>
-        <p className="text-muted-foreground text-lg mb-8 text-center max-w-md">
+        <p className="text-muted-foreground text-lg mb-4 text-center max-w-md">
           Dziękujemy za zakupy. Potwierdzenie zostało wysłane na adres {formData.email}
         </p>
-        <Button
-          size="lg"
-          className="bg-primary text-primary-foreground"
-          onClick={() => setLocation("/")}
-          data-testid="button-back-home"
-        >
-          Wróć na stronę główną
-        </Button>
+        <p className="text-sm text-muted-foreground mb-8 text-center">
+          Możesz śledzić status zamówienia na stronie "Śledź zamówienie"
+        </p>
+        <div className="flex flex-col sm:flex-row gap-3">
+          <Button
+            size="lg"
+            className="bg-primary text-primary-foreground"
+            onClick={() => setLocation("/sledzenie")}
+            data-testid="button-track-order"
+          >
+            Śledź zamówienie
+          </Button>
+          <Button
+            size="lg"
+            variant="outline"
+            onClick={() => setLocation("/")}
+            data-testid="button-back-home"
+          >
+            Wróć na stronę główną
+          </Button>
+        </div>
       </div>
     );
   }

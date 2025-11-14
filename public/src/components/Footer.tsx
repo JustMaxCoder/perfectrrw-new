@@ -48,6 +48,11 @@ export function Footer() {
                   Kontakt
                 </Link>
               </li>
+              <li>
+                <Link href="/sledzenie" className="text-gray-400 hover:text-primary transition-colors text-xs inline-block" data-testid="link-footer-track">
+                  Śledź zamówienie
+                </Link>
+              </li>
             </ul>
           </div>
 

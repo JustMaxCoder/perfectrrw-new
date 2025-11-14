@@ -50,6 +50,20 @@ export function Header({ cartItemCount = 0 }: { cartItemCount?: number }) {
                 )}
               </Link>
             ))}
+            <Link
+                href="/kontakt"
+                className="text-white hover:text-primary transition-colors text-sm font-medium"
+                data-testid="link-contact"
+              >
+                Kontakt
+              </Link>
+              <Link
+                href="/sledzenie"
+                className="text-white hover:text-primary transition-colors text-sm font-medium"
+                data-testid="link-track-order"
+              >
+                Śledź zamówienie
+              </Link>
           </nav>
 
           {/* Search Bar - Desktop */}
@@ -117,6 +131,20 @@ export function Header({ cartItemCount = 0 }: { cartItemCount?: number }) {
                 {item.label}
               </Link>
             ))}
+            <Link
+                href="/kontakt"
+                className="text-white hover:text-primary transition-colors text-sm font-medium"
+                data-testid="link-contact"
+              >
+                Kontakt
+              </Link>
+              <Link
+                href="/sledzenie"
+                className="text-white hover:text-primary transition-colors text-sm font-medium"
+                data-testid="link-track-order"
+              >
+                Śledź zamówienie
+              </Link>
           </nav>
         )}
       </div>
