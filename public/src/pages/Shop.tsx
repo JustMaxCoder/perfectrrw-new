@@ -110,40 +110,6 @@ export default function Shop({
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      {/* Hero Section with Breadcrumbs */}
-      <section className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white py-12 md:py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Breadcrumbs */}
-          <nav className="flex items-center gap-2 text-sm mb-6" aria-label="Breadcrumb">
-            <Link href="/" className="flex items-center gap-1 hover:text-primary transition-colors" data-testid="breadcrumb-home">
-              <Home className="h-4 w-4" />
-              <span>Strona główna</span>
-            </Link>
-            <ChevronRight className="h-4 w-4 text-gray-400" />
-            <span className="text-gray-300">Sklep</span>
-            {selectedCategory !== "all" && (
-              <>
-                <ChevronRight className="h-4 w-4 text-gray-400" />
-                <span className="text-primary font-medium">{currentCategoryLabel}</span>
-              </>
-            )}
-          </nav>
-
-          {/* Title and Description */}
-          <div className="space-y-4">
-            <h1 className="text-4xl md:text-5xl font-bold">
-              {selectedCategory === "all" ? "Wszystkie produkty" : currentCategoryLabel}
-            </h1>
-            <p className="text-lg text-gray-300 max-w-2xl">
-              {selectedCategory === "all" 
-                ? "Przeglądaj naszą pełną ofertę profesjonalnego sprzętu BHP" 
-                : `Sprawdź naszą ofertę w kategorii ${currentCategoryLabel.toLowerCase()}`
-              }
-            </p>
-          </div>
-        </div>
-      </section>
-
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Filters Sidebar */}
