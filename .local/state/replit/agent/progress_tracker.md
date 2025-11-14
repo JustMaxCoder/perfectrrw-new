@@ -8,6 +8,9 @@
 [x] 3. Verify the application runs successfully
 [x] 4. Complete the import migration
 [x] 5. All tasks verified and marked as done
+[x] 6. Removed "Potrzebujesz pomocy w wyborze?" section
+[x] 7. Removed newsletter section "Rabaty dla subskrybentów!"
+[x] 8. Changed footer background to black color
 
 ### Summary:
 - All npm dependencies installed successfully (762 packages)

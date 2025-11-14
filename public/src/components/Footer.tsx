@@ -1,54 +1,12 @@
 
 import { Link } from "wouter";
 import { Mail, Phone, MapPin, Facebook, Instagram, Youtube } from "lucide-react";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { useState } from "react";
-import { useToast } from "../hooks/use-toast";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
-  const [email, setEmail] = useState("");
-  const { toast } = useToast();
-
-  const handleNewsletterSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (email) {
-      toast({
-        title: "Dziękujemy!",
-        description: "Zapisałeś się do newslettera.",
-      });
-      setEmail("");
-    }
-  };
 
   return (
-    <footer className="bg-gray-900 text-white">
-      {/* Newsletter Section */}
-      <div className="bg-primary text-black">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="text-center md:text-left">
-              <h3 className="text-xl font-bold mb-1">Rabaty dla subskrybentów!</h3>
-              <p className="text-sm">Zapisz się na newsletter i otrzymuj najnowsze okazje!</p>
-            </div>
-            <form onSubmit={handleNewsletterSubmit} className="flex gap-2 w-full md:w-auto">
-              <Input
-                type="email"
-                placeholder="Twój e-mail"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="bg-white text-black border-none min-w-[250px]"
-                required
-              />
-              <Button type="submit" variant="secondary" className="bg-black text-white hover:bg-gray-800 whitespace-nowrap">
-                Zapisz się
-              </Button>
-            </form>
-          </div>
-        </div>
-      </div>
-
+    <footer className="bg-black text-white">
       {/* Main Footer Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">

@@ -156,27 +156,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA Section - Before Footer */}
-      <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-gradient-to-r from-primary via-yellow-400 to-primary relative overflow-hidden">
-        <div className="absolute inset-0 bg-black/10" />
-        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 text-center">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 text-black">
-            Potrzebujesz pomocy w wyborze?
-          </h2>
-          <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 text-gray-900 max-w-2xl mx-auto leading-relaxed">
-            Nasi specjaliści pomogą Ci dobrać odpowiednie środki ochrony osobistej.
-          </p>
-          <Link href="/kontakt" data-testid="button-cta-contact" className="inline-block w-full sm:w-auto">
-            <Button
-              size="lg"
-              className="w-full sm:w-auto bg-black text-white border-2 border-black hover:bg-white hover:text-black font-bold px-6 sm:px-8 md:px-10 py-4 sm:py-6 text-base sm:text-lg shadow-2xl transition-all duration-300 hover:scale-105"
-            >
-              Skontaktuj się z nami <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-          </Link>
-        </div>
-      </section>
-
       </div>
   );
 }
