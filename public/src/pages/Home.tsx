@@ -3,13 +3,12 @@ import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "../components/ui/button";
 import { MapComponent } from "../components/MapComponent";
-import { ArrowRight, Shield, ShoppingCart, ChevronLeft, ChevronRight, X, ChevronDown, ChevronUp } from "lucide-react";
+import { ArrowRight, Shield, ChevronLeft, ChevronRight, X } from "lucide-react";
 const bhpBackground = "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=1920&h=1080&fit=crop&q=80";
 import { BRANDING } from "../config/branding";
 import type { Product, Gallery } from "../../../shared/schema";
 import { useState } from "react";
 import { Dialog, DialogContent } from "../components/ui/dialog";
-import { ProductCard } from "../components/ProductCard";
 
 export default function Home() {
   const { data: products = [], isLoading } = useQuery<Product[]>({
@@ -22,7 +21,6 @@ export default function Home() {
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedImage, setSelectedImage] = useState<Gallery | null>(null);
-  const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev + 1) % Math.max(1, gallery.length));
@@ -30,11 +28,6 @@ export default function Home() {
 
   const prevImage = () => {
     setCurrentImageIndex((prev) => (prev - 1 + gallery.length) % Math.max(1, gallery.length));
-  };
-
-  const handleAddToCart = (product: Product) => {
-    // Można dodać logikę dodawania do koszyka tutaj
-    console.log('Dodano do koszyka:', product);
   };
 
   return (
@@ -134,13 +127,13 @@ export default function Home() {
                   const sampleProduct = categoryProducts[0];
 
                   return (
-                    <div
+                    <Link
                       key={category.slug}
-                      className="group cursor-pointer bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl border border-gray-100"
-                      onClick={() => setExpandedCategory(category.slug)}
+                      href={`/sklep?category=${category.slug}`}
                       data-testid={`category-${category.slug}`}
                     >
-                      <div className="relative h-56 md:h-64 overflow-hidden">
+                      <div className="group cursor-pointer bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl border border-gray-100">
+                        <div className="relative h-56 md:h-64 overflow-hidden">
                         {sampleProduct ? (
                           <img
                             src={sampleProduct.image}
@@ -152,68 +145,30 @@ export default function Home() {
                             <Shield className="w-16 h-16 text-white/80" />
                           </div>
                         )}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                      </div>
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                        </div>
 
-                      <div className="p-6">
-                        <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">
-                          {category.label}
-                        </h3>
-                        <p className="text-sm text-gray-600 mb-4 leading-relaxed">
-                          {category.description}
-                        </p>
-                        <div className="flex items-center justify-between">
-                          <span className="text-sm font-semibold text-primary">
-                            {categoryProducts.length} {categoryProducts.length === 1 ? 'produkt' : 'produktów'}
-                          </span>
-                          <div className="bg-primary/10 rounded-full px-3 py-1 text-xs font-bold text-gray-700">
-                            BHP
+                        <div className="p-6">
+                          <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">
+                            {category.label}
+                          </h3>
+                          <p className="text-sm text-gray-600 mb-4 leading-relaxed">
+                            {category.description}
+                          </p>
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm font-semibold text-primary">
+                              {categoryProducts.length} {categoryProducts.length === 1 ? 'produkt' : 'produktów'}
+                            </span>
+                            <div className="bg-primary/10 rounded-full px-3 py-1 text-xs font-bold text-gray-700">
+                              BHP
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </Link>
                   );
                 })}
               </div>
-
-              {/* Expanded Category Products */}
-              {expandedCategory && (
-                <div className="mt-12 space-y-6">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-2xl sm:text-3xl font-bold text-gray-900">
-                      {[
-                        { slug: "odziez-robocza", label: "Odzież robocza" },
-                        { slug: "obuwie", label: "Obuwie BHP" },
-                        { slug: "rekawice", label: "Rękawice" },
-                        { slug: "ochrona-glowy", label: "Ochrona głowy" }
-                      ].find(c => c.slug === expandedCategory)?.label}
-                    </h3>
-                    <Button
-                      variant="outline"
-                      onClick={() => setExpandedCategory(null)}
-                    >
-                      Zamknij <X className="ml-2 h-4 w-4" />
-                    </Button>
-                  </div>
-
-                  {products.filter(p => p.category === expandedCategory).length > 0 ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 animate-in slide-in-from-top-4 duration-300">
-                      {products.filter(p => p.category === expandedCategory).map((product) => (
-                        <ProductCard
-                          key={product.id}
-                          product={product}
-                          onAddToCart={handleAddToCart}
-                        />
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="text-center py-12 bg-gray-50 rounded-xl">
-                      <Shield className="mx-auto h-12 w-12 text-gray-400 mb-3" />
-                      <p className="text-gray-500">Brak produktów w tej kategorii</p>
-                    </div>
-                  )}
-                </div>
-              )}
             </>
           )}
         </div>

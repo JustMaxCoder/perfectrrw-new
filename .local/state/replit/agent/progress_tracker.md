@@ -16,6 +16,14 @@
 - Application verified working - Vite connected and API endpoints responding
 - Import migration completed successfully
 
+### Recent Updates (2025-11-14):
+- ✅ Modified category navigation on home page
+- ✅ Categories now link to /sklep page with category parameter
+- ✅ Removed expanded category display from home page
+- ✅ Cleaned up unused imports and code
+- ✅ All LSP diagnostics resolved
+- ✅ Workflow restarted and verified working
+
 ### Final Verification (2025-11-14 11:46):
 - ✅ Workflow status: RUNNING
 - ✅ Server logs: "Server running at http://127.0.0.1:5000"
