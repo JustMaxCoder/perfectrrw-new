@@ -12,7 +12,7 @@ import {
 } from "./ui/dropdown-menu";
 
 export function Header({ cartItemCount = 0 }: { cartItemCount?: number }) {
-  const [, setLocation] = useLocation();
+  const [location, setLocation] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
 
@@ -39,7 +39,7 @@ export function Header({ cartItemCount = 0 }: { cartItemCount?: number }) {
 
   const isActive = (href: string) => {
     if (href === "/") return location === href;
-    return location.startsWith(href);
+    return typeof location === 'string' && location.startsWith(href);
   };
 
   return (

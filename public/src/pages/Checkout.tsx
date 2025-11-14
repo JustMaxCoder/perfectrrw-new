@@ -17,7 +17,7 @@ export default function Checkout({
   cartItems: CartItem[];
   onClearCart: () => void;
 }) {
-  const [, setLocation] = useLocation();
+  const [currentLocation, setLocation] = useLocation();
   const { toast } = useToast();
   const [orderPlaced, setOrderPlaced] = useState(false);
 
@@ -248,7 +248,7 @@ export default function Checkout({
           <div className="lg:col-span-1">
             <Card className="p-6 sticky top-20">
               <h2 className="text-2xl font-bold mb-6">Twoje zamówienie</h2>
-              
+
               <div className="space-y-4 mb-6">
                 {cartItems.map((item) => (
                   <div key={item.productId} className="flex gap-3">

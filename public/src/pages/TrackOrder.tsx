@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card } from "../components/ui/card";
@@ -31,7 +30,8 @@ export default function TrackOrder() {
     enabled: searchTriggered,
   });
 
-  const foundOrder = orders?.find(o => 
+  const ordersArray = Array.isArray(orders) ? orders : [];
+  const foundOrder = ordersArray.find(o => 
     o.id.toLowerCase().includes(orderId.toLowerCase()) ||
     o.id.slice(0, 8).toLowerCase() === orderId.toLowerCase()
   );
@@ -195,7 +195,7 @@ export default function TrackOrder() {
                 {/* Order Details */}
                 <div className="space-y-4">
                   <h3 className="font-bold text-lg mb-3">Szczegóły zamówienia</h3>
-                  
+
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
                       <p className="text-muted-foreground">Klient</p>
