@@ -116,6 +116,9 @@ function Router() {
           <Route path="/admin" component={AdminPanel} />
           <Route path="/zamowienia" component={OrderHistory} />
           <Route path="/sledzenie" component={TrackOrder} />
+          <Route path="/o-nas" component={About} />
+          <Route path="/kontakt" component={Contact} />
+          <Route path="/galeria" component={Gallery} />
           <Route component={NotFound} />
         </Switch>
       </main>
