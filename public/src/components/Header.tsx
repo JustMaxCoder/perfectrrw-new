@@ -19,7 +19,12 @@ export function Header({ cartItemCount = 0 }: { cartItemCount?: number }) {
   useEffect(() => {
     const userData = localStorage.getItem("user");
     if (userData) {
-      setUser(JSON.parse(userData));
+      try {
+        setUser(JSON.parse(userData));
+      } catch (error) {
+        console.error("Failed to parse user data:", error);
+        localStorage.removeItem("user");
+      }
     }
   }, []);
 
