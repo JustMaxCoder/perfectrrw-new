@@ -53,17 +53,15 @@ export default function Shop({
   }, [products]);
 
   const [priceRange, setPriceRange] = useState<number[]>([0, 1000]);
-  const [hasUserSetCustomPrice, setHasUserSetCustomPrice] = useState(false);
 
   useEffect(() => {
-    if (!hasUserSetCustomPrice && products && products.length > 0) {
+    if (products && products.length > 0) {
       setPriceRange([minPrice, maxPrice]);
     }
-  }, [minPrice, maxPrice, hasUserSetCustomPrice, products]);
+  }, [minPrice, maxPrice, products]);
 
   const handlePriceRangeChange = (value: number[]) => {
     setPriceRange(value);
-    setHasUserSetCustomPrice(true);
   };
 
   const categories = [

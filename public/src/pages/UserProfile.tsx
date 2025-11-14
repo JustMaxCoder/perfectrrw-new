@@ -12,7 +12,7 @@ import { useState, useEffect } from "react";
 import type { Order, Product } from "../../../shared/schema";
 
 export default function UserProfile() {
-  const [, setLocation] = useLocation();
+  const [location, setLocation] = useLocation();
   const { toast } = useToast();
   const [user, setUser] = useState<any>(null);
 
@@ -149,7 +149,11 @@ export default function UserProfile() {
                           </p>
                         </div>
                         <div className="flex items-center gap-3 mt-2 md:mt-0">
-                          <Badge variant={getStatusBadge(order.status)}>
+                          <Badge variant={order.status === "completed" ? "default" : "secondary"}>
+                            {order.status === "pending" ? "Oczekuje" : 
+                             order.status === "processing" ? "W realizacji" : 
+                             order.status === "completed" ? "Zrealizowane" : "Anulowane"}
+                          </Badge>rder.status)}>
                             {getStatusText(order.status)}
                           </Badge>
                           <Button
