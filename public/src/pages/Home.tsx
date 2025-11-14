@@ -2,33 +2,15 @@
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "../components/ui/button";
-import { MapComponent } from "../components/MapComponent";
-import { ArrowRight, Shield, ChevronLeft, ChevronRight, X } from "lucide-react";
+import { ArrowRight, Shield } from "lucide-react";
 const bhpBackground = "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=1920&h=1080&fit=crop&q=80";
 import { BRANDING } from "../config/branding";
-import type { Product, Gallery } from "../../../shared/schema";
-import { useState } from "react";
-import { Dialog, DialogContent } from "../components/ui/dialog";
+import type { Product } from "../../../shared/schema";
 
 export default function Home() {
   const { data: products = [], isLoading } = useQuery<Product[]>({
     queryKey: ["/api/products"],
   });
-
-  const { data: gallery = [], isLoading: galleryLoading } = useQuery<Gallery[]>({
-    queryKey: ["/api/gallery"],
-  });
-
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [selectedImage, setSelectedImage] = useState<Gallery | null>(null);
-
-  const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % Math.max(1, gallery.length));
-  };
-
-  const prevImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + gallery.length) % Math.max(1, gallery.length));
-  };
 
   return (
     <div className="min-h-screen">
@@ -174,7 +156,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CTA Section - Moved higher */}
+      {/* CTA Section - Before Footer */}
       <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-gradient-to-r from-primary via-yellow-400 to-primary relative overflow-hidden">
         <div className="absolute inset-0 bg-black/10" />
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 text-center">
@@ -194,135 +176,6 @@ export default function Home() {
           </Link>
         </div>
       </section>
-
-      {/* Gallery Section - Улучшенная версия */}
-      <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10 sm:mb-12 md:mb-14">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 text-gray-900">
-              Nasza <span className="text-primary">Galeria</span>
-            </h2>
-            <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Zobacz nasze produkty i naszą firmę w akcji
-            </p>
-          </div>
-
-          {galleryLoading ? (
-            <div className="text-center py-12">
-              <p className="text-muted-foreground">Ładowanie galerii...</p>
-            </div>
-          ) : gallery.length === 0 ? (
-            <div className="text-center py-16 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-300">
-              <Shield className="mx-auto h-16 w-16 text-gray-400 mb-4" />
-              <p className="text-gray-500 text-lg mb-2">Brak zdjęć w galerii</p>
-              <p className="text-gray-400 text-sm">Dodaj zdjęcia w panelu administracyjnym</p>
-            </div>
-          ) : (
-            <div className="relative px-8 sm:px-12 md:px-16">
-              <div className="overflow-hidden rounded-2xl shadow-2xl bg-gray-50">
-                <div
-                  className="flex transition-transform duration-500 ease-out"
-                  style={{ transform: `translateX(-${currentImageIndex * 100}%)` }}
-                >
-                  {gallery.map((img, index) => (
-                    <div
-                      key={img.id}
-                      className="min-w-full"
-                    >
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 p-4 sm:p-6">
-                        {gallery.slice(
-                          Math.floor(index / 4) * 4,
-                          Math.floor(index / 4) * 4 + 4
-                        ).map((galleryImg) => (
-                          <div
-                            key={galleryImg.id}
-                            className="group relative aspect-square overflow-hidden rounded-xl cursor-pointer transform transition-all duration-300 hover:scale-110 hover:shadow-2xl hover:z-10 bg-white"
-                            onClick={() => setSelectedImage(galleryImg)}
-                          >
-                            <img
-                              src={galleryImg.path}
-                              alt={galleryImg.filename}
-                              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-125"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                            <div className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 text-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                              <p className="text-sm font-medium truncate">{galleryImg.filename}</p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {gallery.length > 4 && (
-                <>
-                  <button
-                    onClick={prevImage}
-                    className="absolute left-0 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 sm:p-3 shadow-xl transition-all hover:scale-110 active:scale-95 z-10"
-                    aria-label="Previous"
-                  >
-                    <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
-                  </button>
-                  <button
-                    onClick={nextImage}
-                    className="absolute right-0 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white rounded-full p-2 sm:p-3 shadow-xl transition-all hover:scale-110 active:scale-95 z-10"
-                    aria-label="Next"
-                  >
-                    <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
-                  </button>
-                </>
-              )}
-
-              {gallery.length > 4 && (
-                <div className="flex justify-center gap-2 mt-6 sm:mt-8">
-                  {Array.from({ length: Math.ceil(gallery.length / 4) }).map((_, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setCurrentImageIndex(idx * 4)}
-                      className={`h-2 rounded-full transition-all duration-300 ${
-                        Math.floor(currentImageIndex / 4) === idx
-                          ? 'bg-primary w-8'
-                          : 'bg-gray-300 w-2 hover:bg-gray-400'
-                      }`}
-                      aria-label={`Go to slide ${idx + 1}`}
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* Image Lightbox Modal */}
-      <Dialog open={!!selectedImage} onOpenChange={() => setSelectedImage(null)}>
-        <DialogContent className="max-w-4xl w-full p-0 bg-transparent border-0">
-          <button
-            onClick={() => setSelectedImage(null)}
-            className="absolute top-4 right-4 text-white hover:text-gray-300 z-50 bg-black/50 rounded-full p-2 hover:bg-black/70 transition-colors"
-          >
-            <X className="h-6 w-6 sm:h-8 sm:w-8" />
-          </button>
-          {selectedImage && (
-            <div className="relative">
-              <img
-                src={selectedImage.path}
-                alt={selectedImage.filename}
-                className="w-full h-auto max-h-[90vh] object-contain rounded-lg"
-              />
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4 sm:p-6 rounded-b-lg">
-                <p className="text-white text-center text-base sm:text-lg font-medium">
-                  {selectedImage.filename}
-                </p>
-              </div>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
-
-      
 
       </div>
   );
