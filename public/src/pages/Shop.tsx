@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "wouter";
 import { ProductCard } from "../components/ProductCard";
@@ -8,6 +8,7 @@ import { Label } from "../components/ui/label";
 import { RadioGroup, RadioGroupItem } from "../components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import { Badge } from "../components/ui/badge";
+import { Slider } from "../components/ui/slider";
 import { Search, Grid3x3, List, X, ArrowUpDown } from "lucide-react";
 import type { Product } from "../../../shared/schema";
 
@@ -42,6 +43,29 @@ export default function Shop({
     queryKey: ["/api/products"],
   });
 
+  const { minPrice, maxPrice } = useMemo(() => {
+    if (!products || products.length === 0) return { minPrice: 0, maxPrice: 1000 };
+    const prices = products.map(p => parseFloat(p.price));
+    return {
+      minPrice: Math.floor(Math.min(...prices)),
+      maxPrice: Math.ceil(Math.max(...prices))
+    };
+  }, [products]);
+
+  const [priceRange, setPriceRange] = useState<number[]>([0, 1000]);
+  const [hasUserSetCustomPrice, setHasUserSetCustomPrice] = useState(false);
+
+  useEffect(() => {
+    if (!hasUserSetCustomPrice && products && products.length > 0) {
+      setPriceRange([minPrice, maxPrice]);
+    }
+  }, [minPrice, maxPrice, hasUserSetCustomPrice, products]);
+
+  const handlePriceRangeChange = (value: number[]) => {
+    setPriceRange(value);
+    setHasUserSetCustomPrice(true);
+  };
+
   const categories = [
     { value: "all", label: "Wszystkie" },
     { value: "odziez-robocza", label: "Odzież robocza" },
@@ -67,8 +91,11 @@ export default function Shop({
       stockFilter === "all" ||
       (stockFilter === "in-stock" && parseInt(product.stock.toString()) > 0) ||
       (stockFilter === "out-of-stock" && parseInt(product.stock.toString()) === 0);
+    const matchesPrice =
+      parseFloat(product.price) >= priceRange[0] &&
+      parseFloat(product.price) <= priceRange[1];
 
-    return matchesSearch && matchesCategory && matchesStock;
+    return matchesSearch && matchesCategory && matchesStock && matchesPrice;
   }).sort((a, b) => {
     switch (sortBy) {
       case "price-asc":
@@ -97,6 +124,13 @@ export default function Shop({
   }
   if (searchTerm) {
     activeFilters.push({ type: "search", label: `Szukaj: "${searchTerm}"`, value: searchTerm });
+  }
+  if (priceRange[0] !== minPrice || priceRange[1] !== maxPrice) {
+    activeFilters.push({ 
+      type: "price", 
+      label: `${priceRange[0].toFixed(2)} zł - ${priceRange[1].toFixed(2)} zł`, 
+      value: "price" 
+    });
   }
 
   return (
@@ -148,18 +182,37 @@ export default function Shop({
                   <Label className="text-sm font-semibold mb-2 block">Dostępność</Label>
                   <RadioGroup value={stockFilter} onValueChange={setStockFilter}>
                     <div className="flex items-center space-x-2 mb-2">
-                      <RadioGroupItem value="all" id="stock-all" />
+                      <RadioGroupItem value="all" id="stock-all" data-testid="radio-stock-all" />
                       <Label htmlFor="stock-all" className="text-sm cursor-pointer">Wszystkie</Label>
                     </div>
                     <div className="flex items-center space-x-2 mb-2">
-                      <RadioGroupItem value="in-stock" id="stock-in" />
+                      <RadioGroupItem value="in-stock" id="stock-in" data-testid="radio-stock-in" />
                       <Label htmlFor="stock-in" className="text-sm cursor-pointer">W magazynie</Label>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="out-of-stock" id="stock-out" />
+                      <RadioGroupItem value="out-of-stock" id="stock-out" data-testid="radio-stock-out" />
                       <Label htmlFor="stock-out" className="text-sm cursor-pointer">Brak w magazynie</Label>
                     </div>
                   </RadioGroup>
+                </div>
+
+                {/* Price Filter */}
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <Label className="text-sm font-semibold">Cena</Label>
+                    <span className="text-xs text-muted-foreground" data-testid="text-price-range">
+                      {priceRange[0].toFixed(2)} zł - {priceRange[1].toFixed(2)} zł
+                    </span>
+                  </div>
+                  <Slider
+                    min={minPrice}
+                    max={maxPrice}
+                    step={10}
+                    value={priceRange}
+                    onValueChange={handlePriceRangeChange}
+                    className="w-full"
+                    data-testid="slider-price"
+                  />
                 </div>
 
                 <Button
@@ -169,7 +222,10 @@ export default function Shop({
                     setSearchTerm("");
                     setSelectedCategory("all");
                     setStockFilter("all");
+                    setPriceRange([minPrice, maxPrice]);
+                    setHasUserSetCustomPrice(false);
                   }}
+                  data-testid="button-clear-filters"
                 >
                   Wyczyść filtry
                 </Button>
@@ -192,7 +248,12 @@ export default function Shop({
                       if (filter.type === "category") setSelectedCategory("all");
                       if (filter.type === "stock") setStockFilter("all");
                       if (filter.type === "search") setSearchTerm("");
+                      if (filter.type === "price") {
+                        setPriceRange([minPrice, maxPrice]);
+                        setHasUserSetCustomPrice(false);
+                      }
                     }}
+                    data-testid={`badge-filter-${filter.type}`}
                   >
                     {filter.label}
                     <X className="h-3 w-3" />
@@ -268,7 +329,10 @@ export default function Shop({
                     setSearchTerm("");
                     setSelectedCategory("all");
                     setStockFilter("all");
+                    setPriceRange([minPrice, maxPrice]);
+                    setHasUserSetCustomPrice(false);
                   }}
+                  data-testid="button-clear-filters-empty"
                 >
                   Wyczyść filtry
                 </Button>
