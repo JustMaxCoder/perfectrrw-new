@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "wouter";
 import { ProductCard } from "../components/ProductCard";
@@ -15,13 +15,27 @@ export default function Shop({
   onAddToCart: (product: Product) => void;
 }) {
   const [location] = useLocation();
-  const urlParams = new URLSearchParams(location.split("?")[1] || "");
-  const initialCategory = urlParams.get("category") || "all";
+  
+  // Parse URL parameters correctly
+  const getInitialCategory = () => {
+    if (typeof window === "undefined") return "all";
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get("category") || "all";
+  };
 
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState(initialCategory);
+  const [selectedCategory, setSelectedCategory] = useState(getInitialCategory());
   const [stockFilter, setStockFilter] = useState("all");
   const [showFilters, setShowFilters] = useState(false);
+
+  // Update selected category when URL changes
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const category = urlParams.get("category");
+    if (category) {
+      setSelectedCategory(category);
+    }
+  }, [location]);
 
   const { data: products, isLoading } = useQuery<Product[]>({
     queryKey: ["/api/products"],

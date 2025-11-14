@@ -18,7 +18,10 @@
 
 ### Recent Updates (2025-11-14):
 - ✅ Modified category navigation on home page
-- ✅ Categories now link to /sklep page with category parameter
+- ✅ Categories now link to /sklep page with category parameter  
+  - Example: clicking "Obuwie BHP" → `/sklep?category=obuwie`
+- ✅ Updated Shop.tsx to read URL parameters and auto-select category
+- ✅ Added useEffect to handle URL parameter changes
 - ✅ Removed expanded category display from home page
 - ✅ Cleaned up unused imports and code
 - ✅ All LSP diagnostics resolved
