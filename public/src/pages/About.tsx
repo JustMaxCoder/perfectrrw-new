@@ -50,18 +50,6 @@ export default function About() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero */}
-      <section className="bg-gradient-to-r from-black via-gray-900 to-black text-white py-16 md:py-20">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            O <span className="text-primary">BHP Perfect</span>
-          </h1>
-          <p className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto">
-            Twój partner w zakresie bezpieczeństwa pracy od 2009 roku
-          </p>
-        </div>
-      </section>
-
       {/* Mission Section - Simplified */}
       <section className="py-12 md:py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4">
