@@ -22,7 +22,7 @@ export default function TrackOrder() {
     }
   }, []);
 
-  const { data: orders, isLoading } = useQuery<Order[]>({
+  const { data: orders = [], isLoading } = useQuery<Order[]>({
     queryKey: ["orders"],
     queryFn: async () => {
       return await apiRequest("GET", "/api/orders");
@@ -30,11 +30,12 @@ export default function TrackOrder() {
     enabled: searchTriggered,
   });
 
-  const ordersArray = Array.isArray(orders) ? orders : [];
-  const foundOrder = ordersArray.find(o => 
+  // Ensure orders is an array before calling find
+  const foundOrder = Array.isArray(orders) ? orders.find(o =>
     o.id.toLowerCase().includes(orderId.toLowerCase()) ||
     o.id.slice(0, 8).toLowerCase() === orderId.toLowerCase()
-  );
+  ) : undefined;
+
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -110,8 +111,8 @@ export default function TrackOrder() {
               className="flex-1"
               data-testid="input-order-id"
             />
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               size="lg"
               className="bg-primary text-primary-foreground"
               disabled={!orderId.trim() || isLoading}
@@ -159,8 +160,8 @@ export default function TrackOrder() {
                     </div>
 
                     <div className={`h-1 flex-1 ${
-                      foundOrder.status === 'processing' || foundOrder.status === 'completed' 
-                        ? 'bg-green-600' 
+                      foundOrder.status === 'processing' || foundOrder.status === 'completed'
+                        ? 'bg-green-600'
                         : 'bg-gray-300'
                     }`} />
 
