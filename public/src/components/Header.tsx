@@ -1,5 +1,6 @@
+
 import { Link, useLocation } from "wouter";
-import { ShoppingCart, Menu, X, User, LogOut, Package } from "lucide-react";
+import { ShoppingCart, Menu, X, User, LogOut, Package, Search } from "lucide-react";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { SearchBar } from "./SearchBar";
@@ -35,11 +36,12 @@ export function Header({ cartItemCount = 0 }: { cartItemCount?: number }) {
     setLocation("/");
   };
 
-  const navItems = [
-    { href: "/", label: "Strona główna" },
-    { href: "/sklep", label: "Sklep" },
-    { href: "/o-nas", label: "O nas" },
-    { href: "/kontakt", label: "Kontakt" },
+  const categories = [
+    { href: "/sklep?category=odziez-robocza", label: "Odzież robocza" },
+    { href: "/sklep?category=obuwie", label: "Obuwie BHP" },
+    { href: "/sklep?category=rekawice", label: "Rękawice" },
+    { href: "/sklep?category=ochrona-glowy", label: "Ochrona głowy" },
+    { href: "/sklep?category=akcesoria", label: "Akcesoria" },
   ];
 
   const isActive = (href: string) => {
@@ -48,62 +50,72 @@ export function Header({ cartItemCount = 0 }: { cartItemCount?: number }) {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-black text-white shadow-lg">
+    <header className="sticky top-0 z-50 bg-white shadow-md">
       <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between px-3 sm:px-4 md:px-6 py-2.5 sm:py-3 md:py-4">
+        {/* Main Header Row */}
+        <div className="flex items-center justify-between px-3 sm:px-4 md:px-6 py-3 md:py-4 border-b">
           {/* Logo */}
-          <Link href="/" className="flex items-center" data-testid="link-home">
-            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold">
-              <span className="text-white">BHP</span>{" "}
+          <Link href="/" className="flex items-center flex-shrink-0" data-testid="link-home">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold whitespace-nowrap">
+              <span className="text-black">BHP</span>{" "}
               <span className="text-primary">PERFECT</span>
             </h1>
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`px-4 py-2 rounded-md font-medium transition-colors hover-elevate active-elevate-2 ${
-                  isActive(item.href) ? "text-primary" : "text-white"
-                }`}
-                data-testid={`link-nav-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
-              >
-                {item.label}
-                {isActive(item.href) && (
-                  <div className="h-0.5 bg-primary mt-1 rounded-full" />
-                )}
-              </Link>
-            ))}
-            <Link
-                href="/kontakt"
-                className="text-white hover:text-primary transition-colors text-sm font-medium"
-                data-testid="link-contact"
-              >
-                Kontakt
-              </Link>
-              <Link
-                href="/sledzenie"
-                className="text-white hover:text-primary transition-colors text-sm font-medium"
-                data-testid="link-track-order"
-              >
-                Śledź zamówienie
-              </Link>
-          </nav>
-
-          {/* Search Bar - Desktop */}
-          <div className="hidden md:block flex-1 max-w-md mx-4">
+          {/* Desktop Search */}
+          <div className="hidden lg:block flex-1 max-w-2xl mx-6">
             <SearchBar />
           </div>
 
-          {/* Cart & Mobile Menu & User Actions */}
-          <div className="flex items-center gap-2">
+          {/* Right Actions */}
+          <div className="flex items-center gap-2 md:gap-3">
+            {/* Mobile Search Icon */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="lg:hidden"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              <Search className="h-5 w-5" />
+            </Button>
+
+            {/* User Menu */}
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" aria-label="Profil" className="flex-shrink-0">
+                    <User className="h-5 w-5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem onClick={() => setLocation("/profil")}>
+                    <User className="h-4 w-4 mr-2" />
+                    {user.username}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setLocation("/zamowienia")}>
+                    <Package className="h-4 w-4 mr-2" />
+                    Zamówienia
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleLogout}>
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Wyloguj się
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <div className="hidden md:flex gap-2">
+                <Button variant="ghost" size="sm" onClick={() => setLocation("/logowanie")}>
+                  Zaloguj się
+                </Button>
+              </div>
+            )}
+
+            {/* Cart */}
             <Link href="/koszyk" data-testid="link-cart">
               <Button
                 variant="ghost"
                 size="icon"
-                className="relative text-white hover:text-primary"
+                className="relative flex-shrink-0"
               >
                 <ShoppingCart className="h-5 w-5" />
                 {cartItemCount > 0 && (
@@ -117,44 +129,11 @@ export function Header({ cartItemCount = 0 }: { cartItemCount?: number }) {
               </Button>
             </Link>
 
-            {user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" aria-label="Profil">
-                    <User className="h-5 w-5 text-white hover:text-primary" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48">
-                  <DropdownMenuItem onClick={() => setLocation("/profil")}>
-                    <User className="h-4 w-4 mr-2" />
-                    {user.username}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setLocation("/zamowienia")}>
-                    <Package className="h-4 w-4 mr-2" />
-                    Moje zamówienia
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={handleLogout}>
-                    <LogOut className="h-4 w-4 mr-2" />
-                    Wyloguj się
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
-              <div className="hidden md:flex gap-2">
-                <Button variant="outline" onClick={() => setLocation("/logowanie")}>
-                  Zaloguj się
-                </Button>
-                <Button onClick={() => setLocation("/rejestracja")}>
-                  Zarejestruj się
-                </Button>
-              </div>
-            )}
-
-            {/* Mobile menu button */}
+            {/* Mobile Menu Toggle */}
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden text-white"
+              className="md:hidden flex-shrink-0"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               data-testid="button-mobile-menu"
             >
@@ -167,92 +146,135 @@ export function Header({ cartItemCount = 0 }: { cartItemCount?: number }) {
           </div>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Categories Navigation - Desktop */}
+        <nav className="hidden md:flex items-center gap-1 px-6 py-2 border-b overflow-x-auto">
+          <Link
+            href="/"
+            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap hover-elevate ${
+              isActive("/") && !location.includes("/sklep") ? "text-primary bg-primary/10" : "text-gray-700 hover:text-primary"
+            }`}
+          >
+            Strona główna
+          </Link>
+          <Link
+            href="/sklep"
+            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap hover-elevate ${
+              location === "/sklep" ? "text-primary bg-primary/10" : "text-gray-700 hover:text-primary"
+            }`}
+          >
+            Wszystkie produkty
+          </Link>
+          {categories.map((cat) => (
+            <Link
+              key={cat.href}
+              href={cat.href}
+              className={`px-4 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap hover-elevate ${
+                isActive(cat.href) ? "text-primary bg-primary/10" : "text-gray-700 hover:text-primary"
+              }`}
+            >
+              {cat.label}
+            </Link>
+          ))}
+          <Link
+            href="/o-nas"
+            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap hover-elevate ${
+              isActive("/o-nas") ? "text-primary bg-primary/10" : "text-gray-700 hover:text-primary"
+            }`}
+          >
+            O nas
+          </Link>
+          <Link
+            href="/kontakt"
+            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap hover-elevate ${
+              isActive("/kontakt") ? "text-primary bg-primary/10" : "text-gray-700 hover:text-primary"
+            }`}
+          >
+            Kontakt
+          </Link>
+        </nav>
+
+        {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <nav className="md:hidden py-4 border-t border-white/10 max-h-[calc(100vh-4rem)] overflow-y-auto">
+          <nav className="md:hidden border-t bg-white max-h-[calc(100vh-5rem)] overflow-y-auto">
             {/* Mobile Search */}
-            <div className="px-4 mb-4">
+            <div className="p-4 border-b">
               <SearchBar />
             </div>
 
-            {navItems.map((item) => (
+            <div className="py-2">
               <Link
-                key={item.href}
-                href={item.href}
-                className={`block px-4 py-4 rounded-md font-medium transition-colors touch-manipulation ${
-                  isActive(item.href)
-                    ? "text-primary bg-white/5"
-                    : "text-white"
+                href="/"
+                className={`block px-4 py-3 text-sm font-medium transition-colors ${
+                  isActive("/") && !location.includes("/sklep") ? "text-primary bg-primary/10" : "text-gray-700"
                 }`}
                 onClick={() => setMobileMenuOpen(false)}
-                data-testid={`link-mobile-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
               >
-                {item.label}
+                Strona główna
               </Link>
-            ))}
-            <Link
+              <Link
+                href="/sklep"
+                className={`block px-4 py-3 text-sm font-medium transition-colors ${
+                  location === "/sklep" ? "text-primary bg-primary/10" : "text-gray-700"
+                }`}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Wszystkie produkty
+              </Link>
+              {categories.map((cat) => (
+                <Link
+                  key={cat.href}
+                  href={cat.href}
+                  className={`block px-4 py-3 text-sm font-medium transition-colors ${
+                    isActive(cat.href) ? "text-primary bg-primary/10" : "text-gray-700"
+                  }`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {cat.label}
+                </Link>
+              ))}
+              <Link
+                href="/o-nas"
+                className={`block px-4 py-3 text-sm font-medium transition-colors ${
+                  isActive("/o-nas") ? "text-primary bg-primary/10" : "text-gray-700"
+                }`}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                O nas
+              </Link>
+              <Link
                 href="/kontakt"
-                className="text-white hover:text-primary transition-colors text-sm font-medium"
-                data-testid="link-contact"
+                className={`block px-4 py-3 text-sm font-medium transition-colors ${
+                  isActive("/kontakt") ? "text-primary bg-primary/10" : "text-gray-700"
+                }`}
+                onClick={() => setMobileMenuOpen(false)}
               >
                 Kontakt
               </Link>
-              <Link
-                href="/sledzenie"
-                className="text-white hover:text-primary transition-colors text-sm font-medium"
-                data-testid="link-track-order"
-              >
-                Śledź zamówienie
-              </Link>
 
-              {user ? (
-                <>
-                  <Link
-                    href="/profil"
-                    className="block px-4 py-4 text-white hover:text-primary transition-colors"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <User className="h-4 w-4 mr-2 inline-block" />
-                    {user.username}
-                  </Link>
-                  <Link
-                    href="/zamowienia"
-                    className="block px-4 py-4 text-white hover:text-primary transition-colors"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <Package className="h-4 w-4 mr-2 inline-block" />
-                    Moje zamówienia
-                  </Link>
+              {!user && (
+                <div className="px-4 py-3 border-t mt-2">
                   <Button
-                    variant="ghost"
-                    className="w-full justify-start px-4 py-4 text-white hover:text-primary"
+                    className="w-full mb-2"
                     onClick={() => {
-                      handleLogout();
+                      setLocation("/logowanie");
                       setMobileMenuOpen(false);
                     }}
                   >
-                    <LogOut className="h-4 w-4 mr-2" />
-                    Wyloguj się
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <Link
-                    href="/logowanie"
-                    className="block px-4 py-4 text-white hover:text-primary transition-colors"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
                     Zaloguj się
-                  </Link>
-                  <Link
-                    href="/rejestracja"
-                    className="block px-4 py-4 text-white hover:text-primary transition-colors"
-                    onClick={() => setMobileMenuOpen(false)}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => {
+                      setLocation("/rejestracja");
+                      setMobileMenuOpen(false);
+                    }}
                   >
                     Zarejestruj się
-                  </Link>
-                </>
+                  </Button>
+                </div>
               )}
+            </div>
           </nav>
         )}
       </div>
