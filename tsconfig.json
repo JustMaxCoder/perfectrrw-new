@@ -1,0 +1,29 @@
+{
+  "include": [
+    "public/src/**/*",
+    "shared/**/*",
+    "server/**/*",
+    "tailwind.config.ts"
+  ],
+  "exclude": ["node_modules", "build", "dist", "**/*.test.ts"],
+  "compilerOptions": {
+    "incremental": true,
+    "tsBuildInfoFile": "./node_modules/.cache/tsbuildinfo",
+    "noEmit": true,
+    "module": "ESNext",
+    "target": "ESNext",
+    "strict": true,
+    "lib": ["esnext", "dom", "dom.iterable"],
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "allowImportingTsExtensions": true,
+    "moduleResolution": "bundler",
+
+    // baseUrl and paths removed — imports migrated to relative paths
+
+    // note: ignoreDeprecations intentionally omitted to avoid TS errors on current toolchain
+
+    "types": ["node", "vite/client"]
+  }
+}
