@@ -272,13 +272,15 @@ export default function Shop({
                 <div className="flex items-center gap-2">
                   <ArrowUpDown className="h-4 w-4 text-gray-500" />
                   <Select value={sortBy} onValueChange={setSortBy}>
-                    <SelectTrigger className="w-[160px]">
+                    <SelectTrigger className="w-[180px]" data-testid="select-sort">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="default">Domyślnie</SelectItem>
                       <SelectItem value="price-asc">Cena ↑</SelectItem>
                       <SelectItem value="price-desc">Cena ↓</SelectItem>
+                      <SelectItem value="popularity">Popularne</SelectItem>
+                      <SelectItem value="newest">Nowości</SelectItem>
                       <SelectItem value="name-asc">Nazwa A-Z</SelectItem>
                       <SelectItem value="name-desc">Nazwa Z-A</SelectItem>
                     </SelectContent>

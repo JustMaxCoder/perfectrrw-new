@@ -22,6 +22,8 @@ export const products = pgTable("products", {
   stock: integer("stock").notNull().default(0),
   available: boolean("available").notNull().default(true),
   shipping: text("shipping").notNull().default("standard"),
+  popularity: integer("popularity").notNull().default(0),
+  createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
 });
 
 export const orders = pgTable("orders", {
@@ -57,6 +59,7 @@ export const insertUserSchema = createInsertSchema(users).omit({
 
 export const insertProductSchema = createInsertSchema(products).omit({
   id: true,
+  createdAt: true,
 });
 
 export const insertOrderSchema = createInsertSchema(orders).omit({

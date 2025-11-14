@@ -71,6 +71,7 @@ export class MemStorage implements IStorage {
           "https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?w=600&h=600&fit=crop",
         category: "odziez-robocza",
         stock: 45,
+        popularity: 85,
       },
       {
         name: "Buty robocze BHP S3",
@@ -81,6 +82,7 @@ export class MemStorage implements IStorage {
           "https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=600&h=600&fit=crop",
         category: "obuwie",
         stock: 32,
+        popularity: 95,
       },
       {
         name: "Rękawice ochronne ULTRA",
@@ -91,6 +93,7 @@ export class MemStorage implements IStorage {
           "https://images.unsplash.com/photo-1585399000684-d2f72660f092?w=600&h=600&fit=crop",
         category: "rekawice",
         stock: 120,
+        popularity: 100,
       },
       {
         name: "Kask ochronny SAFETY",
@@ -101,6 +104,7 @@ export class MemStorage implements IStorage {
           "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=600&h=600&fit=crop",
         category: "ochrona-glowy",
         stock: 67,
+        popularity: 78,
       },
       {
         name: "Kamizelka odblaskowa Premium",
@@ -111,6 +115,7 @@ export class MemStorage implements IStorage {
           "https://images.unsplash.com/photo-1581574919402-5b7d733224d6?w=600&h=600&fit=crop",
         category: "odziez-robocza",
         stock: 88,
+        popularity: 90,
       },
       {
         name: "Okulary ochronne VISION",
@@ -121,6 +126,7 @@ export class MemStorage implements IStorage {
           "https://images.unsplash.com/photo-1574258495973-f010dfbb5371?w=600&h=600&fit=crop",
         category: "ochrona-glowy",
         stock: 95,
+        popularity: 72,
       },
       {
         name: "Spodnie robocze MASTER",
@@ -131,6 +137,7 @@ export class MemStorage implements IStorage {
           "https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=600&h=600&fit=crop",
         category: "odziez-robocza",
         stock: 54,
+        popularity: 65,
       },
       {
         name: "Nauszniki ochronne PRO",
@@ -141,6 +148,7 @@ export class MemStorage implements IStorage {
           "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=600&h=600&fit=crop",
         category: "ochrona-sluchu",
         stock: 41,
+        popularity: 55,
       },
       {
         name: "Kurtka robocza zimowa TERMO",
@@ -151,6 +159,7 @@ export class MemStorage implements IStorage {
           "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=600&h=600&fit=crop",
         category: "odziez-robocza",
         stock: 28,
+        popularity: 88,
       },
       {
         name: "Półbuty robocze COMFORT",
@@ -161,6 +170,7 @@ export class MemStorage implements IStorage {
           "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&h=600&fit=crop",
         category: "obuwie",
         stock: 37,
+        popularity: 80,
       },
       {
         name: "Rękawice skórzane PREMIUM",
@@ -171,6 +181,7 @@ export class MemStorage implements IStorage {
           "https://images.unsplash.com/photo-1586363104862-3a5e2ab60d99?w=600&h=600&fit=crop",
         category: "rekawice",
         stock: 73,
+        popularity: 68,
       },
       {
         name: "Maska spawalnicza AUTO",
@@ -181,6 +192,7 @@ export class MemStorage implements IStorage {
           "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=600&h=600&fit=crop",
         category: "ochrona-glowy",
         stock: 19,
+        popularity: 45,
       },
     ];
 
