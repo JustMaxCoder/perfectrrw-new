@@ -11,6 +11,8 @@
 [x] 6. Removed "Potrzebujesz pomocy w wyborze?" section
 [x] 7. Removed newsletter section "Rabaty dla subskrybentów!"
 [x] 8. Changed footer background to black color
+[x] 9. Set new professional BHP hero image as main photo
+[x] 10. Added @assets alias to vite.config.ts for attached_assets folder
 
 ### Summary:
 - All npm dependencies installed successfully (762 packages)

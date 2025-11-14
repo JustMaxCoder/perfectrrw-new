@@ -3,7 +3,7 @@ import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "../components/ui/button";
 import { ArrowRight, Shield } from "lucide-react";
-const bhpBackground = "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=1920&h=1080&fit=crop&q=80";
+import bhpBackground from "@assets/bhp-hero.jpg";
 import { BRANDING } from "../config/branding";
 import type { Product } from "../../../shared/schema";
 
