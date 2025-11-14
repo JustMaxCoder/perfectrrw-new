@@ -1,13 +1,34 @@
 import { Link, useLocation } from "wouter";
-import { ShoppingCart, Menu, X } from "lucide-react";
+import { ShoppingCart, Menu, X, User, LogOut, Package } from "lucide-react";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { SearchBar } from "./SearchBar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
 
 export function Header({ cartItemCount = 0 }: { cartItemCount?: number }) {
-  const [location] = useLocation();
+  const [, setLocation] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      setUser(JSON.parse(userData));
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
+    setLocation("/");
+  };
 
   const navItems = [
     { href: "/", label: "Strona główna" },
@@ -71,7 +92,7 @@ export function Header({ cartItemCount = 0 }: { cartItemCount?: number }) {
             <SearchBar />
           </div>
 
-          {/* Cart & Mobile Menu */}
+          {/* Cart & Mobile Menu & User Actions */}
           <div className="flex items-center gap-2">
             <Link href="/koszyk" data-testid="link-cart">
               <Button
@@ -90,6 +111,39 @@ export function Header({ cartItemCount = 0 }: { cartItemCount?: number }) {
                 )}
               </Button>
             </Link>
+
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" aria-label="Profil">
+                    <User className="h-5 w-5 text-white hover:text-primary" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuItem onClick={() => setLocation("/profil")}>
+                    <User className="h-4 w-4 mr-2" />
+                    {user.username}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setLocation("/zamowienia")}>
+                    <Package className="h-4 w-4 mr-2" />
+                    Moje zamówienia
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleLogout}>
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Wyloguj się
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <div className="hidden md:flex gap-2">
+                <Button variant="outline" onClick={() => setLocation("/logowanie")}>
+                  Zaloguj się
+                </Button>
+                <Button onClick={() => setLocation("/rejestracja")}>
+                  Zarejestruj się
+                </Button>
+              </div>
+            )}
 
             {/* Mobile menu button */}
             <Button
@@ -145,6 +199,55 @@ export function Header({ cartItemCount = 0 }: { cartItemCount?: number }) {
               >
                 Śledź zamówienie
               </Link>
+
+              {user ? (
+                <>
+                  <Link
+                    href="/profil"
+                    className="block px-4 py-4 text-white hover:text-primary transition-colors"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <User className="h-4 w-4 mr-2 inline-block" />
+                    {user.username}
+                  </Link>
+                  <Link
+                    href="/zamowienia"
+                    className="block px-4 py-4 text-white hover:text-primary transition-colors"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <Package className="h-4 w-4 mr-2 inline-block" />
+                    Moje zamówienia
+                  </Link>
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start px-4 py-4 text-white hover:text-primary"
+                    onClick={() => {
+                      handleLogout();
+                      setMobileMenuOpen(false);
+                    }}
+                  >
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Wyloguj się
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/logowanie"
+                    className="block px-4 py-4 text-white hover:text-primary transition-colors"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Zaloguj się
+                  </Link>
+                  <Link
+                    href="/rejestracja"
+                    className="block px-4 py-4 text-white hover:text-primary transition-colors"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Zarejestruj się
+                  </Link>
+                </>
+              )}
           </nav>
         )}
       </div>

@@ -23,6 +23,9 @@ import TrackOrder from "./pages/TrackOrder";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Gallery from "./pages/Gallery";
+import Register from "./pages/Register";
+import Login from "./pages/Login";
+import UserProfile from "./pages/UserProfile";
 import NotFound from "./pages/not-found";
 
 function Router() {
@@ -119,6 +122,9 @@ function Router() {
           <Route path="/o-nas" component={About} />
           <Route path="/kontakt" component={Contact} />
           <Route path="/galeria" component={Gallery} />
+          <Route path="/rejestracja" component={Register} />
+          <Route path="/logowanie" component={Login} />
+          <Route path="/profil" component={UserProfile} />
           <Route component={NotFound} />
         </Switch>
       </main>

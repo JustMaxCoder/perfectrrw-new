@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card } from "../components/ui/card";
 import { Input } from "../components/ui/input";
@@ -12,6 +12,16 @@ import type { Order } from "../../../shared/schema";
 export default function TrackOrder() {
   const [orderId, setOrderId] = useState("");
   const [searchTriggered, setSearchTriggered] = useState(false);
+
+  // Check for order ID in URL parameters
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+    if (id) {
+      setOrderId(id);
+      setSearchTriggered(true);
+    }
+  }, []);
 
   const { data: orders, isLoading } = useQuery<Order[]>({
     queryKey: ["orders"],
