@@ -249,7 +249,7 @@ export default function Shop({
                   <div key={i} className={`bg-gray-200 animate-pulse rounded-xl ${viewMode === "grid" ? "h-96" : "h-48"}`} />
                 ))}
               </div>
-            ) : filteredAndSortedProducts && filteredAndSortedProducts.length > 0 ? (
+            ) : filteredAndSortedProducts.length > 0 ? (
               <div className={viewMode === "grid" ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" : "space-y-4"}>
                 {filteredAndSortedProducts.map((product) => (
                   <ProductCard
