@@ -336,16 +336,6 @@ export default function ProductDetail({
                   Udostępnij
                 </Button>
               </div>
-
-              <Link href="/koszyk" className="block">
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="w-full py-4 sm:py-6 text-base sm:text-lg font-semibold border-primary text-primary hover:bg-primary hover:text-black"
-                >
-                  Przejdź do koszyka
-                </Button>
-              </Link>
             </div>
 
             {/* Trust Badges */}
