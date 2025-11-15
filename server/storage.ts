@@ -97,13 +97,13 @@ export class MemStorage implements IStorage {
   }
 
   private seedData() {
-    // Po jednym produkcie dla każdej kategorii
+    // По одному продукту для каждой категории
     const sampleProducts: InsertProduct[] = [
       {
         name: "Bluza robocza BHP Perfect",
         description: "Wytrzymała bluza robocza z wysokiej jakości materiału. Idealna do pracy w różnych warunkach.",
         price: "89.99",
-        image: "https://images.unsplash.com/photo-1578681994506-b8f463449011?w=800&h=800&fit=crop",
+        image: "/uploads/1763205475052-YcJ1jt.jpg",
         category: "odziez-robocza",
         stock: 50,
         available: true,
@@ -115,7 +115,7 @@ export class MemStorage implements IStorage {
         name: "Buty robocze S3 Premium",
         description: "Bezpieczne buty robocze z podnoskiem stalowym i podeszwą antyprzebiciową. Klasa ochrony S3.",
         price: "159.99",
-        image: "https://images.unsplash.com/photo-1542219550-37153d387c27?w=800&h=800&fit=crop",
+        image: "/uploads/1763205475412-nRmEkw.jpg",
         category: "obuwie",
         stock: 40,
         available: true,
@@ -127,7 +127,7 @@ export class MemStorage implements IStorage {
         name: "Rękawice ochronne Nitrilon",
         description: "Rękawice robocze powlekane nitrylem. Doskonała przyczepność i odporność na przebicie.",
         price: "12.99",
-        image: "https://images.unsplash.com/photo-1585435557343-3b092031a831?w=800&h=800&fit=crop",
+        image: "/uploads/1763205970182-XWwV-4.jpg",
         category: "rekawice",
         stock: 200,
         available: true,
@@ -139,7 +139,7 @@ export class MemStorage implements IStorage {
         name: "Kask ochronny SafeGuard",
         description: "Profesjonalny kask budowlany z regulacją. Spełnia najwyższe normy bezpieczeństwa.",
         price: "45.99",
-        image: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=800&h=800&fit=crop",
+        image: "/uploads/1763205960523-yeFPXn.jpg",
         category: "ochrona-glowy",
         stock: 75,
         available: true,
@@ -259,11 +259,11 @@ export class MemStorage implements IStorage {
 
   async deleteProduct(id: string): Promise<void> {
     this.products.delete(id);
-    
+
     // Clean up related product-size entries
     const productSizesToDelete = Array.from(this.productSizes.values())
       .filter((ps) => ps.productId === id);
-    
+
     productSizesToDelete.forEach((ps) => {
       this.productSizes.delete(ps.id);
     });
@@ -485,7 +485,7 @@ export class MemStorage implements IStorage {
 
     // Get sizes for the product (empty array if no sizes)
     const sizes = await this.getProductSizes(productId);
-    
+
     // Always return the product, with empty sizes array if no sizes exist
     return {
       ...product,
@@ -579,7 +579,7 @@ export class MemStorage implements IStorage {
     const remainingSizes = Array.from(this.productSizes.values()).filter(
       (ps) => ps.productId === productId
     );
-    
+
     // If no sizes remain, update product.hasSizes to false
     if (remainingSizes.length === 0) {
       const product = this.products.get(productId);
