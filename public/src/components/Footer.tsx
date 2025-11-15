@@ -26,8 +26,9 @@ export function Footer() {
             <div className="flex items-start gap-2 text-sm text-gray-600">
               <MapPin className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
               <span className="leading-relaxed">
-                Bohaterów Modlina 17,<br />
-                05-100 Nowy Dwór Mazowiecki
+                Bohaterów Modlina 17<br />
+                05-100 Nowy Dwór Mazowiecki<br />
+                mazowieckie (Polska)
               </span>
             </div>
           </div>
@@ -98,7 +99,11 @@ export function Footer() {
                 <Mail className="h-4 w-4 text-primary flex-shrink-0" />
                 <span>kontakt@bhpperfect.pl</span>
               </a>
-              <p className="text-xs text-gray-500">Pn-Pt 08:00-20:00<br />Sob-Ndz 10:00-18:00</p>
+              <div className="text-xs text-gray-500 leading-relaxed">
+                <p className="font-semibold text-gray-700 mb-1">Godziny otwarcia:</p>
+                <p>Pn-Pt: 07:00-17:00</p>
+                <p>Sobota: 09:00-13:00</p>
+              </div>
             </div>
           </div>
         </div>
