@@ -23,8 +23,7 @@ export function Footer() {
             <p className="text-sm text-gray-600 leading-relaxed mb-4">
               Profesjonalna odzież robocza i środki ochrony indywidualnej
             </p>
-            <div className="flex items-start gap-2 text-sm text-gray-600">
-              <MapPin className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+            <div className="text-sm text-gray-600">
               <span className="leading-relaxed">
                 Bohaterów Modlina 17<br />
                 05-100 Nowy Dwór Mazowiecki<br />
