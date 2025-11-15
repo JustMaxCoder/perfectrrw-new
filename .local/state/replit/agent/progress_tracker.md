@@ -13,6 +13,11 @@
 [x] 8. Changed footer background to black color
 [x] 9. Set new professional BHP hero image as main photo
 [x] 10. Added @assets alias to vite.config.ts for attached_assets folder
+[x] 11. Replaced category card images with professional photos:
+      - Odzież robocza (Workwear) - jacket and pants
+      - Obuwie BHP (Safety Shoes) - work boots
+      - Rękawice (Gloves) - protective gloves
+      - Ochrona głowy (Head Protection) - safety helmet
 
 ### Summary:
 - All npm dependencies installed successfully (762 packages)

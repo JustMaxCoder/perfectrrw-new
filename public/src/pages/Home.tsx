@@ -2,8 +2,12 @@
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "../components/ui/button";
-import { ArrowRight, Shield } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import bhpBackground from "@assets/bhp-hero.jpg";
+import categoryOdziezRobocza from "@assets/category-odziez-robocza.jpg";
+import categoryObuwie from "@assets/category-obuwie.jpg";
+import categoryRekawice from "@assets/category-rekawice.jpg";
+import categoryOchronaGlowy from "@assets/category-ochrona-glowy.jpg";
 import { BRANDING } from "../config/branding";
 import type { Product } from "../../../shared/schema";
 
@@ -84,29 +88,28 @@ export default function Home() {
                     slug: "odziez-robocza",
                     label: "Odzież robocza",
                     description: "Profesjonalna odzież dla każdego pracownika",
-                    gradient: "from-blue-500 to-blue-700"
+                    image: categoryOdziezRobocza
                   },
                   {
                     slug: "obuwie",
                     label: "Obuwie BHP",
                     description: "Bezpieczne i wytrzymałe obuwie robocze",
-                    gradient: "from-amber-500 to-orange-600"
+                    image: categoryObuwie
                   },
                   {
                     slug: "rekawice",
                     label: "Rękawice",
                     description: "Ochrona rąk w każdych warunkach",
-                    gradient: "from-green-500 to-emerald-700"
+                    image: categoryRekawice
                   },
                   {
                     slug: "ochrona-glowy",
                     label: "Ochrona głowy",
                     description: "Kaski i akcesoria ochronne",
-                    gradient: "from-red-500 to-rose-700"
+                    image: categoryOchronaGlowy
                   }
                 ].map((category) => {
                   const categoryProducts = products.filter(p => p.category === category.slug);
-                  const sampleProduct = categoryProducts[0];
 
                   return (
                     <Link
@@ -116,17 +119,11 @@ export default function Home() {
                     >
                       <div className="group cursor-pointer bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl border border-gray-100">
                         <div className="relative h-56 md:h-64 overflow-hidden">
-                        {sampleProduct ? (
                           <img
-                            src={sampleProduct.image}
-                            alt={sampleProduct.name}
+                            src={category.image}
+                            alt={category.label}
                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                           />
-                        ) : (
-                          <div className={`w-full h-full bg-gradient-to-br ${category.gradient} flex items-center justify-center`}>
-                            <Shield className="w-16 h-16 text-white/80" />
-                          </div>
-                        )}
                           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                         </div>
 
