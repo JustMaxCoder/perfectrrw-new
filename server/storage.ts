@@ -115,7 +115,7 @@ export class MemStorage implements IStorage {
         name: "Buty robocze S3 Premium",
         description: "Bezpieczne buty robocze z podnoskiem stalowym i podeszwą antyprzebiciową. Klasa ochrony S3.",
         price: "159.99",
-        image: "/uploads/1763205475412-nRmEkw.jpg",
+        image: "/uploads/buty-robocze-s3-premium-new.jpg",
         category: "obuwie",
         stock: 40,
         available: true,
