@@ -475,8 +475,12 @@ function PhotoManager({ productId }: { productId: string }) {
       return response.json();
     },
     onSuccess: () => {
+      // Invalidate both single product and products list
       queryClient.invalidateQueries({ queryKey: ["/api/products", productId] });
       queryClient.invalidateQueries({ queryKey: ["/api/products"] });
+      // Force refetch to update cache immediately
+      queryClient.refetchQueries({ queryKey: ["/api/products"] });
+      
       toast({ title: "Фото загружено успешно" });
       
       // Clean up preview
@@ -509,8 +513,12 @@ function PhotoManager({ productId }: { productId: string }) {
       return response.json();
     },
     onSuccess: () => {
+      // Invalidate both single product and products list
       queryClient.invalidateQueries({ queryKey: ["/api/products", productId] });
       queryClient.invalidateQueries({ queryKey: ["/api/products"] });
+      // Force refetch to update cache immediately
+      queryClient.refetchQueries({ queryKey: ["/api/products"] });
+      
       toast({ title: "Фото удалено" });
     },
   });
