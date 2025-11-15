@@ -1,17 +1,54 @@
 # Deploying to GitHub Pages
 
-This repository builds a Vite site whose public root is `public` and Vite's build output is `dist/public` (see `vite.config.ts`). The included GitHub Actions workflow will build the project and publish the `dist/public` folder to GitHub Pages on pushes to `main`.
+This repository uses Vite with the `public` folder as the site root and builds into `dist/public` (see `vite.config.ts`). The GitHub Actions workflow added at `.github/workflows/deploy.yml` will:
 
-How it works:
-- Push to `main` or create a commit and push; GitHub Actions runs the `redeploy.yml` workflow.
-- The workflow runs `npm ci` and then `npm run build`.
-- The workflow uploads `dist/public` and then deploys it to GitHub Pages using the official `deploy-pages` action.
+- Run `npm ci` and `npm run build` on pushes to `main` (or manual runs).
+- Publish the `dist/public` folder to the `gh-pages` branch using `peaceiris/actions-gh-pages`.
 
-What you may need to check:
-- In your repository **Settings → Pages**, ensure the source is set to "GitHub Actions" (the workflow sets Pages automatically, but you may want to check the URL).
-- No extra secrets are required; the action uses the repository's `GITHUB_TOKEN` automatically.
+How to use:
+- Push changes to `main` (or run the workflow manually from the Actions tab).
+- The action will build and publish the static files to the `gh-pages` branch. GitHub Pages will serve the site from that branch.
 
-Manual trigger (optional):
-- You can run the workflow manually from the Actions tab by selecting the workflow and clicking "Run workflow" (choose `main` branch).
+What to check in your repository settings:
+- Go to **Settings → Pages** and ensure the Source is set to **GitHub Actions** (the Pages site will be updated automatically when the workflow runs).
+- No additional secrets are required; the workflow uses the repository `GITHUB_TOKEN`.
 
-If you want the full server deployed (not just the static frontend), tell me the target (SSH host, Docker registry, Render, Vercel, Fly, etc.) and I will add a deploy workflow for that.
+Local test steps:
+```powershell
+npm ci
+npm run build
+# Serve the built files for a quick check (install a simple static server if needed)
+npx serve dist/public -p 5000
+```
+
+If you want a workflow to deploy the full server (the Node backend) to a hosting provider (e.g. Render, Fly, Heroku) or to deploy directly to Replit, tell me which provider and I will add that workflow as well.
+
+Full redeploy (commit all files & push)
+-------------------------------------
+
+To push all current workspace files to the GitHub repository and trigger the GitHub Actions workflow that deploys to GitHub Pages, run the included PowerShell script from the repository root:
+
+```powershell
+# Make sure you are in the project root
+.\scripts\deploy_github.ps1
+
+# If you need to supply a different remote or branch:
+.\scripts\deploy_github.ps1 -remoteUrl 'https://github.com/JustMaxCoder/perfectrrw-new.git' -branch 'main'
+```
+
+Notes about authentication and workflow trigger:
+- Pushing requires that Git has credentials available (HTTPS PAT or SSH key). If using HTTPS, set up a personal access token (PAT) with `repo` permissions and either use credential manager or supply it when prompted.
+- To automatically trigger the workflow from the script you can install and authenticate the GitHub CLI (`gh`). After `gh auth login` the script will dispatch the `deploy.yml` workflow. Alternatively, run the workflow manually from GitHub Actions UI.
+- If you prefer, you can trigger the workflow via the REST API with a PAT having `repo` and `workflow` scopes. Example (PowerShell + env var `GITHUB_TOKEN` containing a PAT):
+
+```powershell
+$repo = 'JustMaxCoder/perfectrrw-new'
+$workflow_id = 'deploy.yml'
+$ref = 'main'
+
+$headers = @{ Authorization = "Bearer $env:GITHUB_TOKEN"; "User-Agent" = "redeploy-script" }
+$body = @{ ref = $ref } | ConvertTo-Json
+
+Invoke-RestMethod -Method Post -Uri "https://api.github.com/repos/$repo/actions/workflows/$workflow_id/dispatches" -Headers $headers -Body $body -ContentType 'application/json'
+```
+
