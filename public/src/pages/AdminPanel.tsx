@@ -12,7 +12,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from ".
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import { Switch } from "../components/ui/switch";
-import { Pencil, Trash2, Plus, Upload, Settings as SettingsIcon, Image as ImageIcon, Package, X } from "lucide-react";
+import { Pencil, Trash2, Plus, Upload, Settings as SettingsIcon, Image as ImageIcon, Package, X, ShoppingCart, Eye } from "lucide-react";
 import type { Product, Gallery, Settings } from "../../../shared/schema";
 import { Badge } from "../components/ui/badge";
 
@@ -31,6 +31,10 @@ export default function AdminPanel() {
 
   const { data: settings = [], isLoading: settingsLoading } = useQuery<Settings[]>({
     queryKey: ["/api/settings"],
+  });
+
+  const { data: orders = [], isLoading: ordersLoading } = useQuery<any[]>({
+    queryKey: ["/api/orders"],
   });
 
   const deleteProductMutation = useMutation({
@@ -122,10 +126,14 @@ export default function AdminPanel() {
         </div>
 
         <Tabs defaultValue="products" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="products" data-testid="tab-products">
               <Package className="mr-2 h-4 w-4" />
               Produkty
+            </TabsTrigger>
+            <TabsTrigger value="orders" data-testid="tab-orders">
+              <ShoppingCart className="mr-2 h-4 w-4" />
+              Zamówienia
             </TabsTrigger>
             <TabsTrigger value="gallery" data-testid="tab-gallery">
               <ImageIcon className="mr-2 h-4 w-4" />
@@ -240,6 +248,55 @@ export default function AdminPanel() {
                             data-testid={`button-delete-${product.id}`}
                           >
                             <Trash2 className="h-4 w-4 text-destructive" />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="orders" className="mt-6">
+            <Card className="p-6">
+              <h2 className="text-2xl font-bold mb-6">Zarządzanie Zamówieniami</h2>
+              
+              {ordersLoading ? (
+                <p>Ładowanie...</p>
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>ID</TableHead>
+                      <TableHead>Klient</TableHead>
+                      <TableHead>Email</TableHead>
+                      <TableHead>Suma</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Data</TableHead>
+                      <TableHead className="text-right">Akcje</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {orders.map((order) => (
+                      <TableRow key={order.id}>
+                        <TableCell className="font-mono text-xs">
+                          {order.id.slice(0, 8)}...
+                        </TableCell>
+                        <TableCell className="font-medium">{order.customerName}</TableCell>
+                        <TableCell>{order.customerEmail}</TableCell>
+                        <TableCell className="font-bold">{order.total} zł</TableCell>
+                        <TableCell>
+                          <Badge variant={order.status === 'completed' ? 'default' : 'secondary'}>
+                            {order.status}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-sm text-muted-foreground">
+                          {new Date(order.createdAt).toLocaleDateString('pl-PL')}
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <Button variant="ghost" size="icon">
+                            <Eye className="h-4 w-4" />
                           </Button>
                         </TableCell>
                       </TableRow>
