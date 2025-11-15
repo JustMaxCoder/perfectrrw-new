@@ -501,6 +501,37 @@
     animation: icon-bounce 0.5s ease-in-out;
   }
 
+  /* Enhanced hover states for filters */
+  .filter-item-hover {
+    transition: all 0.2s ease;
+  }
+
+  .filter-item-hover:hover {
+    background-color: rgba(255, 208, 0, 0.05);
+    transform: translateX(2px);
+  }
+
+  /* Badge animations */
+  @keyframes badge-remove {
+    0% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(0.8);
+    }
+  }
+
+  .animate-badge-remove {
+    animation: badge-remove 0.2s ease-out forwards;
+  }
+
+  /* Smooth view mode transitions */
+  .view-transition {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
   /* Staggered animations for cards */
   @keyframes slide-up-cards {
     from {
