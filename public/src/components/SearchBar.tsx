@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef } from "react";
 import { Search, X } from "lucide-react";
 import { useLocation } from "wouter";
@@ -28,6 +29,14 @@ export function SearchBar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const categories = [
+    { value: "all", label: "Wszystkie produkty", href: "/sklep" },
+    { value: "odziez-robocza", label: "Odzież robocza", href: "/sklep?category=odziez-robocza" },
+    { value: "obuwie", label: "Obuwie BHP", href: "/sklep?category=obuwie" },
+    { value: "rekawice", label: "Rękawice", href: "/sklep?category=rekawice" },
+    { value: "ochrona-glowy", label: "Ochrona głowy", href: "/sklep?category=ochrona-glowy" },
+  ];
+
   const filteredProducts = products?.filter((product) =>
     product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     product.description.toLowerCase().includes(searchQuery.toLowerCase())
@@ -39,13 +48,19 @@ export function SearchBar() {
     setIsOpen(false);
   };
 
+  const handleCategoryClick = (href: string) => {
+    setLocation(href);
+    setSearchQuery("");
+    setIsOpen(false);
+  };
+
   return (
     <div className="relative" ref={searchRef}>
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
           type="text"
-          placeholder="Szukaj produktów..."
+          placeholder="Szukaj produktów lub kategorii..."
           value={searchQuery}
           onChange={(e) => {
             setSearchQuery(e.target.value);
@@ -69,31 +84,50 @@ export function SearchBar() {
         )}
       </div>
 
-      {isOpen && searchQuery && (
+      {isOpen && (
         <Card className="absolute top-full mt-2 w-full max-h-96 overflow-y-auto z-50">
-          {filteredProducts.length > 0 ? (
+          {searchQuery ? (
+            filteredProducts.length > 0 ? (
+              <div className="p-2">
+                {filteredProducts.slice(0, 5).map((product) => (
+                  <button
+                    key={product.id}
+                    onClick={() => handleProductClick(product.id)}
+                    className="w-full flex items-center gap-3 p-3 hover:bg-accent rounded-lg transition-colors text-left"
+                  >
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-12 h-12 object-cover rounded bg-gray-100"
+                    />
+                    <div className="flex-1">
+                      <p className="font-medium text-sm">{product.name}</p>
+                      <p className="text-primary font-bold">{parseFloat(product.price).toFixed(2)} zł</p>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <div className="p-8 text-center text-muted-foreground">
+                Nie znaleziono produktów
+              </div>
+            )
+          ) : (
             <div className="p-2">
-              {filteredProducts.slice(0, 5).map((product) => (
+              <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                Kategorie
+              </div>
+              {categories.map((category) => (
                 <button
-                  key={product.id}
-                  onClick={() => handleProductClick(product.id)}
-                  className="w-full flex items-center gap-3 p-3 hover:bg-accent rounded-lg transition-colors text-left"
+                  key={category.value}
+                  onClick={() => handleCategoryClick(category.href)}
+                  className="w-full flex items-center gap-3 px-3 py-2.5 hover:bg-accent rounded-lg transition-colors text-left"
                 >
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-12 h-12 object-cover rounded bg-gray-100"
-                  />
                   <div className="flex-1">
-                    <p className="font-medium text-sm">{product.name}</p>
-                    <p className="text-primary font-bold">{parseFloat(product.price).toFixed(2)} zł</p>
+                    <p className="font-medium text-sm">{category.label}</p>
                   </div>
                 </button>
               ))}
-            </div>
-          ) : (
-            <div className="p-8 text-center text-muted-foreground">
-              Nie znaleziono produktów
             </div>
           )}
         </Card>
@@ -101,5 +135,3 @@ export function SearchBar() {
     </div>
   );
 }
-
-
