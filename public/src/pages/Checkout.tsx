@@ -116,21 +116,21 @@ export default function Checkout({
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6">Finalizacja zamówienia</h1>
         <div className="flex items-center justify-center sm:justify-start gap-2 sm:gap-4 mb-6 sm:mb-8 overflow-x-auto pb-2">
           <div className="flex items-center gap-2 flex-shrink-0">
-            <div className="bg-primary text-black rounded-full h-8 w-8 sm:h-10 sm:w-10 flex items-center justify-center font-bold text-sm sm:text-base">
+            <div className="bg-primary text-black rounded-full h-10 w-10 flex items-center justify-center font-bold text-sm sm:text-base touch-manipulation">
               1
             </div>
             <span className="font-medium text-sm sm:text-base hidden xs:inline">Koszyk</span>
           </div>
           <div className="h-0.5 w-6 sm:w-12 bg-primary flex-shrink-0" />
           <div className="flex items-center gap-2 flex-shrink-0">
-            <div className="bg-primary text-black rounded-full h-8 w-8 sm:h-10 sm:w-10 flex items-center justify-center font-bold text-sm sm:text-base">
+            <div className="bg-primary text-black rounded-full h-10 w-10 flex items-center justify-center font-bold text-sm sm:text-base touch-manipulation">
               2
             </div>
             <span className="font-medium text-sm sm:text-base hidden xs:inline">Dostawa</span>
           </div>
           <div className="h-0.5 w-6 sm:w-12 bg-gray-300 flex-shrink-0" />
           <div className="flex items-center gap-2 flex-shrink-0">
-            <div className="bg-gray-300 text-gray-600 rounded-full h-8 w-8 sm:h-10 sm:w-10 flex items-center justify-center font-bold text-sm sm:text-base">
+            <div className="bg-gray-300 text-gray-600 rounded-full h-10 w-10 flex items-center justify-center font-bold text-sm sm:text-base touch-manipulation">
               3
             </div>
             <span className="text-muted-foreground text-sm sm:text-base hidden xs:inline">Potwierdzenie</span>

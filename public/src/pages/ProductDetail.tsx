@@ -179,13 +179,13 @@ export default function ProductDetail({
               </div>
             </div>
 
-            {/* Thumbnail Gallery - Touch-friendly */}
+            {/* Thumbnail Gallery - Touch-friendly with 40px minimum */}
             <div className="grid grid-cols-4 gap-2 sm:gap-3">
               {galleryImages.map((img, idx) => (
                 <button
                   key={idx}
                   onClick={() => setSelectedImage(idx)}
-                  className={`aspect-square bg-white rounded-lg border-2 overflow-hidden transition-all touch-manipulation min-h-[60px] sm:min-h-[80px] ${
+                  className={`aspect-square bg-white rounded-lg border-2 overflow-hidden transition-all touch-manipulation min-h-[80px] min-w-[80px] sm:min-h-[100px] sm:min-w-[100px] ${
                     selectedImage === idx ? 'border-primary shadow-md scale-95' : 'border-gray-200 hover:border-gray-300 active:scale-95'
                   }`}
                   data-testid={`thumbnail-${idx}`}

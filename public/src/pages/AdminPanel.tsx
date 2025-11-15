@@ -234,6 +234,7 @@ export default function AdminPanel() {
                           <Button
                             variant="ghost"
                             size="icon"
+                            className="h-10 w-10 touch-manipulation"
                             onClick={() => {
                               setEditingProduct(product);
                               setIsProductDialogOpen(true);
@@ -245,6 +246,7 @@ export default function AdminPanel() {
                           <Button
                             variant="ghost"
                             size="icon"
+                            className="h-10 w-10 touch-manipulation"
                             onClick={() => deleteProductMutation.mutate(product.id)}
                             data-testid={`button-delete-${product.id}`}
                           >
@@ -298,7 +300,7 @@ export default function AdminPanel() {
                           {new Date(order.createdAt).toLocaleDateString('pl-PL')}
                         </TableCell>
                         <TableCell className="text-right">
-                          <Button variant="ghost" size="icon">
+                          <Button variant="ghost" size="icon" className="h-10 w-10 touch-manipulation">
                             <Eye className="h-4 w-4" />
                           </Button>
                         </TableCell>
@@ -369,7 +371,7 @@ export default function AdminPanel() {
                       <Button
                         variant="destructive"
                         size="icon"
-                        className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-all hover:scale-110 shadow-lg"
+                        className="absolute top-2 right-2 h-10 w-10 opacity-0 group-hover:opacity-100 transition-all hover:scale-110 shadow-lg touch-manipulation"
                         onClick={() => deleteGalleryMutation.mutate(img.id)}
                         data-testid={`button-delete-gallery-${img.id}`}
                       >
@@ -590,7 +592,7 @@ function PhotoManager({ productId }: { productId: string }) {
                 <Button
                   size="icon"
                   variant="destructive"
-                  className="absolute top-3 right-3 h-7 w-7"
+                  className="absolute top-2 right-2 h-10 w-10 touch-manipulation"
                   onClick={() => deletePhotoMutation.mutate(index)}
                   disabled={deletePhotoMutation.isPending}
                   data-testid={`button-delete-photo-${index}`}
@@ -778,6 +780,7 @@ function SizeManager({ productId }: { productId: string }) {
                 <Button
                   size="icon"
                   variant="destructive"
+                  className="h-10 w-10 touch-manipulation"
                   onClick={() => deleteSizeMutation.mutate(ps.sizeId)}
                   disabled={deleteSizeMutation.isPending}
                 >
