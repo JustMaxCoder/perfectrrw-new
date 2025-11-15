@@ -22,6 +22,7 @@ export default function ProductDetail({
   const [selectedSize, setSelectedSize] = useState<string>("");
   const [selectedColor, setSelectedColor] = useState("");
   const [isSticky, setIsSticky] = useState(false);
+  const [isHovering, setIsHovering] = useState(false);
 
   const { data: product, isLoading } = useQuery<any>({
     queryKey: [`/api/products/${id}`],
@@ -93,13 +94,12 @@ export default function ProductDetail({
     : [];
   const colors = ["Czarny", "Niebieski", "Pomarańczowy", "Żółty"];
   
-  // Gallery images (mock multiple images)
-  const galleryImages = [
-    product.image,
-    product.image,
-    product.image,
-    product.image
-  ];
+  // Gallery images - only actual product photos
+  const galleryImages = product.additionalImages && product.additionalImages.length > 0
+    ? [product.image, ...product.additionalImages]
+    : [product.image];
+  
+  const hasMultipleImages = galleryImages.length > 1;
 
   // Related products (same category)
   const relatedProducts = allProducts
@@ -162,12 +162,16 @@ export default function ProductDetail({
           {/* Left Column - Image Gallery */}
           <div className="space-y-4">
             {/* Main Image */}
-            <div className="bg-white rounded-lg shadow-md p-3 sm:p-4 md:p-6 group">
+            <div 
+              className="bg-white rounded-lg shadow-md p-3 sm:p-4 md:p-6 group"
+              onMouseEnter={() => hasMultipleImages && setIsHovering(true)}
+              onMouseLeave={() => setIsHovering(false)}
+            >
               <div className="relative aspect-square bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
                 <img
-                  src={galleryImages[selectedImage]}
+                  src={isHovering && hasMultipleImages ? galleryImages[1] : galleryImages[selectedImage]}
                   alt={product.name}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-108"
+                  className="w-full h-full object-cover transition-all duration-500 group-hover:scale-108"
                   onError={(e) => {
                     e.currentTarget.style.display = 'none';
                     const fallback = document.createElement('div');
@@ -179,21 +183,23 @@ export default function ProductDetail({
               </div>
             </div>
 
-            {/* Thumbnail Gallery - Touch-friendly with 40px minimum */}
-            <div className="grid grid-cols-4 gap-2 sm:gap-3">
-              {galleryImages.map((img, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setSelectedImage(idx)}
-                  className={`aspect-square bg-white rounded-lg border-2 overflow-hidden transition-all touch-manipulation min-h-[80px] min-w-[80px] sm:min-h-[100px] sm:min-w-[100px] ${
-                    selectedImage === idx ? 'border-primary shadow-md scale-95' : 'border-gray-200 hover:border-gray-300 active:scale-95'
-                  }`}
-                  data-testid={`thumbnail-${idx}`}
-                >
-                  <img src={img} alt={`${product.name} ${idx + 1}`} className="w-full h-full object-cover" />
-                </button>
-              ))}
-            </div>
+            {/* Thumbnail Gallery - Only show if multiple images exist */}
+            {hasMultipleImages && (
+              <div className="grid grid-cols-4 gap-2 sm:gap-3">
+                {galleryImages.map((img, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setSelectedImage(idx)}
+                    className={`aspect-square bg-white rounded-lg border-2 overflow-hidden transition-all touch-manipulation min-h-[80px] min-w-[80px] sm:min-h-[100px] sm:min-w-[100px] ${
+                      selectedImage === idx ? 'border-primary shadow-md scale-95' : 'border-gray-200 hover:border-gray-300 active:scale-95'
+                    }`}
+                    data-testid={`thumbnail-${idx}`}
+                  >
+                    <img src={img} alt={`${product.name} ${idx + 1}`} className="w-full h-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Right Column - Product Info */}

@@ -16,6 +16,11 @@ export function ProductCard({ product, onAddToCart, viewMode = "grid" }: Product
   const inStock = parseInt(product.stock.toString()) > 0;
   const price = parseFloat(product.price.toString());
   const [imageError, setImageError] = useState(false);
+  const [isHovering, setIsHovering] = useState(false);
+  
+  // Get second image if available
+  const hasMultipleImages = product.additionalImages && product.additionalImages.length > 0;
+  const displayImage = isHovering && hasMultipleImages ? product.additionalImages[0] : product.image;
 
   // List view layout
   if (viewMode === "list") {
@@ -24,12 +29,17 @@ export function ProductCard({ product, onAddToCart, viewMode = "grid" }: Product
         className="group bg-white rounded-lg overflow-hidden transition-all duration-300 border border-gray-200 hover:shadow-lg hover:border-primary flex flex-col sm:flex-row"
         data-testid={`card-product-${product.id}`}
       >
-        <Link href={`/produkt/${product.id}`} className="sm:w-48 flex-shrink-0">
+        <Link 
+          href={`/produkt/${product.id}`} 
+          className="sm:w-48 flex-shrink-0"
+          onMouseEnter={() => setIsHovering(true)}
+          onMouseLeave={() => setIsHovering(false)}
+        >
           <div className="relative bg-gradient-to-br from-gray-50 to-gray-100 aspect-square sm:h-48 flex items-center justify-center overflow-hidden group-hover:from-gray-100 group-hover:to-gray-200 transition-all">
             <img 
-              src={product.image} 
+              src={displayImage} 
               alt={product.name}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              className="w-full h-full object-cover transition-all duration-300 group-hover:scale-105"
             />
             <div className="absolute top-2 left-2 bg-green-600 text-white rounded-full p-1.5 shadow-md">
               <Shield className="h-3.5 w-3.5" />
@@ -98,7 +108,12 @@ export function ProductCard({ product, onAddToCart, viewMode = "grid" }: Product
       className="group bg-white rounded-lg overflow-hidden border border-gray-200 product-card-hover"
       data-testid={`card-product-${product.id}`}
     >
-      <Link href={`/produkt/${product.id}`} className="block">
+      <Link 
+        href={`/produkt/${product.id}`} 
+        className="block"
+        onMouseEnter={() => setIsHovering(true)}
+        onMouseLeave={() => setIsHovering(false)}
+      >
         <div className="relative bg-white aspect-square flex items-center justify-center overflow-hidden">
           {imageError ? (
             <div className="flex items-center justify-center text-gray-300">
@@ -106,7 +121,7 @@ export function ProductCard({ product, onAddToCart, viewMode = "grid" }: Product
             </div>
           ) : (
             <img 
-              src={product.image} 
+              src={displayImage} 
               alt={product.name}
               className="w-full h-full object-cover product-image-zoom"
               onError={() => setImageError(true)}
