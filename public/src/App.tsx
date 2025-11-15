@@ -16,16 +16,12 @@ import Shop from "./pages/Shop";
 import ProductDetail from "./pages/ProductDetail";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
-import AdminLogin from "./pages/AdminLogin";
 import AdminPanel from "./pages/AdminPanel";
 import OrderHistory from "./pages/OrderHistory";
 import TrackOrder from "./pages/TrackOrder";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Gallery from "./pages/Gallery";
-import Register from "./pages/Register";
-import Login from "./pages/Login";
-import UserProfile from "./pages/UserProfile";
 import NotFound from "./pages/not-found";
 
 function Router() {
@@ -115,16 +111,12 @@ function Router() {
               <Checkout cartItems={cartItems} onClearCart={handleClearCart} />
             )}
           />
-          <Route path="/admin/login" component={AdminLogin} />
           <Route path="/admin" component={AdminPanel} />
           <Route path="/zamowienia" component={OrderHistory} />
           <Route path="/sledzenie" component={TrackOrder} />
           <Route path="/o-nas" component={About} />
           <Route path="/kontakt" component={Contact} />
           <Route path="/galeria" component={Gallery} />
-          <Route path="/rejestracja" component={Register} />
-          <Route path="/logowanie" component={Login} />
-          <Route path="/profil" component={UserProfile} />
           <Route component={NotFound} />
         </Switch>
       </main>

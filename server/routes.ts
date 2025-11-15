@@ -4,47 +4,13 @@ import { storage } from "./storage";
 import {
   insertProductSchema,
   insertOrderSchema,
-  loginSchema,
-  registerSchema,
   insertGallerySchema,
 } from "../shared/schema";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
 import { nanoid } from "nanoid";
 import { fileTypeFromBuffer } from "file-type";
-
-const JWT_SECRET =
-  process.env.JWT_SECRET || "your-secret-key-change-in-production";
-
-// Authentication middleware
-const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res.status(401).json({ error: "No token provided" });
-    }
-
-    const token = authHeader.split(" ")[1];
-    const decoded = jwt.verify(token, JWT_SECRET) as { id: string; email: string; isAdmin: boolean };
-    
-    (req as any).user = decoded;
-    next();
-  } catch (error) {
-    res.status(401).json({ error: "Invalid token" });
-  }
-};
-
-// Admin-only middleware
-const adminMiddleware = async (req: Request, res: Response, next: NextFunction) => {
-  const user = (req as any).user;
-  if (!user || !user.isAdmin) {
-    return res.status(403).json({ error: "Admin access required" });
-  }
-  next();
-};
 
 // Configure multer for file uploads
 const uploadDir = path.join(process.cwd(), "public", "uploads");
@@ -147,7 +113,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/products", authMiddleware, adminMiddleware, upload.array("images", 5), async (req, res) => {
+  app.post("/api/products", upload.array("images", 5), async (req, res) => {
     try {
       console.log("=== CREATE PRODUCT REQUEST ===");
       console.log("Request body:", JSON.stringify(req.body, null, 2));
@@ -204,7 +170,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put("/api/products/:id", authMiddleware, adminMiddleware, upload.array("images", 5), async (req, res) => {
+  app.put("/api/products/:id", upload.array("images", 5), async (req, res) => {
     try {
       const files = req.files as Express.Multer.File[];
       const newImages = files ? files.map(f => `/uploads/${f.filename}`) : [];
@@ -256,7 +222,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.delete("/api/products/:id", authMiddleware, adminMiddleware, async (req, res) => {
+  app.delete("/api/products/:id", async (req, res) => {
     try {
       const product = await storage.getProduct(req.params.id);
       if (product) {
@@ -281,7 +247,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Protected photo upload route for products
-  app.post("/api/products/:id/photo", authMiddleware, adminMiddleware, upload.single("photo"), async (req, res) => {
+  app.post("/api/products/:id/photo", upload.single("photo"), async (req, res) => {
     try {
       const file = req.file;
       if (!file) {
@@ -343,7 +309,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Delete specific photo from product
-  app.delete("/api/products/:productId/photos/:photoIndex", authMiddleware, adminMiddleware, async (req, res) => {
+  app.delete("/api/products/:productId/photos/:photoIndex", async (req, res) => {
     try {
       const { productId, photoIndex } = req.params;
       const index = parseInt(photoIndex);
@@ -411,130 +377,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Auth routes
-  app.post("/api/auth/register", async (req, res) => {
-    try {
-      const validatedData = registerSchema.parse(req.body);
-
-      // Check if user already exists
-      const existingUser = await storage.getUserByEmail(validatedData.email);
-      if (existingUser) {
-        return res.status(400).json({ error: "User already exists" });
-      }
-
-      // Hash password
-      const hashedPassword = await bcrypt.hash(validatedData.password, 10);
-
-      // Create user
-      const user = await storage.createUser({
-        username: validatedData.username,
-        email: validatedData.email,
-        password: hashedPassword,
-        isAdmin: false,
-      });
-
-      // Generate JWT
-      const token = jwt.sign(
-        { id: user.id, email: user.email, isAdmin: user.isAdmin },
-        JWT_SECRET,
-        { expiresIn: "7d" }
-      );
-
-      res.status(201).json({
-        user: {
-          id: user.id,
-          username: user.username,
-          email: user.email,
-          isAdmin: user.isAdmin,
-        },
-        token,
-      });
-    } catch {
-      res.status(400).json({ error: "Invalid registration data" });
-    }
-  });
-
-  app.post("/api/auth/login", async (req, res) => {
-    try {
-      const validatedData = loginSchema.parse(req.body);
-
-      // Find user
-      const user = await storage.getUserByEmail(validatedData.email);
-      if (!user) {
-        return res.status(401).json({ error: "Invalid credentials" });
-      }
-
-      // Verify password
-      const isValidPassword = await bcrypt.compare(
-        validatedData.password,
-        user.password
-      );
-      if (!isValidPassword) {
-        return res.status(401).json({ error: "Invalid credentials" });
-      }
-
-      // Generate JWT
-      const token = jwt.sign(
-        { id: user.id, email: user.email, isAdmin: user.isAdmin },
-        JWT_SECRET,
-        { expiresIn: "7d" }
-      );
-
-      res.json({
-        user: {
-          id: user.id,
-          username: user.username,
-          email: user.email,
-          isAdmin: user.isAdmin,
-        },
-        token,
-      });
-    } catch {
-      res.status(400).json({ error: "Invalid login data" });
-    }
-  });
-
-  app.post("/api/auth/test-login", async (req, res) => {
-    if (process.env.NODE_ENV === "production") {
-      return res.status(403).json({ error: "Test login is disabled in production" });
-    }
-
-    try {
-      const testEmail = "admin@test.pl";
-      const testPassword = "admin123";
-      
-      let user = await storage.getUserByEmail(testEmail);
-      
-      if (!user) {
-        const hashedPassword = await bcrypt.hash(testPassword, 10);
-        user = await storage.createUser({
-          username: "Admin Test",
-          email: testEmail,
-          password: hashedPassword,
-          isAdmin: true,
-        });
-      }
-
-      const token = jwt.sign(
-        { id: user.id, email: user.email, isAdmin: user.isAdmin },
-        JWT_SECRET,
-        { expiresIn: "7d" }
-      );
-
-      res.json({
-        user: {
-          id: user.id,
-          username: user.username,
-          email: user.email,
-          isAdmin: user.isAdmin,
-        },
-        token,
-      });
-    } catch (error) {
-      res.status(500).json({ error: "Failed to test login" });
-    }
-  });
-
   // Gallery routes
   app.get("/api/gallery", async (req, res) => {
     try {
@@ -545,7 +387,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/gallery", authMiddleware, adminMiddleware, upload.single("image"), async (req, res) => {
+  app.post("/api/gallery", upload.single("image"), async (req, res) => {
     try {
       const file = req.file;
       if (!file) {
@@ -562,7 +404,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.delete("/api/gallery/:id", authMiddleware, adminMiddleware, async (req, res) => {
+  app.delete("/api/gallery/:id", async (req, res) => {
     try {
       const image = (await storage.getAllGalleryImages()).find(img => img.id === req.params.id);
       if (image) {
@@ -580,7 +422,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Settings routes
-  app.get("/api/settings", authMiddleware, adminMiddleware, async (req, res) => {
+  app.get("/api/settings", async (req, res) => {
     try {
       const settings = await storage.getAllSettings();
       res.json(settings);
@@ -589,7 +431,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/settings/:key", authMiddleware, adminMiddleware, async (req, res) => {
+  app.get("/api/settings/:key", async (req, res) => {
     try {
       const setting = await storage.getSetting(req.params.key);
       if (!setting) {
@@ -601,7 +443,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put("/api/settings/:key", authMiddleware, adminMiddleware, async (req, res) => {
+  app.put("/api/settings/:key", async (req, res) => {
     try {
       const { value } = req.body;
       if (!value) {
@@ -639,47 +481,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.delete("/api/reviews/:id", authMiddleware, adminMiddleware, async (req, res) => {
+  app.delete("/api/reviews/:id", async (req, res) => {
     try {
       await storage.deleteReview(req.params.id);
       res.json({ success: true });
     } catch (error) {
       res.status(500).json({ error: "Failed to delete review" });
-    }
-  });
-
-  // Wishlist routes
-  app.get("/api/wishlist", authMiddleware, async (req, res) => {
-    try {
-      const user = (req as any).user;
-      const wishlist = await storage.getUserWishlist(user.id);
-      const productIds = wishlist.map((w: any) => w.productId);
-      const products = await Promise.all(
-        productIds.map((id: string) => storage.getProduct(id))
-      );
-      res.json(products.filter(Boolean));
-    } catch (error) {
-      res.status(500).json({ error: "Failed to fetch wishlist" });
-    }
-  });
-
-  app.post("/api/wishlist/:productId", authMiddleware, async (req, res) => {
-    try {
-      const user = (req as any).user;
-      const item = await storage.addToWishlist(user.id, req.params.productId);
-      res.status(201).json(item);
-    } catch (error) {
-      res.status(400).json({ error: "Failed to add to wishlist" });
-    }
-  });
-
-  app.delete("/api/wishlist/:productId", authMiddleware, async (req, res) => {
-    try {
-      const user = (req as any).user;
-      await storage.removeFromWishlist(user.id, req.params.productId);
-      res.json({ success: true });
-    } catch (error) {
-      res.status(500).json({ error: "Failed to remove from wishlist" });
     }
   });
 

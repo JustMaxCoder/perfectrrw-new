@@ -18,6 +18,15 @@
       - Obuwie BHP (Safety Shoes) - work boots
       - Rękawice (Gloves) - protective gloves
       - Ochrona głowy (Head Protection) - safety helmet
+[x] 12. Removed complete authentication and registration system:
+      - Deleted Login.tsx, Register.tsx, UserProfile.tsx, AdminLogin.tsx pages
+      - Removed all auth routes from App.tsx
+      - Removed all login/registration buttons from Header.tsx
+      - Deleted /api/auth/* routes from backend
+      - Deleted /api/wishlist routes from backend
+      - Removed authMiddleware and adminMiddleware from server/routes.ts
+      - Removed auth dependencies (bcrypt, jwt) from routes
+      - Cleaned up AdminPanel.tsx - removed getAuthHeaders usage
 
 ### Summary:
 - All npm dependencies installed successfully (762 packages)

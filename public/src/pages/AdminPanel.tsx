@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { queryClient, apiRequest, getAuthHeaders } from "../lib/queryClient";
+import { queryClient, apiRequest } from "../lib/queryClient";
 import { Card } from "../components/ui/card";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -37,7 +37,7 @@ export default function AdminPanel() {
     mutationFn: async (id: string) => {
       const response = await fetch(`/api/products/${id}`, {
         method: "DELETE",
-        headers: getAuthHeaders(),
+        
       });
       if (!response.ok) throw new Error("Failed to delete product");
       return response.json();
@@ -52,7 +52,7 @@ export default function AdminPanel() {
     mutationFn: async (id: string) => {
       const response = await fetch(`/api/gallery/${id}`, {
         method: "DELETE",
-        headers: getAuthHeaders(),
+        
       });
       if (!response.ok) throw new Error("Failed to delete gallery image");
       return response.json();
@@ -70,7 +70,7 @@ export default function AdminPanel() {
       
       const response = await fetch("/api/gallery", {
         method: "POST",
-        headers: getAuthHeaders(),
+        
         body: formData,
       });
       
@@ -88,7 +88,7 @@ export default function AdminPanel() {
       const response = await fetch(`/api/settings/${key}`, {
         method: "PUT",
         headers: { 
-          ...getAuthHeaders(),
+          
           "Content-Type": "application/json"
         },
         body: JSON.stringify({ value }),
@@ -395,7 +395,7 @@ function PhotoManager({ productId }: { productId: string }) {
       
       const response = await fetch(`/api/products/${productId}/photo?main=${main}`, {
         method: "POST",
-        headers: getAuthHeaders(),
+        
         body: formData,
       });
       
@@ -430,7 +430,7 @@ function PhotoManager({ productId }: { productId: string }) {
     mutationFn: async (photoIndex: number) => {
       const response = await fetch(`/api/products/${productId}/photos/${photoIndex}`, {
         method: "DELETE",
-        headers: getAuthHeaders(),
+        
       });
       
       if (!response.ok) {
@@ -636,7 +636,7 @@ function ProductForm({ product, onClose }: { product: Product | null; onClose: (
 
       const response = await fetch("/api/products", {
         method: "POST",
-        headers: getAuthHeaders(),
+        
         body: fd,
       });
 
@@ -690,7 +690,7 @@ function ProductForm({ product, onClose }: { product: Product | null; onClose: (
 
       const response = await fetch(`/api/products/${product?.id}`, {
         method: "PUT",
-        headers: getAuthHeaders(),
+        
         body: fd,
       });
 

@@ -1,40 +1,14 @@
 
 import { Link, useLocation } from "wouter";
-import { ShoppingCart, Menu, X, User, LogOut, Package, Search } from "lucide-react";
+import { ShoppingCart, Menu, X, Search } from "lucide-react";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { SearchBar } from "./SearchBar";
-import { useState, useEffect } from "react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
+import { useState } from "react";
 
 export function Header({ cartItemCount = 0 }: { cartItemCount?: number }) {
-  const [location, setLocation] = useLocation();
+  const [location] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [user, setUser] = useState<any>(null);
-
-  useEffect(() => {
-    const userData = localStorage.getItem("user");
-    if (userData) {
-      try {
-        setUser(JSON.parse(userData));
-      } catch (error) {
-        console.error("Failed to parse user data:", error);
-        localStorage.removeItem("user");
-      }
-    }
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setUser(null);
-    setLocation("/");
-  };
 
   const categories = [
     { href: "/sklep?category=odziez-robocza", label: "Odzież robocza" },
@@ -78,37 +52,6 @@ export function Header({ cartItemCount = 0 }: { cartItemCount?: number }) {
             >
               <Search className="h-5 w-5" />
             </Button>
-
-            {/* User Menu */}
-            {user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" aria-label="Profil" className="flex-shrink-0">
-                    <User className="h-5 w-5" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48">
-                  <DropdownMenuItem onClick={() => setLocation("/profil")}>
-                    <User className="h-4 w-4 mr-2" />
-                    {user.username}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setLocation("/zamowienia")}>
-                    <Package className="h-4 w-4 mr-2" />
-                    Zamówienia
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={handleLogout}>
-                    <LogOut className="h-4 w-4 mr-2" />
-                    Wyloguj się
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
-              <div className="hidden md:flex gap-2">
-                <Button variant="ghost" size="sm" onClick={() => setLocation("/logowanie")}>
-                  Zaloguj się
-                </Button>
-              </div>
-            )}
 
             {/* Cart */}
             <Link href="/koszyk" data-testid="link-cart">
@@ -250,30 +193,6 @@ export function Header({ cartItemCount = 0 }: { cartItemCount?: number }) {
               >
                 Kontakt
               </Link>
-
-              {!user && (
-                <div className="px-4 py-3 border-t mt-2">
-                  <Button
-                    className="w-full mb-2"
-                    onClick={() => {
-                      setLocation("/logowanie");
-                      setMobileMenuOpen(false);
-                    }}
-                  >
-                    Zaloguj się
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full"
-                    onClick={() => {
-                      setLocation("/rejestracja");
-                      setMobileMenuOpen(false);
-                    }}
-                  >
-                    Zarejestruj się
-                  </Button>
-                </div>
-              )}
             </div>
           </nav>
         )}
