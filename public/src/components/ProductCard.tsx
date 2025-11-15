@@ -95,78 +95,70 @@ export function ProductCard({ product, onAddToCart, viewMode = "grid" }: Product
   // Grid view layout (default)
   return (
     <div
-      className="group bg-white rounded-lg overflow-hidden transition-all duration-300 border border-gray-200 hover:shadow-xl hover:border-primary hover:-translate-y-1"
+      className="group bg-white rounded-lg overflow-hidden border border-gray-200 product-card-hover"
       data-testid={`card-product-${product.id}`}
     >
       <Link href={`/produkt/${product.id}`} className="block">
-        <div className="relative bg-gradient-to-br from-gray-50 to-gray-100 aspect-square flex items-center justify-center overflow-hidden group-hover:from-gray-100 group-hover:to-gray-200 transition-all">
+        <div className="relative bg-white aspect-square flex items-center justify-center overflow-hidden">
           {imageError ? (
-            <div className="flex items-center justify-center text-gray-400">
+            <div className="flex items-center justify-center text-gray-300">
               <Package className="h-16 w-16" />
             </div>
           ) : (
             <img 
               src={product.image} 
               alt={product.name}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              className="w-full h-full object-cover product-image-zoom"
               onError={() => setImageError(true)}
             />
           )}
           
-          {/* Certified Badge */}
-          <div className="absolute top-2 left-2 bg-green-600 text-white rounded-full p-1.5 shadow-md">
-            <Shield className="h-3.5 w-3.5" />
+          {/* Clean badge - only on hover */}
+          <div className="absolute top-3 left-3 bg-black/80 text-white rounded-md px-2 py-1 text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+            BHP
           </div>
         </div>
       </Link>
 
-      <div className="p-3">
+      <div className="p-4">
         <Link href={`/produkt/${product.id}`}>
           <h3
-            className="font-bold text-sm leading-tight mb-2 line-clamp-2 hover:text-primary transition-colors min-h-[2.5rem] text-gray-900"
+            className="font-semibold text-sm leading-tight mb-3 line-clamp-2 hover:text-primary transition-colors min-h-[2.5rem] text-gray-900 tracking-tight"
             data-testid={`text-product-name-${product.id}`}
           >
             {product.name}
           </h3>
         </Link>
 
-        {/* Stock Status with Icon */}
-        <div className={`flex items-center gap-1.5 mb-3 px-2 py-1.5 rounded ${
-          inStock ? "bg-green-50 border border-green-200" : "bg-red-50 border border-red-200"
-        }`}>
-          {inStock ? (
-            <CheckCircle className="h-3.5 w-3.5 text-green-600" />
-          ) : (
-            <XCircle className="h-3.5 w-3.5 text-red-600" />
-          )}
+        {/* Stock Status - Minimal */}
+        <div className="mb-3">
           <span 
-            className={`text-xs font-semibold ${
-              inStock ? "text-green-700" : "text-red-700"
+            className={`text-xs font-medium ${
+              inStock ? "text-green-600" : "text-red-600"
             }`} 
             data-testid={`text-stock-${product.id}`}
           >
-            {inStock ? `W magazynie (${product.stock})` : "Niedostępny"}
+            {inStock ? "W magazynie" : "Niedostępny"}
           </span>
         </div>
 
         {/* Price and Cart Button */}
-        <div className="flex items-center justify-between gap-2 mt-auto pt-3 border-t border-gray-100">
+        <div className="flex items-center justify-between gap-3 mt-auto pt-3 border-t border-gray-100">
           <div className="flex flex-col">
-            <span className="text-lg font-bold text-gray-900" data-testid={`text-price-${product.id}`}>
+            <span className="text-xl font-bold text-gray-900 tracking-tight" data-testid={`text-price-${product.id}`}>
               {price.toFixed(2)} zł
             </span>
-            <span className="text-[10px] text-gray-500 font-medium">+ VAT</span>
+            <span className="text-xs text-gray-500">+ VAT</span>
           </div>
           <Button
             variant="default"
             size="sm"
-            className="bg-primary text-black font-bold"
+            className="bg-primary text-black font-semibold hover:bg-primary/90 transition-minimal"
             onClick={() => onAddToCart?.(product)}
             disabled={!inStock}
             data-testid={`button-add-to-cart-${product.id}`}
           >
-            <ShoppingCart className="h-4 w-4 mr-1" />
-            <span>Dodaj</span>
+            <ShoppingCart className="h-4 w-4" />
           </Button>
         </div>
       </div>

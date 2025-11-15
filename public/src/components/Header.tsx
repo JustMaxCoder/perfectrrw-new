@@ -1,9 +1,11 @@
 
 import { Link } from "wouter";
-import { ShoppingCart, Menu, X } from "lucide-react";
+import { ShoppingCart, Menu, X, Search } from "lucide-react";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
+import { Input } from "./ui/input";
 import { useState, useEffect } from "react";
+import { SearchBar } from "./SearchBar";
 
 export function Header({ cartItemCount = 0 }: { cartItemCount?: number }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -11,7 +13,7 @@ export function Header({ cartItemCount = 0 }: { cartItemCount?: number }) {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 10);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -19,35 +21,40 @@ export function Header({ cartItemCount = 0 }: { cartItemCount?: number }) {
 
   return (
     <header
-      className={`sticky top-0 z-50 bg-white/95 backdrop-blur-sm transition-all duration-300 ${
-        isScrolled ? "shadow-lg" : "shadow-md"
+      className={`sticky top-0 z-50 bg-white/98 backdrop-blur-md transition-all duration-300 ${
+        isScrolled ? "shadow-sm border-b border-gray-100" : ""
       }`}
-      style={{ minHeight: "120px" }}
     >
       <div className="max-w-7xl mx-auto">
         {/* Main Header Row */}
-        <div className="flex items-center justify-between px-4 sm:px-6 py-4 md:py-6">
-          {/* Left Block - Logo & Tagline */}
+        <div className="flex items-center justify-between px-4 sm:px-6 py-4 gap-4">
+          {/* Logo */}
           <Link
             href="/"
-            className="flex flex-col gap-1 flex-shrink-0 animate-fade-in"
+            className="flex items-center gap-2 flex-shrink-0 animate-fade-in group"
           >
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold whitespace-nowrap">
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
               <span className="text-black">BHP</span>{" "}
-              <span className="text-primary">PERFECT</span>
+              <span className="text-primary transition-colors">PERFECT</span>
             </h1>
-            <p className="hidden md:block text-xs text-gray-600 max-w-xs leading-tight">
-              Professional workwear and personal protective equipment for your safety
-            </p>
           </Link>
 
+          {/* Search Bar - Desktop */}
+          <div className="hidden md:block flex-1 max-w-xl mx-8">
+            <SearchBar />
+          </div>
+
           {/* Right Block - Cart & Mobile Menu */}
-          <div className="flex items-center gap-3 md:gap-4">
+          <div className="flex items-center gap-2">
             <Link href="/koszyk">
-              <Button variant="ghost" size="icon" className="relative">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="relative transition-minimal hover:bg-primary/10"
+              >
                 <ShoppingCart className="h-5 w-5" />
                 {cartItemCount > 0 && (
-                  <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 bg-primary text-black text-xs font-bold">
+                  <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 bg-primary text-black text-xs font-bold border-2 border-white">
                     {cartItemCount}
                   </Badge>
                 )}
@@ -57,86 +64,110 @@ export function Header({ cartItemCount = 0 }: { cartItemCount?: number }) {
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden"
+              className="md:hidden transition-minimal"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
-              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
           </div>
         </div>
 
-        {/* Desktop Navigation - Product Categories */}
-        <nav className="hidden md:flex items-center justify-center gap-2 px-6 py-3 border-t">
+        {/* Search Bar - Mobile */}
+        <div className="md:hidden px-4 pb-3">
+          <SearchBar />
+        </div>
+
+        {/* Desktop Navigation - Clean Categories */}
+        <nav className="hidden md:flex items-center justify-center gap-1 px-6 py-2 border-t border-gray-100">
+          <Link
+            href="/sklep"
+            className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-primary transition-colors relative group"
+          >
+            Wszystkie produkty
+            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full"></span>
+          </Link>
           <Link
             href="/sklep?category=odziez-robocza"
-            className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-primary transition-all hover:translate-y-[-2px]"
+            className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-primary transition-colors relative group"
           >
             Odzież robocza
+            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full"></span>
           </Link>
           <Link
             href="/sklep?category=obuwie"
-            className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-primary transition-all hover:translate-y-[-2px]"
+            className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-primary transition-colors relative group"
           >
             Obuwie BHP
+            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full"></span>
           </Link>
           <Link
             href="/sklep?category=rekawice"
-            className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-primary transition-all hover:translate-y-[-2px]"
+            className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-primary transition-colors relative group"
           >
             Rękawice
+            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full"></span>
           </Link>
           <Link
             href="/sklep?category=ochrona-glowy"
-            className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-primary transition-all hover:translate-y-[-2px]"
+            className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-primary transition-colors relative group"
           >
             Ochrona głowy
+            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full"></span>
           </Link>
           <Link
-            href="/sklep"
-            className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-primary transition-all hover:translate-y-[-2px]"
+            href="/kontakt"
+            className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-primary transition-colors relative group"
           >
-            Wszystkie produkty
+            Kontakt
+            <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full"></span>
           </Link>
         </nav>
 
-        {/* Mobile Menu - Product Categories */}
+        {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <nav className="md:hidden border-t bg-white max-h-[calc(100vh-140px)] overflow-y-auto animate-slide-down">
-            <div className="py-4 px-4 space-y-2">
+          <nav className="md:hidden border-t border-gray-100 bg-white animate-slide-down">
+            <div className="py-3 px-4 space-y-1">
+              <Link
+                href="/sklep"
+                className="block py-2.5 px-4 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-primary rounded-md transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Wszystkie produkty
+              </Link>
               <Link
                 href="/sklep?category=odziez-robocza"
-                className="block py-3 px-4 bg-gray-50 rounded-lg text-sm font-medium text-gray-700 hover:text-primary transition-colors"
+                className="block py-2.5 px-4 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-primary rounded-md transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Odzież robocza
               </Link>
               <Link
                 href="/sklep?category=obuwie"
-                className="block py-3 px-4 bg-gray-50 rounded-lg text-sm font-medium text-gray-700 hover:text-primary transition-colors"
+                className="block py-2.5 px-4 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-primary rounded-md transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Obuwie BHP
               </Link>
               <Link
                 href="/sklep?category=rekawice"
-                className="block py-3 px-4 bg-gray-50 rounded-lg text-sm font-medium text-gray-700 hover:text-primary transition-colors"
+                className="block py-2.5 px-4 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-primary rounded-md transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Rękawice
               </Link>
               <Link
                 href="/sklep?category=ochrona-glowy"
-                className="block py-3 px-4 bg-gray-50 rounded-lg text-sm font-medium text-gray-700 hover:text-primary transition-colors"
+                className="block py-2.5 px-4 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-primary rounded-md transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Ochrona głowy
               </Link>
               <Link
-                href="/sklep"
-                className="block py-3 px-4 bg-gray-50 rounded-lg text-sm font-medium text-gray-700 hover:text-primary transition-colors"
+                href="/kontakt"
+                className="block py-2.5 px-4 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-primary rounded-md transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Wszystkie produkty
+                Kontakt
               </Link>
             </div>
           </nav>

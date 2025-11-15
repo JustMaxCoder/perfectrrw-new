@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* BHP PERFEKT THEME - BLACK & YELLOW (#0b0b0b & #ffd000) */
+/* BHP PERFECT 2025 MINIMALIST THEME - BLACK & YELLOW (#0b0b0b & #ffd000) */
 :root {
   --button-outline: rgba(255, 255, 255, 0.1);
   --badge-outline: rgba(255, 255, 255, 0.05);
@@ -10,31 +10,32 @@
   /* Automatic computation of border around primary / danger buttons */
   --opaque-button-border-intensity: 9; /* In terms of percentages */
 
-  /* Backgrounds applied on top of other backgrounds when hovered/active */
-  --elevate-1: rgba(255, 255, 255, 0.04);
-  --elevate-2: rgba(255, 255, 255, 0.09);
+  /* Subtle elevation backgrounds for minimalist design */
+  --elevate-1: rgba(0, 0, 0, 0.02);
+  --elevate-2: rgba(0, 0, 0, 0.04);
 
-  --background: 0 0% 98%;
+  /* Clean, minimal backgrounds */
+  --background: 0 0% 99%; /* Almost white #fcfcfc */
 
-  --foreground: 0 0% 9%;
+  --foreground: 0 0% 4.3%; /* Pure black #0b0b0b */
 
-  --border: 0 0% 18%;
+  --border: 0 0% 90%; /* Light gray #e5e5e5 */
 
-  --card: 0 0% 100%;
+  --card: 0 0% 100%; /* Pure white */
 
-  --card-foreground: 0 0% 9%;
+  --card-foreground: 0 0% 4.3%;
 
-  --card-border: 0 0% 88%;
+  --card-border: 0 0% 90%;
 
-  --sidebar: 0 0% 6%;
+  --sidebar: 0 0% 4.3%;
 
   --sidebar-foreground: 0 0% 98%;
 
   --sidebar-border: 0 0% 12%;
 
-  --sidebar-primary: 48 100% 50%;
+  --sidebar-primary: 48 100% 50%; /* Yellow #ffd000 */
 
-  --sidebar-primary-foreground: 0 0% 4%;
+  --sidebar-primary-foreground: 0 0% 4.3%;
 
   --sidebar-accent: 0 0% 12%;
 
@@ -44,31 +45,31 @@
 
   --popover: 0 0% 100%;
 
-  --popover-foreground: 0 0% 9%;
+  --popover-foreground: 0 0% 4.3%;
 
-  --popover-border: 0 0% 88%;
+  --popover-border: 0 0% 90%;
 
-  --primary: 48 100% 50%;
+  --primary: 48 100% 50%; /* Yellow #ffd000 */
 
-  --primary-foreground: 0 0% 4%;
+  --primary-foreground: 0 0% 4.3%; /* Black text on yellow */
 
-  --secondary: 0 0% 96%;
+  --secondary: 0 0% 97%; /* Very light gray #f7f7f7 */
 
-  --secondary-foreground: 0 0% 9%;
+  --secondary-foreground: 0 0% 4.3%;
 
-  --muted: 0 0% 96%;
+  --muted: 0 0% 97%;
 
-  --muted-foreground: 0 0% 45%;
+  --muted-foreground: 0 0% 50%; /* Medium gray #808080 */
 
-  --accent: 48 95% 96%;
+  --accent: 48 100% 97%; /* Very light yellow tint */
 
-  --accent-foreground: 0 0% 9%;
+  --accent-foreground: 0 0% 4.3%;
 
   --destructive: 0 72% 51%;
 
   --destructive-foreground: 0 0% 98%;
 
-  --input: 0 0% 88%;
+  --input: 0 0% 90%;
   --ring: 48 100% 50%;
   --chart-1: 48 100% 50%;
   --chart-2: 0 0% 98%;
@@ -76,24 +77,22 @@
   --chart-4: 0 0% 60%;
   --chart-5: 48 100% 35%;
 
-  --font-sans: Inter, sans-serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-serif: Georgia, serif;
   --font-mono: Menlo, monospace;
-  --radius: 0.5rem; /* 8px */
-  --shadow-2xs: 0px 2px 0px 0px hsl(0 0% 0% / 0.3);
-  --shadow-xs: 0px 2px 0px 0px hsl(0 0% 0% / 0.35);
-  --shadow-sm:
-    0px 2px 0px 0px hsl(0 0% 0% / 0.4), 0px 1px 2px -1px hsl(0 0% 0% / 0.45);
-  --shadow:
-    0px 2px 0px 0px hsl(0 0% 0% / 0.4), 0px 1px 2px -1px hsl(0 0% 0% / 0.5);
-  --shadow-md:
-    0px 2px 0px 0px hsl(0 0% 0% / 0.45), 0px 2px 4px -1px hsl(0 0% 0% / 0.55);
-  --shadow-lg:
-    0px 2px 0px 0px hsl(0 0% 0% / 0.5), 0px 4px 6px -1px hsl(0 0% 0% / 0.6);
-  --shadow-xl:
-    0px 2px 0px 0px hsl(0 0% 0% / 0.55), 0px 8px 10px -1px hsl(0 0% 0% / 0.65);
-  --shadow-2xl: 0px 2px 0px 0px hsl(0 0% 0% / 0.7);
-  --tracking-normal: 0em;
+  --radius: 0.375rem; /* 6px - more subtle than before */
+  
+  /* Minimal, subtle shadows */
+  --shadow-2xs: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
+  --shadow-xs: 0px 1px 3px 0px rgba(0, 0, 0, 0.08);
+  --shadow-sm: 0px 2px 4px 0px rgba(0, 0, 0, 0.08);
+  --shadow: 0px 2px 8px 0px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0px 4px 12px 0px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
+  --shadow-xl: 0px 12px 24px 0px rgba(0, 0, 0, 0.18);
+  --shadow-2xl: 0px 16px 32px 0px rgba(0, 0, 0, 0.2);
+  
+  --tracking-normal: -0.01em; /* Slight tightening for Inter */
   --spacing: 0.25rem;
 
   /* Automatically computed borders - intensity can be controlled by the user by the --opaque-button-border-intensity setting */
@@ -349,7 +348,7 @@
     pointer-events: none;
   }
 
-  /* Animation utilities */
+  /* 2025 Minimalist Animation Utilities */
   @keyframes fade-in {
     from {
       opacity: 0;
@@ -362,7 +361,7 @@
   @keyframes slide-down {
     from {
       opacity: 0;
-      transform: translateY(-10px);
+      transform: translateY(-8px);
     }
     to {
       opacity: 1;
@@ -373,7 +372,7 @@
   @keyframes slide-up {
     from {
       opacity: 0;
-      transform: translateY(20px);
+      transform: translateY(16px);
     }
     to {
       opacity: 1;
@@ -384,7 +383,7 @@
   @keyframes fade-in-up {
     from {
       opacity: 0;
-      transform: translateY(30px);
+      transform: translateY(20px);
     }
     to {
       opacity: 1;
@@ -392,33 +391,69 @@
     }
   }
 
-  @keyframes subtle-bounce {
+  @keyframes subtle-scale {
     0%, 100% {
       transform: scale(1);
     }
     50% {
+      transform: scale(1.02);
+    }
+  }
+
+  @keyframes smooth-zoom {
+    from {
+      transform: scale(1);
+    }
+    to {
       transform: scale(1.05);
     }
   }
 
   .animate-fade-in {
-    animation: fade-in 0.6s ease-out;
+    animation: fade-in 0.4s ease-out;
   }
 
   .animate-slide-down {
-    animation: slide-down 0.3s ease-out;
+    animation: slide-down 0.25s ease-out;
   }
 
   .animate-slide-up {
-    animation: slide-up 0.6s ease-out forwards;
+    animation: slide-up 0.5s ease-out forwards;
   }
 
   .animate-fade-in-up {
-    animation: fade-in-up 0.8s ease-out;
+    animation: fade-in-up 0.6s ease-out;
   }
 
-  .animate-subtle-bounce:hover {
-    animation: subtle-bounce 0.6s ease-in-out;
+  .animate-subtle-scale:hover {
+    animation: subtle-scale 0.4s ease-in-out;
+  }
+
+  /* Smooth transitions for minimalist design */
+  .transition-minimal {
+    transition: all 0.2s ease-in-out;
+  }
+
+  .transition-smooth {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Product card hover effects */
+  .product-card-hover {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .product-card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .product-image-zoom {
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .product-image-zoom:hover {
+    transform: scale(1.05);
   }
 
   /* .no-default-hover-elevate/no-default-active-elevate is an escape hatch so consumers of
