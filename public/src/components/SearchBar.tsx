@@ -55,9 +55,9 @@ export function SearchBar() {
   };
 
   return (
-    <div className="relative" ref={searchRef}>
+    <div className="relative w-full" ref={searchRef}>
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
         <Input
           type="text"
           placeholder="Szukaj produktów lub kategorii..."
@@ -85,7 +85,7 @@ export function SearchBar() {
       </div>
 
       {isOpen && (
-        <Card className="absolute top-full mt-2 w-full max-h-96 overflow-y-auto z-50">
+        <Card className="absolute top-[calc(100%+0.5rem)] left-0 right-0 max-h-96 overflow-y-auto z-[100] shadow-lg border bg-white">
           {searchQuery ? (
             filteredProducts.length > 0 ? (
               <div className="p-2">
@@ -98,10 +98,10 @@ export function SearchBar() {
                     <img
                       src={product.image}
                       alt={product.name}
-                      className="w-12 h-12 object-cover rounded bg-gray-100"
+                      className="w-12 h-12 object-cover rounded bg-gray-100 flex-shrink-0"
                     />
-                    <div className="flex-1">
-                      <p className="font-medium text-sm">{product.name}</p>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-sm truncate">{product.name}</p>
                       <p className="text-primary font-bold">{parseFloat(product.price).toFixed(2)} zł</p>
                     </div>
                   </button>

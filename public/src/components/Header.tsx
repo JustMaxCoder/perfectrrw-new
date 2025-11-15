@@ -52,7 +52,7 @@ export function Header({ cartItemCount = 0 }: { cartItemCount?: number }) {
           </Link>
 
           {/* Search Bar - Desktop Only */}
-          <div className="hidden md:block flex-1 max-w-xl mx-8">
+          <div className="hidden md:block flex-1 max-w-xl mx-8 min-w-0">
             <SearchBar /> 
           </div>
 
