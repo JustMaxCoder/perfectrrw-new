@@ -1,12 +1,30 @@
-# Sklep BHP - E-Commerce Platform
+# BHP Perfect - E-Commerce Platform
 
-## Overview
+## Огляд проекту
 
-Sklep BHP is a B2B/B2C e-commerce platform specializing in occupational health and safety equipment. The application provides a full-featured online store for industrial safety gear, work clothing, protective footwear, and personal protective equipment. Built with a modern TypeScript stack, it features a React-based frontend with a utility-focused design system and an Express backend with PostgreSQL database storage.
+BHP Perfect - повнофункціональна платформа електронної комерції для продажу засобів індивідуального захисту та робочого одягу. Побудована на сучасному TypeScript стеку з React frontend і Express backend.
 
-The platform supports product browsing, shopping cart functionality, order management, and user authentication with admin capabilities. The design emphasizes clarity, trust, and efficiency while maintaining industrial aesthetics through a black, yellow, and white color scheme.
+## Архітектура
 
-## Recent Changes
+### Frontend (public/src/)
+- React 18 + TypeScript
+- Vite для швидкої розробки
+- Tailwind CSS + Shadcn/ui компоненти
+- Wouter для клієнтського роутингу
+- TanStack Query для управління даними
+
+### Backend (server/)
+- Express.js + TypeScript
+- Drizzle ORM
+- JWT аутентифікація
+- Multer для завантаження файлів
+
+### База даних (shared/)
+- PostgreSQL (Neon Serverless)
+- Drizzle ORM схеми
+- Автоматична синхронізація типів
+
+## Останні зміни
 
 ### November 12, 2025 - Product Creation Fix
 - **Fixed:** Admin panel product creation now works correctly when creating products with uploaded images instead of URLs

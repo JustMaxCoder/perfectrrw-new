@@ -1,31 +1,11 @@
 {
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "always"
-  },
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact"
-  ],
-  "files.eol": "\n",
-  "editor.tabSize": 2,
-  "editor.wordWrap": "on",
-  "files.trimTrailingWhitespace": true,
-  "files.insertFinalNewline": true,
-  "workbench.iconTheme": "material-icon-theme",
-  "tailwindCSS.includeLanguages": {
-    "plaintext": "html",
-    "javascript": "javascript",
-    "typescript": "typescript",
-    "javascriptreact": "javascriptreact",
-    "typescriptreact": "typescriptreact"
-  },
-  "css.lint.unknownAtRules": "ignore",
-  // Prettier extension settings - prefer local installation
-  "prettier.prettierPath": "./node_modules/prettier/index.cjs",
-  "prettier.resolveGlobalModules": false,
-  "prettier.requireConfig": false
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "files.exclude": {
+    "node_modules": true,
+    "dist": true,
+    ".replit": true,
+    "replit.nix": true
+  }
 }
