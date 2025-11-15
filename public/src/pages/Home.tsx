@@ -18,27 +18,27 @@ export default function Home() {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section - Улучшенная версия */}
-      <section className="relative text-white min-h-[500px] md:min-h-[600px] lg:min-h-[700px] flex items-center">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${bhpBackground})` }} />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40" />
+      {/* Hero Section - Enhanced with animations */}
+      <section className="relative text-white min-h-[500px] md:min-h-[600px] lg:min-h-[700px] flex items-center overflow-hidden">
+        <div className="absolute inset-0 bg-cover bg-center animate-fade-in" style={{ backgroundImage: `url(${bhpBackground})` }} />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40 animate-gradient" />
 
         <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 md:py-24 w-full">
           <div className="max-w-3xl">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 sm:mb-6 leading-tight">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 sm:mb-6 leading-tight animate-slide-in-left">
               <span className="text-white drop-shadow-2xl">BHP</span>{" "}
               <span className="text-primary drop-shadow-2xl">PERFECT</span>
             </h1>
-            <p className="text-lg sm:text-xl md:text-2xl text-gray-100 mb-6 sm:mb-8 drop-shadow-lg leading-relaxed">
+            <p className="text-lg sm:text-xl md:text-2xl text-gray-100 mb-6 sm:mb-8 drop-shadow-lg leading-relaxed animate-slide-in-left" style={{ animationDelay: '0.2s', animationFillMode: 'both' }}>
               Twoje bezpieczeństwo - nasza pasja! Szeroki wybór produktów BHP w najlepszych cenach.
             </p>
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 animate-slide-in-left" style={{ animationDelay: '0.4s', animationFillMode: 'both' }}>
               <Link href="/sklep" data-testid="button-shop-now" className="w-full sm:w-auto">
                 <Button
                   size="lg"
-                  className="w-full sm:w-auto bg-primary text-black font-bold px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg hover:bg-primary/90 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+                  className="w-full sm:w-auto bg-primary text-black font-bold px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg hover:bg-primary/90 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 group"
                 >
-                  Zobacz produkty <ArrowRight className="ml-2 h-5 w-5" />
+                  Zobacz produkty <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
               <Link href="/kontakt" data-testid="button-contact" className="w-full sm:w-auto">
@@ -117,7 +117,7 @@ export default function Home() {
                       href={`/sklep?category=${category.slug}`}
                       data-testid={`category-${category.slug}`}
                     >
-                      <div className="group cursor-pointer bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl border border-gray-100">
+                      <div className="group cursor-pointer bg-white rounded-2xl shadow-lg overflow-hidden category-card-hover border border-gray-100">
                         <div className="relative h-56 md:h-64 overflow-hidden">
                           <img
                             src={category.image}
@@ -125,20 +125,24 @@ export default function Home() {
                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                          {/* Hover overlay with icon */}
+                          <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                            <ArrowRight className="h-12 w-12 text-primary transform translate-x-0 group-hover:translate-x-2 transition-transform duration-300" />
+                          </div>
                         </div>
 
                         <div className="p-6">
-                          <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">
+                          <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors duration-300">
                             {category.label}
                           </h3>
                           <p className="text-sm text-gray-600 mb-4 leading-relaxed">
                             {category.description}
                           </p>
                           <div className="flex items-center justify-between">
-                            <span className="text-sm font-semibold text-primary">
+                            <span className="text-sm font-semibold text-primary group-hover:scale-105 transition-transform duration-300 inline-block">
                               {categoryProducts.length} {categoryProducts.length === 1 ? 'produkt' : 'produktów'}
                             </span>
-                            <div className="bg-primary/10 rounded-full px-3 py-1 text-xs font-bold text-gray-700">
+                            <div className="bg-primary/10 rounded-full px-3 py-1 text-xs font-bold text-gray-700 group-hover:bg-primary group-hover:text-black transition-all duration-300">
                               BHP
                             </div>
                           </div>

@@ -348,7 +348,7 @@
     pointer-events: none;
   }
 
-  /* 2025 Minimalist Animation Utilities */
+  /* 2025 Enhanced Animation Utilities */
   @keyframes fade-in {
     from {
       opacity: 0;
@@ -391,6 +391,28 @@
     }
   }
 
+  @keyframes slide-in-left {
+    from {
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slide-in-right {
+    from {
+      opacity: 0;
+      transform: translateX(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
   @keyframes subtle-scale {
     0%, 100% {
       transform: scale(1);
@@ -409,6 +431,39 @@
     }
   }
 
+  @keyframes fly-to-cart {
+    0% {
+      opacity: 1;
+      transform: scale(1) translate(0, 0);
+    }
+    50% {
+      opacity: 0.8;
+      transform: scale(0.5) translate(200px, -100px);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(0.2) translate(400px, -200px);
+    }
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 10px rgba(255, 208, 0, 0.3);
+    }
+    50% {
+      box-shadow: 0 0 20px rgba(255, 208, 0, 0.6);
+    }
+  }
+
+  @keyframes icon-bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+  }
+
   .animate-fade-in {
     animation: fade-in 0.4s ease-out;
   }
@@ -424,6 +479,26 @@
   .animate-fade-in-up {
     animation: fade-in-up 0.6s ease-out;
     animation-fill-mode: both;
+  }
+
+  .animate-slide-in-left {
+    animation: slide-in-left 0.6s ease-out;
+  }
+
+  .animate-slide-in-right {
+    animation: slide-in-right 0.6s ease-out;
+  }
+
+  .animate-fly-to-cart {
+    animation: fly-to-cart 0.8s ease-out forwards;
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  .animate-icon-bounce {
+    animation: icon-bounce 0.5s ease-in-out;
   }
 
   /* Staggered animations for cards */
@@ -451,6 +526,10 @@
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
+  .transition-transform {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
   /* Product card hover effects */
   .product-card-hover {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -467,6 +546,40 @@
 
   .product-image-zoom:hover {
     transform: scale(1.05);
+  }
+
+  /* Category card hover effects */
+  .category-card-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .category-card-hover:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--shadow-xl);
+  }
+
+  /* Icon hover effects */
+  .icon-hover {
+    transition: transform 0.3s ease;
+  }
+
+  .icon-hover:hover {
+    transform: scale(1.1) rotate(5deg);
+  }
+
+  /* Gradient background animation */
+  @keyframes gradient-shift {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: gradient-shift 4s ease infinite;
   }
 
   /* .no-default-hover-elevate/no-default-active-elevate is an escape hatch so consumers of
