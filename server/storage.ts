@@ -97,8 +97,57 @@ export class MemStorage implements IStorage {
   }
 
   private seedData() {
-    // Все товары удалены из магазина
-    const sampleProducts: InsertProduct[] = [];
+    // Po jednym produkcie dla każdej kategorii
+    const sampleProducts: InsertProduct[] = [
+      {
+        name: "Bluza robocza BHP Perfect",
+        description: "Wytrzymała bluza robocza z wysokiej jakości materiału. Idealna do pracy w różnych warunkach.",
+        price: "89.99",
+        image: "https://images.unsplash.com/photo-1578681994506-b8f463449011?w=800&h=800&fit=crop",
+        category: "odziez-robocza",
+        stock: 50,
+        available: true,
+        shipping: "standard",
+        hasSizes: true,
+        popularity: 85,
+      },
+      {
+        name: "Buty robocze S3 Premium",
+        description: "Bezpieczne buty robocze z podnoskiem stalowym i podeszwą antyprzebiciową. Klasa ochrony S3.",
+        price: "159.99",
+        image: "https://images.unsplash.com/photo-1542219550-37153d387c27?w=800&h=800&fit=crop",
+        category: "obuwie",
+        stock: 40,
+        available: true,
+        shipping: "standard",
+        hasSizes: true,
+        popularity: 92,
+      },
+      {
+        name: "Rękawice ochronne Nitrilon",
+        description: "Rękawice robocze powlekane nitrylem. Doskonała przyczepność i odporność na przebicie.",
+        price: "12.99",
+        image: "https://images.unsplash.com/photo-1585435557343-3b092031a831?w=800&h=800&fit=crop",
+        category: "rekawice",
+        stock: 200,
+        available: true,
+        shipping: "standard",
+        hasSizes: true,
+        popularity: 78,
+      },
+      {
+        name: "Kask ochronny SafeGuard",
+        description: "Profesjonalny kask budowlany z regulacją. Spełnia najwyższe normy bezpieczeństwa.",
+        price: "45.99",
+        image: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=800&h=800&fit=crop",
+        category: "ochrona-glowy",
+        stock: 75,
+        available: true,
+        shipping: "standard",
+        hasSizes: false,
+        popularity: 88,
+      },
+    ];
 
     sampleProducts.forEach((product) => {
       const id = randomUUID();
