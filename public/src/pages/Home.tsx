@@ -18,25 +18,25 @@ export default function Home() {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section - Enhanced with animations */}
-      <section className="relative text-white min-h-[500px] md:min-h-[600px] lg:min-h-[700px] flex items-center overflow-hidden">
+      {/* Hero Section - Mobile-First Design */}
+      <section className="relative text-white min-h-[400px] sm:min-h-[500px] md:min-h-[600px] lg:min-h-[700px] flex items-center overflow-hidden">
         <div className="absolute inset-0 bg-cover bg-center animate-fade-in" style={{ backgroundImage: `url(${bhpBackground})` }} />
         <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40 animate-gradient" />
 
-        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 md:py-24 w-full">
+        <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20 lg:py-24 w-full">
           <div className="max-w-3xl">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 sm:mb-6 leading-tight animate-slide-in-left">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-3 sm:mb-4 md:mb-6 leading-tight animate-slide-in-left">
               <span className="text-white drop-shadow-2xl">BHP</span>{" "}
               <span className="text-primary drop-shadow-2xl">PERFECT</span>
             </h1>
-            <p className="text-lg sm:text-xl md:text-2xl text-gray-100 mb-6 sm:mb-8 drop-shadow-lg leading-relaxed animate-slide-in-left" style={{ animationDelay: '0.2s', animationFillMode: 'both' }}>
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-100 mb-5 sm:mb-6 md:mb-8 drop-shadow-lg leading-relaxed animate-slide-in-left" style={{ animationDelay: '0.2s', animationFillMode: 'both' }}>
               Twoje bezpieczeństwo - nasza pasja! Szeroki wybór produktów BHP w najlepszych cenach.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 animate-slide-in-left" style={{ animationDelay: '0.4s', animationFillMode: 'both' }}>
               <Link href="/sklep" data-testid="button-shop-now" className="w-full sm:w-auto">
                 <Button
                   size="lg"
-                  className="w-full sm:w-auto bg-primary text-black font-bold px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg hover:bg-primary/90 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 group"
+                  className="w-full sm:w-auto bg-primary text-black font-bold px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg hover:bg-primary/90 shadow-xl hover:shadow-2xl transition-all duration-300 active:scale-95 group min-h-[52px]"
                 >
                   Zobacz produkty <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
@@ -45,7 +45,7 @@ export default function Home() {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="w-full sm:w-auto backdrop-blur-sm bg-white/10 border-2 border-white text-white hover:bg-white hover:text-black px-6 sm:px-8 py-4 sm:py-6 text-base sm:text-lg font-bold shadow-xl transition-all duration-300 hover:scale-105"
+                  className="w-full sm:w-auto backdrop-blur-sm bg-white/10 border-2 border-white text-white hover:bg-white hover:text-black active:bg-white active:text-black px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg font-bold shadow-xl transition-all duration-300 active:scale-95 min-h-[52px]"
                 >
                   Skontaktuj się z nami
                 </Button>
@@ -55,34 +55,38 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Categories Section - Улучшенная версия */}
-      <section className="py-12 sm:py-16 md:py-20 lg:py-24 bg-gradient-to-b from-gray-50 to-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10 sm:mb-12 md:mb-16">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 sm:mb-6 text-gray-900">
+      {/* Categories Section - Mobile-First with Horizontal Scroll */}
+      <section className="py-8 sm:py-12 md:py-16 lg:py-20 bg-gradient-to-b from-gray-50 to-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-6 sm:mb-8 md:mb-12 px-4">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 md:mb-6 text-gray-900">
               Nasze kategorie
             </h2>
-            <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
               Szeroki wybór profesjonalnego sprzętu BHP. Wybierz kategorię i poznaj naszą ofertę.
             </p>
           </div>
 
           {isLoading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="bg-white rounded-2xl shadow-lg overflow-hidden h-96 animate-pulse">
-                  <div className="h-56 md:h-64 bg-gray-200" />
-                  <div className="p-6 space-y-3">
-                    <div className="h-6 bg-gray-200 rounded w-3/4" />
-                    <div className="h-4 bg-gray-200 rounded w-full" />
-                    <div className="h-4 bg-gray-200 rounded w-5/6" />
+            <div className="px-4 sm:px-6 lg:px-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="bg-white rounded-2xl shadow-lg overflow-hidden h-80 sm:h-96 animate-pulse">
+                    <div className="h-48 sm:h-56 md:h-64 bg-gray-200" />
+                    <div className="p-4 sm:p-6 space-y-3">
+                      <div className="h-5 sm:h-6 bg-gray-200 rounded w-3/4" />
+                      <div className="h-4 bg-gray-200 rounded w-full" />
+                      <div className="h-4 bg-gray-200 rounded w-5/6" />
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+              {/* Mobile: Horizontal Scroll */}
+              <div className="lg:hidden overflow-x-auto pb-4 -mb-4 scrollbar-hide">
+                <div className="flex gap-4 px-4 min-w-min">
                 {[
                   {
                     slug: "odziez-robocza",

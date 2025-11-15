@@ -275,15 +275,30 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Improve touch responsiveness on mobile */
+  /* Mobile-first optimizations */
   @media (hover: none) and (pointer: coarse) {
     * {
       -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
     }
 
-    button, a, input, select, textarea {
+    /* Touch-friendly minimum sizes */
+    button, a, input, select, textarea, [role="button"] {
       touch-action: manipulation;
-      min-height: 44px; /* Apple's recommended touch target size */
+      min-height: 44px;
+      min-width: 44px;
+    }
+
+    /* Remove hover states on touch devices */
+    .hover-elevate:hover::after,
+    .hover-elevate-2:hover::after {
+      background-color: transparent;
+    }
+
+    /* Active states for touch */
+    button:active, a:active, [role="button"]:active {
+      transform: scale(0.98);
+      transition: transform 0.1s ease;
     }
   }
 
@@ -301,16 +316,51 @@
     }
   }
 
-  /* Extra small screens optimization */
-  @media screen and (max-width: 375px) {
+  /* Mobile typography optimizations */
+  @media screen and (max-width: 640px) {
+    html {
+      font-size: 14px;
+    }
+
     h1 {
-      font-size: 2rem;
+      font-size: 1.875rem;
       line-height: 2.25rem;
     }
 
     h2 {
-      font-size: 1.75rem;
+      font-size: 1.5rem;
       line-height: 2rem;
+    }
+
+    h3 {
+      font-size: 1.25rem;
+      line-height: 1.75rem;
+    }
+
+    p {
+      font-size: 0.875rem;
+      line-height: 1.5rem;
+    }
+  }
+
+  /* Extra small screens optimization */
+  @media screen and (max-width: 375px) {
+    h1 {
+      font-size: 1.5rem;
+      line-height: 2rem;
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      line-height: 1.75rem;
+    }
+  }
+
+  /* Safe area for notched devices */
+  @supports (padding: max(0px)) {
+    body {
+      padding-left: max(0px, env(safe-area-inset-left));
+      padding-right: max(0px, env(safe-area-inset-right));
     }
   }
 }
