@@ -30,7 +30,7 @@ export default function Shop({
   const [stockFilter, setStockFilter] = useState("all");
   const [sortBy, setSortBy] = useState("default");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
+  const [hasUserSetCustomPrice, setHasUserSetCustomPrice] = useState(false);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -60,8 +60,6 @@ export default function Shop({
       setPriceRange([minPrice, maxPrice]);
     }
   }, [minPrice, maxPrice, products]);
-
-  const [hasUserSetCustomPrice, setHasUserSetCustomPrice] = useState(false);
 
   const handlePriceRangeChange = (value: number[]) => {
     setPriceRange(value);
