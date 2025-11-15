@@ -173,65 +173,6 @@ export default function Shop({
                     ))}
                   </RadioGroup>
                 </div>
-
-                {/* Stock Filter */}
-                <div className="pt-4 border-t border-gray-100">
-                  <Label className="text-sm font-bold mb-3 block text-gray-900">Dostępność</Label>
-                  <RadioGroup value={stockFilter} onValueChange={setStockFilter}>
-                    <div className="flex items-center space-x-2 mb-2 hover:bg-gray-50 p-2 rounded-lg transition-colors">
-                      <RadioGroupItem value="all" id="stock-all" data-testid="radio-stock-all" />
-                      <Label htmlFor="stock-all" className="text-sm cursor-pointer">Wszystkie</Label>
-                    </div>
-                    <div className="flex items-center space-x-2 mb-2 hover:bg-gray-50 p-2 rounded-lg transition-colors">
-                      <RadioGroupItem value="in-stock" id="stock-in" data-testid="radio-stock-in" />
-                      <Label htmlFor="stock-in" className="text-sm cursor-pointer flex items-center gap-2">
-                        W magazynie
-                        <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                      </Label>
-                    </div>
-                    <div className="flex items-center space-x-2 hover:bg-gray-50 p-2 rounded-lg transition-colors">
-                      <RadioGroupItem value="out-of-stock" id="stock-out" data-testid="radio-stock-out" />
-                      <Label htmlFor="stock-out" className="text-sm cursor-pointer flex items-center gap-2">
-                        Brak w magazynie
-                        <span className="w-2 h-2 bg-red-500 rounded-full"></span>
-                      </Label>
-                    </div>
-                  </RadioGroup>
-                </div>
-
-                {/* Price Filter - Dual Slider */}
-                <div className="pt-4 border-t border-gray-100">
-                  <div className="flex items-center justify-between mb-4">
-                    <Label className="text-sm font-bold text-gray-900">Cena</Label>
-                    <span className="text-xs font-semibold text-primary bg-primary/10 px-2 py-1 rounded" data-testid="text-price-range">
-                      {priceRange[0]} - {priceRange[1]} zł
-                    </span>
-                  </div>
-                  <Slider
-                    min={minPrice}
-                    max={maxPrice}
-                    step={10}
-                    value={priceRange}
-                    onValueChange={handlePriceRangeChange}
-                    className="w-full mb-2"
-                    data-testid="slider-price"
-                  />
-                  <div className="flex justify-between text-xs text-gray-500">
-                    <span>{minPrice} zł</span>
-                    <span>{maxPrice} zł</span>
-                  </div>
-                </div>
-
-                {/* Clear Filters Button */}
-                <Button
-                  variant="outline"
-                  className="w-full border-2 hover:bg-primary hover:text-black hover:border-primary transition-all font-semibold"
-                  onClick={clearAllFilters}
-                  data-testid="button-clear-filters"
-                >
-                  <X className="h-4 w-4 mr-2" />
-                  Wyczyść filtry
-                </Button>
               </div>
             </div>
           </aside>
