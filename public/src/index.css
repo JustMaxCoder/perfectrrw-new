@@ -81,7 +81,7 @@
   --font-serif: Georgia, serif;
   --font-mono: Menlo, monospace;
   --radius: 0.375rem; /* 6px - more subtle than before */
-  
+
   /* Minimal, subtle shadows */
   --shadow-2xs: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
   --shadow-xs: 0px 1px 3px 0px rgba(0, 0, 0, 0.08);
@@ -91,7 +91,7 @@
   --shadow-lg: 0px 8px 16px 0px rgba(0, 0, 0, 0.15);
   --shadow-xl: 0px 12px 24px 0px rgba(0, 0, 0, 0.18);
   --shadow-2xl: 0px 16px 32px 0px rgba(0, 0, 0, 0.2);
-  
+
   --tracking-normal: -0.01em; /* Slight tightening for Inter */
   --spacing: 0.25rem;
 
@@ -280,7 +280,7 @@
     * {
       -webkit-tap-highlight-color: transparent;
     }
-    
+
     button, a, input, select, textarea {
       touch-action: manipulation;
       min-height: 44px; /* Apple's recommended touch target size */
@@ -307,7 +307,7 @@
       font-size: 2rem;
       line-height: 2.25rem;
     }
-    
+
     h2 {
       font-size: 1.75rem;
       line-height: 2rem;
@@ -653,5 +653,59 @@
   .border.active-elevate-2:not(.no-active-interaction-elevate)::after,
   .border.hover-elevate:not(.no-hover-interaction-elevate)::after {
     inset: -1px;
+  }
+
+  /* Product card animations */
+  .product-card-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .product-card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.15);
+  }
+
+  .product-image-zoom {
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .product-card-hover:hover .product-image-zoom {
+    transform: scale(1.08);
+  }
+
+  .transition-minimal {
+    transition: all 0.2s ease;
+  }
+
+  /* Shop page fade-in animation */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fadeInUp 0.5s ease-out;
+  }
+
+  /* Filter badge animations */
+  .filter-badge-enter {
+    animation: slideInFromLeft 0.3s ease-out;
+  }
+
+  @keyframes slideInFromLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
   }
 }
