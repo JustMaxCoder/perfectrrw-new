@@ -54,6 +54,15 @@ export function SearchBar() {
     setIsOpen(false);
   };
 
+  const [inputRect, setInputRect] = useState<DOMRect | null>(null);
+
+  useEffect(() => {
+    if (searchRef.current && isOpen) {
+      const rect = searchRef.current.getBoundingClientRect();
+      setInputRect(rect);
+    }
+  }, [isOpen]);
+
   return (
     <div className="relative w-full" ref={searchRef}>
       <div className="relative">
@@ -84,8 +93,15 @@ export function SearchBar() {
         )}
       </div>
 
-      {isOpen && (
-        <Card className="absolute top-[calc(100%+0.5rem)] left-0 right-0 max-h-96 overflow-y-auto z-[100] shadow-lg border bg-white">
+      {isOpen && inputRect && (
+        <Card 
+          className="fixed max-h-96 overflow-y-auto z-[100] shadow-lg border bg-white"
+          style={{
+            top: `${inputRect.bottom + 8}px`,
+            left: `${inputRect.left}px`,
+            width: `${inputRect.width}px`,
+          }}
+        >
           {searchQuery ? (
             filteredProducts.length > 0 ? (
               <div className="p-2">
