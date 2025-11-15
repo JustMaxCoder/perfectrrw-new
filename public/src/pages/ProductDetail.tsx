@@ -23,6 +23,7 @@ export default function ProductDetail({
   const [selectedColor, setSelectedColor] = useState("");
   const [isSticky, setIsSticky] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
 
   const { data: product, isLoading } = useQuery<any>({
     queryKey: [`/api/products/${id}`],
@@ -31,6 +32,34 @@ export default function ProductDetail({
   const { data: allProducts = [] } = useQuery<Product[]>({
     queryKey: ["/api/products"],
   });
+
+  // Check if product is in favorites
+  useEffect(() => {
+    if (product?.id) {
+      const favorites = localStorage.getItem("favorites");
+      if (favorites) {
+        const favoriteIds = JSON.parse(favorites);
+        setIsFavorite(favoriteIds.includes(product.id));
+      }
+    }
+  }, [product?.id]);
+
+  // Toggle favorite
+  const toggleFavorite = () => {
+    if (!product?.id) return;
+    
+    const favorites = localStorage.getItem("favorites");
+    let favoriteIds = favorites ? JSON.parse(favorites) : [];
+    
+    if (isFavorite) {
+      favoriteIds = favoriteIds.filter((fid: string) => fid !== product.id);
+    } else {
+      favoriteIds.push(product.id);
+    }
+    
+    localStorage.setItem("favorites", JSON.stringify(favoriteIds));
+    setIsFavorite(!isFavorite);
+  };
 
   // SEO Meta Tags
   useEffect(() => {
@@ -333,9 +362,19 @@ export default function ProductDetail({
               </Button>
 
               <div className="grid grid-cols-2 gap-3">
-                <Button variant="outline" size="lg" className="font-semibold">
-                  <Heart className="mr-2 h-4 w-4" />
-                  Ulubione
+                <Button 
+                  variant={isFavorite ? "default" : "outline"} 
+                  size="lg" 
+                  className={`font-semibold transition-all ${
+                    isFavorite ? "bg-red-50 border-red-200 text-red-700 hover:bg-red-100" : ""
+                  }`}
+                  onClick={toggleFavorite}
+                  data-testid="button-favorite-detail"
+                >
+                  <Heart className={`mr-2 h-4 w-4 transition-all ${
+                    isFavorite ? "fill-red-500 text-red-500" : ""
+                  }`} />
+                  {isFavorite ? "W ulubionych" : "Dodaj do ulubionych"}
                 </Button>
                 <Button variant="outline" size="lg" className="font-semibold">
                   <Share2 className="mr-2 h-4 w-4" />
