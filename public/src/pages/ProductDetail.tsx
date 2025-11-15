@@ -233,11 +233,6 @@ export default function ProductDetail({
 
           {/* Right Column - Product Info */}
           <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 md:p-8 space-y-4 sm:space-y-6">
-            {/* Category Badge */}
-            <Badge className="text-xs sm:text-sm bg-yellow-100 text-black hover:bg-yellow-200">
-              {product.category}
-            </Badge>
-
             {/* Product Name */}
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
               {product.name}
