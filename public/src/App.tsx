@@ -16,6 +16,7 @@ import Shop from "./pages/Shop";
 import ProductDetail from "./pages/ProductDetail";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
+import Favorites from "./pages/Favorites";
 import AdminPanel from "./pages/AdminPanel";
 import Dashboard from "./pages/Dashboard";
 import OrderHistory from "./pages/OrderHistory";
@@ -111,6 +112,10 @@ function Router() {
             component={() => (
               <Checkout cartItems={cartItems} onClearCart={handleClearCart} />
             )}
+          />
+          <Route
+            path="/ulubione"
+            component={() => <Favorites onAddToCart={handleAddToCart} />}
           />
           <Route path="/admin" component={AdminPanel} />
           <Route path="/dashboard" component={Dashboard} />

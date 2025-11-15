@@ -83,14 +83,16 @@ export function Header({ cartItemCount = 0 }: { cartItemCount?: number }) {
             </Link>
 
             {/* Heart/Wishlist Icon - Desktop & Tablet */}
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="hidden sm:flex transition-minimal hover:bg-primary/10"
-              data-testid="button-wishlist"
-            >
-              <Heart className="h-5 w-5" />
-            </Button>
+            <Link href="/ulubione" className="hidden sm:block">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="transition-minimal hover:bg-primary/10"
+                data-testid="button-wishlist"
+              >
+                <Heart className="h-5 w-5" />
+              </Button>
+            </Link>
 
             {/* Cart Button - Always Visible */}
             <Link href="/koszyk">

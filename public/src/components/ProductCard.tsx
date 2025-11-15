@@ -2,9 +2,9 @@
 import { Link } from "wouter";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
-import { ShoppingCart, CheckCircle, XCircle, Shield, Package } from "lucide-react";
+import { ShoppingCart, CheckCircle, XCircle, Shield, Package, Heart } from "lucide-react";
 import type { Product } from "../../../shared/schema";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface ProductCardProps {
   product: Product;
@@ -17,10 +17,38 @@ export function ProductCard({ product, onAddToCart, viewMode = "grid" }: Product
   const price = parseFloat(product.price.toString());
   const [imageError, setImageError] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
+  
+  // Check if product is in favorites
+  useEffect(() => {
+    const favorites = localStorage.getItem("favorites");
+    if (favorites) {
+      const favoriteIds = JSON.parse(favorites);
+      setIsFavorite(favoriteIds.includes(product.id));
+    }
+  }, [product.id]);
+
+  // Toggle favorite
+  const toggleFavorite = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const favorites = localStorage.getItem("favorites");
+    let favoriteIds = favorites ? JSON.parse(favorites) : [];
+    
+    if (isFavorite) {
+      favoriteIds = favoriteIds.filter((id: string) => id !== product.id);
+    } else {
+      favoriteIds.push(product.id);
+    }
+    
+    localStorage.setItem("favorites", JSON.stringify(favoriteIds));
+    setIsFavorite(!isFavorite);
+  };
   
   // Get second image if available
-  const hasMultipleImages = product.additionalImages && product.additionalImages.length > 0;
-  const displayImage = isHovering && hasMultipleImages ? product.additionalImages[0] : product.image;
+  const hasMultipleImages = product.additionalImages && product.additionalImages !== null && product.additionalImages.length > 0;
+  const displayImage = isHovering && hasMultipleImages ? product.additionalImages![0] : product.image;
 
   // List view layout
   if (viewMode === "list") {
@@ -44,6 +72,19 @@ export function ProductCard({ product, onAddToCart, viewMode = "grid" }: Product
             <div className="absolute top-2 left-2 bg-green-600 text-white rounded-full p-1.5 shadow-md">
               <Shield className="h-3.5 w-3.5" />
             </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute top-2 right-2 h-8 w-8 bg-white/90 hover:bg-white shadow-md backdrop-blur-sm"
+              onClick={toggleFavorite}
+              data-testid={`button-favorite-${product.id}`}
+            >
+              <Heart 
+                className={`h-4 w-4 transition-colors ${
+                  isFavorite ? "fill-red-500 text-red-500" : "text-gray-600"
+                }`}
+              />
+            </Button>
           </div>
         </Link>
 
@@ -134,6 +175,23 @@ export function ProductCard({ product, onAddToCart, viewMode = "grid" }: Product
               Rozmiary
             </div>
           )}
+          
+          {/* Favorite button */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className={`absolute top-3 right-3 h-9 w-9 bg-white/90 hover:bg-white shadow-md backdrop-blur-sm transition-opacity ${
+              isFavorite ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+            }`}
+            onClick={toggleFavorite}
+            data-testid={`button-favorite-${product.id}`}
+          >
+            <Heart 
+              className={`h-5 w-5 transition-colors ${
+                isFavorite ? "fill-red-500 text-red-500" : "text-gray-600"
+              }`}
+            />
+          </Button>
         </div>
       </Link>
 
