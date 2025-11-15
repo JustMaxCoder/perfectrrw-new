@@ -1,6 +1,6 @@
 
 import { Link } from "wouter";
-import { ShoppingCart, Menu, X, Search } from "lucide-react";
+import { ShoppingCart, Menu, X, Search, Phone, User, Heart } from "lucide-react";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { useState, useEffect } from "react";
@@ -56,14 +56,49 @@ export function Header({ cartItemCount = 0 }: { cartItemCount?: number }) {
             <SearchBar /> 
           </div>
 
-          {/* Right Block - Cart & Mobile Menu */}
-          <div className="flex items-center gap-2">
-            {/* Cart Button - Mobile Optimized */}
+          {/* Right Block - Icons & Mobile Menu */}
+          <div className="flex items-center gap-1 sm:gap-2">
+            {/* Phone Icon - Desktop & Tablet */}
+            <Link href="/kontakt" className="hidden sm:block">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="transition-minimal hover:bg-primary/10"
+                data-testid="button-phone"
+              >
+                <Phone className="h-5 w-5" />
+              </Button>
+            </Link>
+
+            {/* User Icon - Desktop & Tablet */}
+            <Link href="/kontakt" className="hidden sm:block">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="transition-minimal hover:bg-primary/10"
+                data-testid="button-user"
+              >
+                <User className="h-5 w-5" />
+              </Button>
+            </Link>
+
+            {/* Heart/Wishlist Icon - Desktop & Tablet */}
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="hidden sm:flex transition-minimal hover:bg-primary/10"
+              data-testid="button-wishlist"
+            >
+              <Heart className="h-5 w-5" />
+            </Button>
+
+            {/* Cart Button - Always Visible */}
             <Link href="/koszyk">
               <Button 
                 variant="ghost" 
                 size="icon" 
                 className="relative transition-minimal hover:bg-primary/10 h-11 w-11 sm:h-10 sm:w-10"
+                data-testid="button-cart"
               >
                 <ShoppingCart className="h-5 w-5 sm:h-5 sm:w-5" />
                 {cartItemCount > 0 && (
@@ -81,6 +116,7 @@ export function Header({ cartItemCount = 0 }: { cartItemCount?: number }) {
               className="md:hidden transition-minimal h-11 w-11"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label={mobileMenuOpen ? "Zamknij menu" : "Otwórz menu"}
+              data-testid="button-menu-toggle"
             >
               {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </Button>
