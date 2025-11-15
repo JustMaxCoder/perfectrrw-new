@@ -23,6 +23,22 @@ export const products = pgTable("products", {
   available: boolean("available").notNull().default(true),
   shipping: text("shipping").notNull().default("standard"),
   popularity: integer("popularity").notNull().default(0),
+  hasSizes: boolean("has_sizes").notNull().default(false),
+  createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+});
+
+export const sizes = pgTable("sizes", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  name: text("name").notNull().unique(),
+  displayOrder: integer("display_order").notNull().default(0),
+  createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+});
+
+export const productSizes = pgTable("product_sizes", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  productId: varchar("product_id").notNull(),
+  sizeId: varchar("size_id").notNull(),
+  stock: integer("stock").notNull().default(0),
   createdAt: text("created_at").notNull().default(sql`CURRENT_TIMESTAMP`),
 });
 
@@ -103,6 +119,18 @@ export const insertWishlistSchema = createInsertSchema(wishlist).omit({
   createdAt: true,
 });
 
+export const insertSizeSchema = createInsertSchema(sizes).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertProductSizeSchema = createInsertSchema(productSizes).omit({
+  id: true,
+  createdAt: true,
+}).extend({
+  stock: z.number().int().nonnegative(),
+});
+
 // Auth schemas
 export const loginSchema = z.object({
   email: z.string().email(),
@@ -122,6 +150,8 @@ export const cartItemSchema = z.object({
   name: z.string(),
   price: z.string(),
   image: z.string(),
+  sizeId: z.string().optional(),
+  sizeName: z.string().optional(),
 });
 
 // Types
@@ -139,6 +169,15 @@ export type InsertReview = z.infer<typeof insertReviewSchema>;
 export type Review = typeof reviews.$inferSelect;
 export type InsertWishlist = z.infer<typeof insertWishlistSchema>;
 export type WishlistItem = typeof wishlist.$inferSelect;
+export type InsertSize = z.infer<typeof insertSizeSchema>;
+export type Size = typeof sizes.$inferSelect;
+export type InsertProductSize = z.infer<typeof insertProductSizeSchema>;
+export type ProductSize = typeof productSizes.$inferSelect;
 export type LoginData = z.infer<typeof loginSchema>;
 export type RegisterData = z.infer<typeof registerSchema>;
 export type CartItem = z.infer<typeof cartItemSchema>;
+
+// Extended Product type with sizes
+export type ProductWithSizes = Product & {
+  sizes?: (ProductSize & { size: Size })[];
+};

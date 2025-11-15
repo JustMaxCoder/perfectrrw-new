@@ -5,7 +5,9 @@ import {
   insertProductSchema,
   insertOrderSchema,
   insertGallerySchema,
+  insertProductSizeSchema,
 } from "../shared/schema";
+import { ZodError } from "zod";
 import multer from "multer";
 import path from "path";
 import fs from "fs";
@@ -103,11 +105,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/products/:id", async (req, res) => {
     try {
-      const product = await storage.getProduct(req.params.id);
-      if (!product) {
+      const productWithSizes = await storage.getProductWithSizes(req.params.id);
+      if (!productWithSizes) {
         return res.status(404).json({ error: "Product not found" });
       }
-      res.json(product);
+      res.json(productWithSizes);
     } catch {
       res.status(500).json({ error: "Failed to fetch product" });
     }
@@ -243,6 +245,88 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ success: true });
     } catch (error) {
       res.status(500).json({ error: "Failed to delete product" });
+    }
+  });
+
+  // Size routes
+  app.get("/api/sizes", async (req, res) => {
+    try {
+      const sizes = await storage.getAllSizes();
+      res.json(sizes);
+    } catch {
+      res.status(500).json({ error: "Failed to fetch sizes" });
+    }
+  });
+
+  // Product size routes
+  app.post("/api/products/:id/sizes", async (req, res) => {
+    try {
+      // Validate request body with Zod
+      const validatedData = insertProductSizeSchema.parse({
+        productId: req.params.id,
+        sizeId: req.body.sizeId,
+        stock: typeof req.body.stock === 'number' ? req.body.stock : parseFloat(req.body.stock),
+      });
+
+      const productSize = await storage.addProductSize(
+        validatedData.productId,
+        validatedData.sizeId,
+        validatedData.stock
+      );
+      res.json(productSize);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return res.status(400).json({ error: "Validation error", details: error.issues });
+      }
+      if (error instanceof Error) {
+        if (error.message.includes('not found')) {
+          return res.status(404).json({ error: error.message });
+        }
+        if (error.message.includes('already added')) {
+          return res.status(409).json({ error: "Duplicate", details: error.message });
+        }
+      }
+      res.status(400).json({ error: "Failed to add size to product", details: error instanceof Error ? error.message : String(error) });
+    }
+  });
+
+  app.patch("/api/products/:id/sizes/:sizeId", async (req, res) => {
+    try {
+      // Validate and parse stock
+      if (req.body.stock === undefined || req.body.stock === null) {
+        return res.status(400).json({ error: "Validation error", details: "stock is required" });
+      }
+      
+      const stock = insertProductSizeSchema.shape.stock.parse(
+        typeof req.body.stock === 'number' ? req.body.stock : parseFloat(req.body.stock)
+      );
+
+      const productSize = await storage.updateProductSizeStock(req.params.id, req.params.sizeId, stock);
+      if (!productSize) {
+        return res.status(404).json({ error: "Product size not found" });
+      }
+      
+      res.json(productSize);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return res.status(400).json({ error: "Validation error", details: error.issues });
+      }
+      if (error instanceof Error && error.message.includes('not found')) {
+        return res.status(404).json({ error: error.message });
+      }
+      res.status(400).json({ error: "Failed to update product size", details: error instanceof Error ? error.message : String(error) });
+    }
+  });
+
+  app.delete("/api/products/:id/sizes/:sizeId", async (req, res) => {
+    try {
+      const deleted = await storage.deleteProductSize(req.params.id, req.params.sizeId);
+      if (!deleted) {
+        return res.status(404).json({ error: "Product size not found" });
+      }
+      res.json({ success: true });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to delete product size" });
     }
   });
 

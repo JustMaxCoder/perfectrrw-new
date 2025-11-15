@@ -9,6 +9,11 @@ import {
   type InsertGallery,
   type Settings,
   type InsertSettings,
+  type Size,
+  type InsertSize,
+  type ProductSize,
+  type InsertProductSize,
+  type ProductWithSizes,
 } from "../shared/schema";
 import { randomUUID } from "crypto";
 
@@ -49,6 +54,18 @@ export interface IStorage {
   addToWishlist(userId: string, productId: string): Promise<any>;
   getUserWishlist(userId: string): Promise<any[]>;
   removeFromWishlist(userId: string, productId: string): Promise<void>;
+
+  // Sizes
+  getAllSizes(): Promise<Size[]>;
+  createSize(size: InsertSize): Promise<Size>;
+  deleteSize(id: string): Promise<void>;
+
+  // Product Sizes
+  getProductSizes(productId: string): Promise<(ProductSize & { size: Size })[]>;
+  getProductWithSizes(productId: string): Promise<ProductWithSizes | undefined>;
+  addProductSize(productId: string, sizeId: string, stock: number): Promise<ProductSize>;
+  updateProductSizeStock(productId: string, sizeId: string, stock: number): Promise<ProductSize | undefined>;
+  deleteProductSize(productId: string, sizeId: string): Promise<boolean>;
 }
 
 export class MemStorage implements IStorage {
@@ -59,6 +76,8 @@ export class MemStorage implements IStorage {
   private settings: Map<string, Settings>;
   private reviews: Map<string, any>;
   private wishlist: Map<string, any>;
+  private sizes: Map<string, Size>;
+  private productSizes: Map<string, ProductSize>;
 
   constructor() {
     this.users = new Map();
@@ -68,9 +87,13 @@ export class MemStorage implements IStorage {
     this.settings = new Map();
     this.reviews = new Map();
     this.wishlist = new Map();
+    this.sizes = new Map();
+    this.productSizes = new Map();
     this.seedData();
     this.seedSettings();
     this.seedGallery();
+    this.seedSizes();
+    this.seedProductSizes();
   }
 
   private seedData() {
@@ -212,13 +235,17 @@ export class MemStorage implements IStorage {
 
     sampleProducts.forEach((product) => {
       const id = randomUUID();
+      const createdAt = new Date().toISOString();
       this.products.set(id, {
         ...product,
         id,
         stock: product.stock ?? 0,
         images: [],
         available: true,
-        shipping: "standard"
+        shipping: "standard",
+        hasSizes: false,
+        popularity: product.popularity ?? 0,
+        createdAt,
       });
     });
   }
@@ -261,6 +288,7 @@ export class MemStorage implements IStorage {
 
   async createProduct(insertProduct: InsertProduct): Promise<Product> {
     const id = randomUUID();
+    const createdAt = new Date().toISOString();
     // ensure stock is present (InsertProduct.stock can be optional)
     const product: Product = {
       ...insertProduct,
@@ -269,6 +297,9 @@ export class MemStorage implements IStorage {
       images: insertProduct.images ?? [],
       available: insertProduct.available ?? true,
       shipping: insertProduct.shipping ?? "standard",
+      hasSizes: insertProduct.hasSizes ?? false,
+      popularity: insertProduct.popularity ?? 0,
+      createdAt,
     };
     this.products.set(id, product);
     return product;
@@ -312,6 +343,14 @@ export class MemStorage implements IStorage {
 
   async deleteProduct(id: string): Promise<void> {
     this.products.delete(id);
+    
+    // Clean up related product-size entries
+    const productSizesToDelete = Array.from(this.productSizes.values())
+      .filter((ps) => ps.productId === id);
+    
+    productSizesToDelete.forEach((ps) => {
+      this.productSizes.delete(ps.id);
+    });
   }
 
   // Gallery methods
@@ -447,6 +486,249 @@ export class MemStorage implements IStorage {
     if (item) {
       this.wishlist.delete(item.id);
     }
+  }
+
+  // Sizes
+  private seedSizes() {
+    const standardSizes = [
+      { name: "XS", displayOrder: 1 },
+      { name: "S", displayOrder: 2 },
+      { name: "M", displayOrder: 3 },
+      { name: "L", displayOrder: 4 },
+      { name: "XL", displayOrder: 5 },
+      { name: "XXL", displayOrder: 6 },
+      { name: "XXXL", displayOrder: 7 },
+      { name: "36", displayOrder: 8 },
+      { name: "37", displayOrder: 9 },
+      { name: "38", displayOrder: 10 },
+      { name: "39", displayOrder: 11 },
+      { name: "40", displayOrder: 12 },
+      { name: "41", displayOrder: 13 },
+      { name: "42", displayOrder: 14 },
+      { name: "43", displayOrder: 15 },
+      { name: "44", displayOrder: 16 },
+      { name: "45", displayOrder: 17 },
+      { name: "46", displayOrder: 18 },
+      { name: "47", displayOrder: 19 },
+      { name: "48", displayOrder: 20 },
+    ];
+
+    standardSizes.forEach((size) => {
+      const id = randomUUID();
+      const createdAt = new Date().toISOString();
+      this.sizes.set(id, { id, ...size, createdAt });
+    });
+  }
+
+  private seedProductSizes() {
+    // Get some products and sizes to create sample relationships
+    const allProducts = Array.from(this.products.values());
+    const allSizes = Array.from(this.sizes.values());
+
+    if (allProducts.length === 0 || allSizes.length === 0) {
+      return; // Nothing to seed
+    }
+
+    // Get clothing sizes (XS-XXXL) and shoe sizes (36-48)
+    const clothingSizes = allSizes.filter(s => ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'].includes(s.name));
+    const shoeSizes = allSizes.filter(s => !['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL'].includes(s.name));
+
+    // Add sizes to clothing products (first 3 products are clothing-related)
+    const clothingProductNames = ['Kombinezon roboczy PROTECT', 'Spodnie robocze MASTER', 'Kurtka robocza zimowa TERMO', 'Kamizelka odblaskowa Premium'];
+    allProducts.forEach(product => {
+      if (clothingProductNames.some(name => product.name.includes(name))) {
+        // Add clothing sizes to this product
+        clothingSizes.forEach((size, index) => {
+          const id = randomUUID();
+          const createdAt = new Date().toISOString();
+          const stock = 10 + Math.floor(Math.random() * 20); // Random stock between 10-30
+          this.productSizes.set(id, {
+            id,
+            productId: product.id,
+            sizeId: size.id,
+            stock,
+            createdAt,
+          });
+        });
+        // Update product to indicate it has sizes
+        product.hasSizes = true;
+        this.products.set(product.id, product);
+      }
+    });
+
+    // Add sizes to shoe products
+    const shoeProductNames = ['Buty robocze BHP S3', 'Półbuty robocze COMFORT'];
+    allProducts.forEach(product => {
+      if (shoeProductNames.some(name => product.name.includes(name))) {
+        // Add shoe sizes to this product
+        shoeSizes.forEach((size, index) => {
+          const id = randomUUID();
+          const createdAt = new Date().toISOString();
+          const stock = 5 + Math.floor(Math.random() * 15); // Random stock between 5-20
+          this.productSizes.set(id, {
+            id,
+            productId: product.id,
+            sizeId: size.id,
+            stock,
+            createdAt,
+          });
+        });
+        // Update product to indicate it has sizes
+        product.hasSizes = true;
+        this.products.set(product.id, product);
+      }
+    });
+  }
+
+  async getAllSizes(): Promise<Size[]> {
+    return Array.from(this.sizes.values()).sort((a, b) => a.displayOrder - b.displayOrder);
+  }
+
+  async createSize(insertSize: InsertSize): Promise<Size> {
+    const id = randomUUID();
+    const createdAt = new Date().toISOString();
+    const size: Size = {
+      ...insertSize,
+      id,
+      displayOrder: insertSize.displayOrder ?? 0,
+      createdAt,
+    };
+    this.sizes.set(id, size);
+    return size;
+  }
+
+  async deleteSize(id: string): Promise<void> {
+    this.sizes.delete(id);
+    // Also delete associated product sizes
+    Array.from(this.productSizes.values())
+      .filter((ps) => ps.sizeId === id)
+      .forEach((ps) => this.productSizes.delete(ps.id));
+  }
+
+  async getProductSizes(productId: string): Promise<(ProductSize & { size: Size })[]> {
+    const productSizesList = Array.from(this.productSizes.values())
+      .filter((ps) => ps.productId === productId);
+
+    return productSizesList.map((ps) => {
+      const size = this.sizes.get(ps.sizeId);
+      return {
+        ...ps,
+        size: size!,
+      };
+    }).filter((ps) => ps.size !== undefined);
+  }
+
+  async getProductWithSizes(productId: string): Promise<ProductWithSizes | undefined> {
+    const product = await this.getProduct(productId);
+    if (!product) return undefined;
+
+    // Get sizes for the product (empty array if no sizes)
+    const sizes = await this.getProductSizes(productId);
+    
+    // Always return the product, with empty sizes array if no sizes exist
+    return {
+      ...product,
+      sizes: sizes.length > 0 ? sizes : undefined,
+    };
+  }
+
+  async addProductSize(productId: string, sizeId: string, stock: number): Promise<ProductSize> {
+    // Validate that size exists
+    const size = this.sizes.get(sizeId);
+    if (!size) {
+      throw new Error(`Size with id ${sizeId} not found`);
+    }
+
+    // Validate that product exists
+    const product = this.products.get(productId);
+    if (!product) {
+      throw new Error(`Product with id ${productId} not found`);
+    }
+
+    // Check for duplicates
+    const existingProductSize = Array.from(this.productSizes.values()).find(
+      (ps) => ps.productId === productId && ps.sizeId === sizeId
+    );
+    if (existingProductSize) {
+      throw new Error(`Size ${size.name} already added to this product`);
+    }
+
+    // Validate stock is non-negative
+    if (stock < 0) {
+      throw new Error("Stock cannot be negative");
+    }
+
+    const id = randomUUID();
+    const createdAt = new Date().toISOString();
+    const productSize: ProductSize = {
+      id,
+      productId,
+      sizeId,
+      stock,
+      createdAt,
+    };
+    this.productSizes.set(id, productSize);
+
+    // Update product.hasSizes to true if this is the first size
+    if (!product.hasSizes) {
+      product.hasSizes = true;
+      this.products.set(productId, product);
+    }
+
+    return productSize;
+  }
+
+  async updateProductSizeStock(
+    productId: string,
+    sizeId: string,
+    stock: number
+  ): Promise<ProductSize | undefined> {
+    // Validate stock is non-negative
+    if (stock < 0) {
+      throw new Error("Stock cannot be negative");
+    }
+
+    // Validate that size exists
+    const size = this.sizes.get(sizeId);
+    if (!size) {
+      throw new Error(`Size with id ${sizeId} not found`);
+    }
+
+    const productSize = Array.from(this.productSizes.values()).find(
+      (ps) => ps.productId === productId && ps.sizeId === sizeId
+    );
+    if (!productSize) return undefined;
+
+    productSize.stock = stock;
+    this.productSizes.set(productSize.id, productSize);
+    return productSize;
+  }
+
+  async deleteProductSize(productId: string, sizeId: string): Promise<boolean> {
+    const productSize = Array.from(this.productSizes.values()).find(
+      (ps) => ps.productId === productId && ps.sizeId === sizeId
+    );
+    if (!productSize) {
+      return false; // Not found
+    }
+
+    this.productSizes.delete(productSize.id);
+
+    // Check if this was the last size for this product
+    const remainingSizes = Array.from(this.productSizes.values()).filter(
+      (ps) => ps.productId === productId
+    );
+    
+    // If no sizes remain, update product.hasSizes to false
+    if (remainingSizes.length === 0) {
+      const product = this.products.get(productId);
+      if (product && product.hasSizes) {
+        product.hasSizes = false;
+        this.products.set(productId, product);
+      }
+    }
+
+    return true; // Successfully deleted
   }
 }
 
