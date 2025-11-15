@@ -36,18 +36,7 @@ export function SearchBar() {
   }, []);
 
   useEffect(() => {
-    if (isOpen && searchRef.current) {
-      const rect = searchRef.current.getBoundingClientRect();
-      setDropdownStyle({
-        top: rect.bottom + window.scrollY + 8,
-        left: rect.left + window.scrollX,
-        width: rect.width,
-      });
-    }
-  }, [isOpen]);
-
-  useEffect(() => {
-    const handleResize = () => {
+    const updatePosition = () => {
       if (isOpen && searchRef.current) {
         const rect = searchRef.current.getBoundingClientRect();
         setDropdownStyle({
@@ -58,19 +47,14 @@ export function SearchBar() {
       }
     };
 
-    const handleScroll = () => {
-      if (isOpen && searchRef.current) {
-        const rect = searchRef.current.getBoundingClientRect();
-        setDropdownStyle({
-          top: rect.bottom + window.scrollY + 8,
-          left: rect.left + window.scrollX,
-          width: rect.width,
-        });
-      }
-    };
+    updatePosition();
+
+    const handleResize = () => updatePosition();
+    const handleScroll = () => updatePosition();
 
     window.addEventListener("resize", handleResize);
     window.addEventListener("scroll", handleScroll, true);
+    
     return () => {
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("scroll", handleScroll, true);
@@ -91,15 +75,15 @@ export function SearchBar() {
   ) || [];
 
   const handleProductClick = (id: string) => {
-    setLocation(`/produkt/${id}`);
-    setSearchQuery("");
     setIsOpen(false);
+    setSearchQuery("");
+    setLocation(`/produkt/${id}`);
   };
 
   const handleCategoryClick = (href: string) => {
-    setLocation(href);
-    setSearchQuery("");
     setIsOpen(false);
+    setSearchQuery("");
+    setLocation(href);
   };
 
   const dropdownContent = isOpen && dropdownStyle && (
@@ -169,10 +153,11 @@ export function SearchBar() {
             value={searchQuery}
             onChange={(e) => {
               setSearchQuery(e.target.value);
-              setIsOpen(true);
+              if (!isOpen) setIsOpen(true);
             }}
             onFocus={() => setIsOpen(true)}
             className="pl-9 pr-9"
+            autoComplete="off"
           />
           {searchQuery && (
             <Button
