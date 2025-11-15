@@ -113,10 +113,12 @@ export function ProductCard({ product, onAddToCart, viewMode = "grid" }: Product
             />
           )}
           
-          {/* Clean badge - only on hover */}
-          <div className="absolute top-3 left-3 bg-black/80 text-white rounded-md px-2 py-1 text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity">
-            BHP
-          </div>
+          {/* Size badge if product has sizes */}
+          {product.hasSizes && (
+            <div className="absolute top-3 left-3 bg-primary/90 text-black rounded-md px-2 py-1 text-xs font-bold">
+              Rozmiary
+            </div>
+          )}
         </div>
       </Link>
 

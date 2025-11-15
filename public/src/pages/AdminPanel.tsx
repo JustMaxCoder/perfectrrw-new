@@ -157,12 +157,15 @@ export default function AdminPanel() {
                     
                     {editingProduct ? (
                       <Tabs defaultValue="info" className="w-full">
-                        <TabsList className="grid w-full grid-cols-2">
+                        <TabsList className="grid w-full grid-cols-3">
                           <TabsTrigger value="info" data-testid="tab-product-info">
                             Основные данные
                           </TabsTrigger>
                           <TabsTrigger value="photos" data-testid="tab-product-photos">
                             Фотографии
+                          </TabsTrigger>
+                          <TabsTrigger value="sizes" data-testid="tab-product-sizes">
+                            Rozmiary
                           </TabsTrigger>
                         </TabsList>
                         <TabsContent value="info" className="mt-4">
@@ -176,6 +179,9 @@ export default function AdminPanel() {
                         </TabsContent>
                         <TabsContent value="photos" className="mt-4">
                           <PhotoManager productId={editingProduct.id} />
+                        </TabsContent>
+                        <TabsContent value="sizes" className="mt-4">
+                          <SizeManager productId={editingProduct.id} />
                         </TabsContent>
                       </Tabs>
                     ) : (
@@ -596,6 +602,178 @@ function PhotoManager({ productId }: { productId: string }) {
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+function SizeManager({ productId }: { productId: string }) {
+  const { toast } = useToast();
+  const [selectedSizeId, setSelectedSizeId] = useState("");
+  const [stock, setStock] = useState(0);
+
+  const { data: product } = useQuery<any>({
+    queryKey: ["/api/products", productId],
+  });
+
+  const { data: allSizes = [] } = useQuery<any[]>({
+    queryKey: ["/api/sizes"],
+  });
+
+  const addSizeMutation = useMutation({
+    mutationFn: async ({ sizeId, stock }: { sizeId: string; stock: number }) => {
+      const response = await fetch("/api/product-sizes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productId, sizeId, stock }),
+      });
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.details || error.error || "Failed to add size");
+      }
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/products", productId] });
+      queryClient.invalidateQueries({ queryKey: ["/api/products"] });
+      toast({ title: "Rozmiar dodany" });
+      setSelectedSizeId("");
+      setStock(0);
+    },
+    onError: (error: Error) => {
+      toast({ title: "Błąd", description: error.message, variant: "destructive" });
+    },
+  });
+
+  const updateSizeMutation = useMutation({
+    mutationFn: async ({ sizeId, stock }: { sizeId: string; stock: number }) => {
+      const response = await fetch(`/api/products/${productId}/sizes/${sizeId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ stock }),
+      });
+      if (!response.ok) throw new Error("Failed to update size");
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/products", productId] });
+      queryClient.invalidateQueries({ queryKey: ["/api/products"] });
+      toast({ title: "Stan zaktualizowany" });
+    },
+  });
+
+  const deleteSizeMutation = useMutation({
+    mutationFn: async (sizeId: string) => {
+      const response = await fetch(`/api/products/${productId}/sizes/${sizeId}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) throw new Error("Failed to delete size");
+      return response.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/products", productId] });
+      queryClient.invalidateQueries({ queryKey: ["/api/products"] });
+      toast({ title: "Rozmiar usunięty" });
+    },
+  });
+
+  if (!product) return <div>Загрузка...</div>;
+
+  const productSizes = product.sizes || [];
+  const availableSizes = allSizes.filter(
+    (size: any) => !productSizes.find((ps: any) => ps.sizeId === size.id)
+  );
+
+  return (
+    <div className="space-y-4">
+      <div>
+        <Label className="text-base font-semibold">Zarządzanie rozmiarami</Label>
+        <p className="text-sm text-muted-foreground mb-3">
+          Dodaj dostępne rozmiary i zarządzaj ich stanem magazynowym
+        </p>
+      </div>
+
+      {/* Current Sizes */}
+      {productSizes.length > 0 && (
+        <div>
+          <Label className="text-sm font-medium">Aktualne rozmiary</Label>
+          <div className="mt-2 space-y-2">
+            {productSizes.map((ps: any) => (
+              <div key={ps.sizeId} className="flex items-center gap-3 p-3 border rounded-md">
+                <Badge variant="outline" className="font-bold">{ps.size.name}</Badge>
+                <div className="flex-1 flex items-center gap-2">
+                  <Label className="text-xs">Stan:</Label>
+                  <Input
+                    type="number"
+                    min="0"
+                    value={ps.stock}
+                    onChange={(e) => {
+                      const newStock = parseInt(e.target.value) || 0;
+                      updateSizeMutation.mutate({ sizeId: ps.sizeId, stock: newStock });
+                    }}
+                    className="w-20"
+                  />
+                  <span className="text-xs text-muted-foreground">szt.</span>
+                </div>
+                <Button
+                  size="icon"
+                  variant="destructive"
+                  onClick={() => deleteSizeMutation.mutate(ps.sizeId)}
+                  disabled={deleteSizeMutation.isPending}
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Add New Size */}
+      {availableSizes.length > 0 && (
+        <div className="border-t pt-4">
+          <Label className="text-sm font-medium">Dodaj rozmiar</Label>
+          <div className="mt-2 flex gap-2">
+            <Select value={selectedSizeId} onValueChange={setSelectedSizeId}>
+              <SelectTrigger className="flex-1">
+                <SelectValue placeholder="Wybierz rozmiar" />
+              </SelectTrigger>
+              <SelectContent>
+                {availableSizes.map((size: any) => (
+                  <SelectItem key={size.id} value={size.id}>
+                    {size.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Input
+              type="number"
+              min="0"
+              placeholder="Stan"
+              value={stock}
+              onChange={(e) => setStock(parseInt(e.target.value) || 0)}
+              className="w-24"
+            />
+            <Button
+              onClick={() => {
+                if (selectedSizeId) {
+                  addSizeMutation.mutate({ sizeId: selectedSizeId, stock });
+                }
+              }}
+              disabled={!selectedSizeId || addSizeMutation.isPending}
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Dodaj
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {productSizes.length === 0 && (
+        <div className="text-center py-8 bg-muted rounded-md">
+          <Package className="h-12 w-12 text-muted-foreground mx-auto mb-2" />
+          <p className="text-sm text-muted-foreground">Brak rozmiarów dla tego produktu</p>
+        </div>
+      )}
     </div>
   );
 }

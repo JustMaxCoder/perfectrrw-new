@@ -330,6 +330,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get all sizes
+  app.get("/api/sizes", async (_req, res) => {
+    try {
+      const sizes = await storage.getSizes();
+      res.json(sizes);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch sizes" });
+    }
+  });
+
   // Protected photo upload route for products
   app.post("/api/products/:id/photo", upload.single("photo"), async (req, res) => {
     try {

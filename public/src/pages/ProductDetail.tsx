@@ -19,11 +19,11 @@ export default function ProductDetail({
   const { id } = useParams();
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
-  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedSize, setSelectedSize] = useState<string>("");
   const [selectedColor, setSelectedColor] = useState("");
   const [isSticky, setIsSticky] = useState(false);
 
-  const { data: product, isLoading } = useQuery<Product>({
+  const { data: product, isLoading } = useQuery<any>({
     queryKey: [`/api/products/${id}`],
   });
 
@@ -72,11 +72,25 @@ export default function ProductDetail({
     );
   }
 
-  const inStock = parseInt(product.stock.toString()) > 0;
-  const price = parseFloat(product.price.toString());
+  // Check if product has sizes
+  const hasSizes = product?.hasSizes && product?.sizes && product.sizes.length > 0;
   
-  // Mock data for options
-  const sizes = ["S", "M", "L", "XL", "XXL"];
+  // Calculate stock
+  let availableStock = 0;
+  if (hasSizes && selectedSize) {
+    const selectedSizeData = product.sizes.find((s: any) => s.sizeId === selectedSize);
+    availableStock = selectedSizeData?.stock || 0;
+  } else if (!hasSizes) {
+    availableStock = parseInt(product?.stock?.toString() || "0");
+  }
+  
+  const inStock = availableStock > 0;
+  const price = parseFloat(product?.price?.toString() || "0");
+  
+  // Get available sizes from product or mock data
+  const sizes = hasSizes 
+    ? product.sizes.map((s: any) => ({ id: s.sizeId, name: s.size.name, stock: s.stock }))
+    : [];
   const colors = ["Czarny", "Niebieski", "Pomarańczowy", "Żółty"];
   
   // Gallery images (mock multiple images)
@@ -93,12 +107,22 @@ export default function ProductDetail({
     .slice(0, 4);
 
   const handleQuantityChange = (delta: number) => {
-    const newQuantity = Math.max(1, Math.min(parseInt(product.stock.toString()), quantity + delta));
+    const maxStock = hasSizes && selectedSize ? availableStock : parseInt(product?.stock?.toString() || "0");
+    const newQuantity = Math.max(1, Math.min(maxStock, quantity + delta));
     setQuantity(newQuantity);
   };
 
   const handleAddToCart = () => {
-    onAddToCart(product, quantity);
+    if (hasSizes && !selectedSize) {
+      alert("Proszę wybrać rozmiar");
+      return;
+    }
+    
+    const productToAdd = hasSizes 
+      ? { ...product, selectedSize, selectedSizeName: sizes.find((s: any) => s.id === selectedSize)?.name }
+      : product;
+    
+    onAddToCart(productToAdd, quantity);
   };
 
   // SEO-friendly URL slug
@@ -202,26 +226,35 @@ export default function ProductDetail({
             </div>
 
             {/* Product Options */}
-            {inStock && (
-              <div className="space-y-4">
-                {/* Size Selector */}
+            <div className="space-y-4">
+              {/* Size Selector - Only show if product has sizes */}
+              {hasSizes && (
                 <div>
-                  <label className="text-sm font-medium mb-2 block">Rozmiar</label>
-                  <Select value={selectedSize} onValueChange={setSelectedSize}>
+                  <label className="text-sm font-medium mb-2 block">Rozmiar *</label>
+                  <Select value={selectedSize} onValueChange={(value) => {
+                    setSelectedSize(value);
+                    setQuantity(1); // Reset quantity when size changes
+                  }}>
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="Wybierz rozmiar" />
                     </SelectTrigger>
                     <SelectContent>
-                      {sizes.map(size => (
-                        <SelectItem key={size} value={size}>{size}</SelectItem>
+                      {sizes.map((size: any) => (
+                        <SelectItem 
+                          key={size.id} 
+                          value={size.id}
+                          disabled={size.stock === 0}
+                        >
+                          {size.name} {size.stock > 0 ? `(${size.stock} szt.)` : '(brak)'}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
-                  <Link href="#" className="text-xs text-primary hover:underline mt-1 inline-flex items-center gap-1">
-                    <Download className="h-3 w-3" />
-                    Tabela rozmiarów (PDF)
-                  </Link>
+                  {!selectedSize && (
+                    <p className="text-xs text-red-600 mt-1">Wybierz rozmiar przed dodaniem do koszyka</p>
+                  )}
                 </div>
+              )}
 
                 {/* Color Selector */}
                 <div>
@@ -238,7 +271,8 @@ export default function ProductDetail({
                   </Select>
                 </div>
 
-                {/* Quantity Selector */}
+                {/* Quantity Selector - Show if no sizes OR if size is selected */}
+              {(!hasSizes || selectedSize) && (
                 <div>
                   <label className="text-sm font-medium mb-2 block">Ilość</label>
                   <div className="flex items-center gap-3">
@@ -253,34 +287,37 @@ export default function ProductDetail({
                     <Input
                       type="number"
                       min="1"
-                      max={product.stock.toString()}
+                      max={availableStock.toString()}
                       value={quantity}
-                      onChange={(e) => setQuantity(Math.max(1, Math.min(parseInt(product.stock.toString()), parseInt(e.target.value) || 1)))}
+                      onChange={(e) => setQuantity(Math.max(1, Math.min(availableStock, parseInt(e.target.value) || 1)))}
                       className="w-20 text-center text-lg font-semibold"
                     />
                     <Button
                       variant="outline"
                       size="icon"
                       onClick={() => handleQuantityChange(1)}
-                      disabled={quantity >= parseInt(product.stock.toString())}
+                      disabled={quantity >= availableStock}
                     >
                       <Plus className="h-4 w-4" />
                     </Button>
                   </div>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Dostępne: {availableStock} szt.
+                  </p>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
 
             {/* CTA Buttons */}
             <div className="space-y-3 pt-4">
               <Button
                 size="lg"
                 className="w-full bg-primary text-black hover:bg-primary/90 font-bold py-4 sm:py-6 text-base sm:text-lg shadow-md hover:shadow-lg hover:scale-105 transition-all"
-                disabled={!inStock}
+                disabled={!inStock || (hasSizes && !selectedSize)}
                 onClick={handleAddToCart}
               >
                 <ShoppingCart className="mr-2 h-5 w-5" />
-                Dodaj do koszyka
+                {hasSizes && !selectedSize ? 'Wybierz rozmiar' : 'Dodaj do koszyka'}
               </Button>
 
               <div className="grid grid-cols-2 gap-3">
