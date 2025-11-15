@@ -82,10 +82,8 @@ export default function Home() {
               </div>
             </div>
           ) : (
-            <>
-              {/* Mobile: Horizontal Scroll */}
-              <div className="lg:hidden overflow-x-auto pb-4 -mb-4 scrollbar-hide">
-                <div className="flex gap-4 px-4 min-w-min">
+            <div className="px-4 sm:px-6 lg:px-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
                 {[
                   {
                     slug: "odziez-robocza",
@@ -120,28 +118,27 @@ export default function Home() {
                       href={`/sklep?category=${category.slug}`}
                       data-testid={`category-${category.slug}`}
                     >
-                      <div className="group cursor-pointer bg-white rounded-2xl shadow-lg overflow-hidden category-card-hover border border-gray-100">
-                        <div className="relative h-56 md:h-64 overflow-hidden">
+                      <div className="group cursor-pointer bg-white rounded-2xl shadow-lg overflow-hidden category-card-hover border border-gray-100 h-full flex flex-col">
+                        <div className="relative h-48 sm:h-56 md:h-64 overflow-hidden flex-shrink-0">
                           <img
                             src={category.image}
                             alt={category.label}
                             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                          {/* Hover overlay with icon */}
                           <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                             <ArrowRight className="h-12 w-12 text-primary transform translate-x-0 group-hover:translate-x-2 transition-transform duration-300" />
                           </div>
                         </div>
 
-                        <div className="p-6">
-                          <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors duration-300">
+                        <div className="p-4 sm:p-6 flex flex-col flex-1">
+                          <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors duration-300">
                             {category.label}
                           </h3>
-                          <p className="text-sm text-gray-600 mb-4 leading-relaxed">
+                          <p className="text-sm text-gray-600 mb-4 leading-relaxed flex-1">
                             {category.description}
                           </p>
-                          <div className="flex items-center justify-between">
+                          <div className="flex items-center justify-between mt-auto">
                             <span className="text-sm font-semibold text-primary group-hover:scale-105 transition-transform duration-300 inline-block">
                               {categoryProducts.length} {categoryProducts.length === 1 ? 'produkt' : 'produktów'}
                             </span>
@@ -156,77 +153,6 @@ export default function Home() {
                 })}
               </div>
             </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8 px-4 sm:px-6 lg:px-8 mt-8">
-                {[
-                  {
-                    slug: "odziez-robocza",
-                    label: "Odzież robocza",
-                    description: "Profesjonalna odzież dla każdego pracownika",
-                    image: categoryOdziezRobocza
-                  },
-                  {
-                    slug: "obuwie",
-                    label: "Obuwie BHP",
-                    description: "Bezpieczne i wytrzymałe obuwie robocze",
-                    image: categoryObuwie
-                  },
-                  {
-                    slug: "rekawice",
-                    label: "Rękawice",
-                    description: "Ochrona rąk w każdych warunkach",
-                    image: categoryRekawice
-                  },
-                  {
-                    slug: "ochrona-glowy",
-                    label: "Ochrona głowy",
-                    description: "Kaski i akcesoria ochronne",
-                    image: categoryOchronaGlowy
-                  }
-                ].map((category) => {
-                  const categoryProducts = products.filter(p => p.category === category.slug);
-
-                  return (
-                    <Link
-                      key={category.slug}
-                      href={`/sklep?category=${category.slug}`}
-                      data-testid={`category-${category.slug}`}
-                    >
-                      <div className="group cursor-pointer bg-white rounded-2xl shadow-lg overflow-hidden category-card-hover border border-gray-100">
-                        <div className="relative h-56 md:h-64 overflow-hidden">
-                          <img
-                            src={category.image}
-                            alt={category.label}
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                          {/* Hover overlay with icon */}
-                          <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                            <ArrowRight className="h-12 w-12 text-primary transform translate-x-0 group-hover:translate-x-2 transition-transform duration-300" />
-                          </div>
-                        </div>
-
-                        <div className="p-6">
-                          <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors duration-300">
-                            {category.label}
-                          </h3>
-                          <p className="text-sm text-gray-600 mb-4 leading-relaxed">
-                            {category.description}
-                          </p>
-                          <div className="flex items-center justify-between">
-                            <span className="text-sm font-semibold text-primary group-hover:scale-105 transition-transform duration-300 inline-block">
-                              {categoryProducts.length} {categoryProducts.length === 1 ? 'produkt' : 'produktów'}
-                            </span>
-                            <div className="bg-primary/10 rounded-full px-3 py-1 text-xs font-bold text-gray-700 group-hover:bg-primary group-hover:text-black transition-all duration-300">
-                              BHP
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </Link>
-                  );
-                })}
-              </div>
-            </>
           )}
         </div>
       </section>

@@ -179,15 +179,16 @@ export default function ProductDetail({
               </div>
             </div>
 
-            {/* Thumbnail Gallery */}
+            {/* Thumbnail Gallery - Touch-friendly */}
             <div className="grid grid-cols-4 gap-2 sm:gap-3">
               {galleryImages.map((img, idx) => (
                 <button
                   key={idx}
                   onClick={() => setSelectedImage(idx)}
-                  className={`aspect-square bg-white rounded-lg border-2 overflow-hidden transition-all ${
-                    selectedImage === idx ? 'border-primary shadow-md' : 'border-gray-200 hover:border-gray-300'
+                  className={`aspect-square bg-white rounded-lg border-2 overflow-hidden transition-all touch-manipulation min-h-[60px] sm:min-h-[80px] ${
+                    selectedImage === idx ? 'border-primary shadow-md scale-95' : 'border-gray-200 hover:border-gray-300 active:scale-95'
                   }`}
+                  data-testid={`thumbnail-${idx}`}
                 >
                   <img src={img} alt={`${product.name} ${idx + 1}`} className="w-full h-full object-cover" />
                 </button>
@@ -274,15 +275,17 @@ export default function ProductDetail({
                 {/* Quantity Selector - Show if no sizes OR if size is selected */}
               {(!hasSizes || selectedSize) && (
                 <div>
-                  <label className="text-sm font-medium mb-2 block">Ilość</label>
+                  <label className="text-sm sm:text-base font-medium mb-2 block">Ilość</label>
                   <div className="flex items-center gap-3">
                     <Button
                       variant="outline"
                       size="icon"
+                      className="h-10 w-10 sm:h-12 sm:w-12 flex-shrink-0 touch-manipulation"
                       onClick={() => handleQuantityChange(-1)}
                       disabled={quantity <= 1}
+                      data-testid="button-quantity-decrease"
                     >
-                      <Minus className="h-4 w-4" />
+                      <Minus className="h-5 w-5" />
                     </Button>
                     <Input
                       type="number"
@@ -290,18 +293,21 @@ export default function ProductDetail({
                       max={availableStock.toString()}
                       value={quantity}
                       onChange={(e) => setQuantity(Math.max(1, Math.min(availableStock, parseInt(e.target.value) || 1)))}
-                      className="w-20 text-center text-lg font-semibold"
+                      className="w-20 sm:w-24 text-center text-base sm:text-lg font-semibold h-10 sm:h-12 touch-manipulation"
+                      data-testid="input-quantity"
                     />
                     <Button
                       variant="outline"
                       size="icon"
+                      className="h-10 w-10 sm:h-12 sm:w-12 flex-shrink-0 touch-manipulation"
                       onClick={() => handleQuantityChange(1)}
                       disabled={quantity >= availableStock}
+                      data-testid="button-quantity-increase"
                     >
-                      <Plus className="h-4 w-4" />
+                      <Plus className="h-5 w-5" />
                     </Button>
                   </div>
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs sm:text-sm text-gray-500 mt-2">
                     Dostępne: {availableStock} szt.
                   </p>
                 </div>

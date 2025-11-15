@@ -70,19 +70,19 @@ export default function Cart({
                       {parseFloat(item.price).toFixed(2)} zł
                     </p>
 
-                    <div className="flex items-center gap-4">
+                    <div className="flex flex-wrap items-center gap-3 sm:gap-4">
                       <div className="flex items-center gap-2">
                         <Button
                           variant="outline"
                           size="icon"
-                          className="h-8 w-8"
+                          className="h-10 w-10 flex-shrink-0 touch-manipulation"
                           onClick={() =>
                             onUpdateQuantity(item.productId, item.quantity - 1)
                           }
                           disabled={item.quantity <= 1}
                           data-testid={`button-decrease-${item.productId}`}
                         >
-                          <Minus className="h-4 w-4" />
+                          <Minus className="h-5 w-5" />
                         </Button>
                         <Input
                           type="number"
@@ -94,26 +94,25 @@ export default function Cart({
                               Math.max(1, parseInt(e.target.value) || 1)
                             )
                           }
-                          className="w-16 text-center h-8"
+                          className="w-16 sm:w-20 text-center h-10 text-base touch-manipulation"
                           data-testid={`input-quantity-${item.productId}`}
                         />
                         <Button
                           variant="outline"
                           size="icon"
-                          className="h-8 w-8"
+                          className="h-10 w-10 flex-shrink-0 touch-manipulation"
                           onClick={() =>
                             onUpdateQuantity(item.productId, item.quantity + 1)
                           }
                           data-testid={`button-increase-${item.productId}`}
                         >
-                          <Plus className="h-4 w-4" />
+                          <Plus className="h-5 w-5" />
                         </Button>
                       </div>
 
                       <Button
                         variant="ghost"
-                        size="sm"
-                        className="text-destructive hover:text-destructive"
+                        className="text-destructive hover:text-destructive min-h-10 touch-manipulation"
                         onClick={() => onRemoveItem(item.productId)}
                         data-testid={`button-remove-${item.productId}`}
                       >

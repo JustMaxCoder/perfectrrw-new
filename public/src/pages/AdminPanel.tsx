@@ -208,6 +208,7 @@ export default function AdminPanel() {
               {productsLoading ? (
                 <p>Ładowanie...</p>
               ) : (
+                <div className="overflow-x-auto -mx-6 px-6 sm:mx-0 sm:px-0">
                 <Table>
                   <TableHeader>
                     <TableRow>
@@ -254,6 +255,7 @@ export default function AdminPanel() {
                     ))}
                   </TableBody>
                 </Table>
+                </div>
               )}
             </Card>
           </TabsContent>
@@ -265,6 +267,7 @@ export default function AdminPanel() {
               {ordersLoading ? (
                 <p>Ładowanie...</p>
               ) : (
+                <div className="overflow-x-auto -mx-6 px-6 sm:mx-0 sm:px-0">
                 <Table>
                   <TableHeader>
                     <TableRow>
@@ -303,6 +306,7 @@ export default function AdminPanel() {
                     ))}
                   </TableBody>
                 </Table>
+                </div>
               )}
             </Card>
           </TabsContent>
