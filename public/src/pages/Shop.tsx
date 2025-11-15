@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "wouter";
@@ -39,9 +38,20 @@ export default function Shop({
     }
   }, [location]);
 
-  const { data: products, isLoading } = useQuery<Product[]>({
+  const { data: products = [], isLoading, error } = useQuery<Product[]>({
     queryKey: ["/api/products"],
   });
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Wystąpił błąd</h2>
+          <p className="text-gray-600">Nie udało się załadować produktów. Spróbuj odświeżyć stronę.</p>
+        </div>
+      </div>
+    );
+  }
 
   const { minPrice, maxPrice } = useMemo(() => {
     if (!products || products.length === 0) return { minPrice: 0, maxPrice: 1000 };

@@ -25,11 +25,11 @@ export default function Home() {
         <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20 lg:py-24 w-full">
           <div className="max-w-3xl">
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-3 sm:mb-4 md:mb-6 leading-tight animate-slide-in-left">
-              <span className="text-white drop-shadow-2xl">BHP</span>{" "}
+              <span className="text-white drop-shadow-2xl">Sklep BHP</span>{" "}
               <span className="text-primary drop-shadow-2xl">PERFECT</span>
             </h1>
             <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-100 mb-5 sm:mb-6 md:mb-8 drop-shadow-lg leading-relaxed animate-slide-in-left" style={{ animationDelay: '0.2s', animationFillMode: 'both' }}>
-              Twoje bezpieczeństwo - nasza pasja! Szeroki wybór produktów BHP w najlepszych cenach.
+              Profesjonalna odzież robocza i środki ochrony osobistej. Szeroki wybór produktów BHP w najlepszych cenach z wysyłką 24h.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 animate-slide-in-left" style={{ animationDelay: '0.4s', animationFillMode: 'both' }}>
               <Link href="/sklep" data-testid="button-shop-now" className="w-full sm:w-auto">

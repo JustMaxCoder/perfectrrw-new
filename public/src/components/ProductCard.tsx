@@ -1,4 +1,3 @@
-
 import { Link } from "wouter";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
@@ -17,7 +16,7 @@ export function ProductCard({ product, onAddToCart, viewMode = "grid" }: Product
   const price = parseFloat(product.price.toString());
   const [imageError, setImageError] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
-  
+
   // Get second image if available
   const hasMultipleImages = product.additionalImages && product.additionalImages !== null && product.additionalImages.length > 0;
   const displayImage = isHovering && hasMultipleImages ? product.additionalImages![0] : product.image;
@@ -29,15 +28,15 @@ export function ProductCard({ product, onAddToCart, viewMode = "grid" }: Product
         className="group bg-white rounded-lg overflow-hidden transition-all duration-300 border border-gray-200 hover:shadow-lg hover:border-primary flex flex-col sm:flex-row"
         data-testid={`card-product-${product.id}`}
       >
-        <Link 
-          href={`/produkt/${product.id}`} 
+        <Link
+          href={`/produkt/${product.id}`}
           className="sm:w-48 flex-shrink-0"
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
         >
           <div className="relative bg-gradient-to-br from-gray-50 to-gray-100 aspect-square sm:h-48 flex items-center justify-center overflow-hidden group-hover:from-gray-100 group-hover:to-gray-200 transition-all">
-            <img 
-              src={displayImage} 
+            <img
+              src={displayImage}
               alt={product.name}
               className="w-full h-full object-cover transition-all duration-300 group-hover:scale-105"
             />
@@ -58,7 +57,7 @@ export function ProductCard({ product, onAddToCart, viewMode = "grid" }: Product
               </h3>
             </Link>
             <p className="text-sm text-gray-600 line-clamp-2 mb-3">{product.description}</p>
-            
+
             <div className={`inline-flex items-center gap-1.5 px-2 py-1.5 rounded ${
               inStock ? "bg-green-50 border border-green-200" : "bg-red-50 border border-red-200"
             }`}>
@@ -67,10 +66,10 @@ export function ProductCard({ product, onAddToCart, viewMode = "grid" }: Product
               ) : (
                 <XCircle className="h-3.5 w-3.5 text-red-600" />
               )}
-              <span 
+              <span
                 className={`text-xs font-semibold ${
                   inStock ? "text-green-700" : "text-red-700"
-                }`} 
+                }`}
                 data-testid={`text-stock-${product.id}`}
               >
                 {inStock ? `W magazynie (${product.stock})` : "Niedostępny"}
@@ -108,8 +107,8 @@ export function ProductCard({ product, onAddToCart, viewMode = "grid" }: Product
       className="group bg-white rounded-lg overflow-hidden border border-gray-200 product-card-hover"
       data-testid={`card-product-${product.id}`}
     >
-      <Link 
-        href={`/produkt/${product.id}`} 
+      <Link
+        href={`/produkt/${product.id}`}
         className="block"
         onMouseEnter={() => setIsHovering(true)}
         onMouseLeave={() => setIsHovering(false)}
@@ -120,14 +119,15 @@ export function ProductCard({ product, onAddToCart, viewMode = "grid" }: Product
               <Package className="h-16 w-16" />
             </div>
           ) : (
-            <img 
-              src={displayImage} 
+            <img
+              src={displayImage}
               alt={product.name}
+              loading="lazy"
               className="w-full h-full object-cover product-image-zoom"
               onError={() => setImageError(true)}
             />
           )}
-          
+
           {/* Size badge if product has sizes */}
           {product.hasSizes && (
             <div className="absolute top-3 left-3 bg-primary/90 text-black rounded-md px-2 py-1 text-xs font-bold">
@@ -149,10 +149,10 @@ export function ProductCard({ product, onAddToCart, viewMode = "grid" }: Product
 
         {/* Stock Status - Minimal */}
         <div className="mb-3">
-          <span 
+          <span
             className={`text-xs font-medium ${
               inStock ? "text-green-600" : "text-red-600"
-            }`} 
+            }`}
             data-testid={`text-stock-${product.id}`}
           >
             {inStock ? "W magazynie" : "Niedostępny"}
