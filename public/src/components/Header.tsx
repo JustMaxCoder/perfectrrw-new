@@ -1,14 +1,12 @@
 
-import { Link, useLocation } from "wouter";
-import { ShoppingCart, Menu, X, ChevronDown, Phone, Mail, Clock } from "lucide-react";
+import { Link } from "wouter";
+import { ShoppingCart, Menu, X } from "lucide-react";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { useState, useEffect } from "react";
 
 export function Header({ cartItemCount = 0 }: { cartItemCount?: number }) {
-  const [location] = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -18,27 +16,6 @@ export function Header({ cartItemCount = 0 }: { cartItemCount?: number }) {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  const customerServiceLinks = [
-    { href: "/kontakt", label: "Contact" },
-    { href: "/sledzenie", label: "Order Status" },
-    { href: "/zamowienia", label: "Complaints" },
-    { href: "/kontakt", label: "Returns" },
-    { href: "/kontakt", label: "Terms & Conditions" },
-    { href: "/o-nas", label: "About Us" },
-    { href: "/kontakt", label: "Careers" },
-    { href: "/kontakt", label: "Media" },
-    { href: "/kontakt", label: "Partner Program" },
-    { href: "/kontakt", label: "Privacy Policy" },
-  ];
-
-  const shoppingLinks = [
-    { href: "/sklep", label: "All Products" },
-    { href: "/sklep?filter=promotions", label: "Promotions" },
-    { href: "/kontakt", label: "Installments & Payments" },
-    { href: "/kontakt", label: "Leasing" },
-    { href: "/kontakt", label: "B2B Sales" },
-  ];
 
   return (
     <header
@@ -64,15 +41,8 @@ export function Header({ cartItemCount = 0 }: { cartItemCount?: number }) {
             </p>
           </Link>
 
-          {/* Right Block - CTA & Cart */}
+          {/* Right Block - Cart & Mobile Menu */}
           <div className="flex items-center gap-3 md:gap-4">
-            <Button
-              asChild
-              className="hidden md:inline-flex bg-primary hover:bg-primary/90 text-black font-semibold transition-all hover:scale-105 animate-subtle-bounce"
-            >
-              <Link href="/kontakt">Contact Us</Link>
-            </Button>
-
             <Link href="/koszyk">
               <Button variant="ghost" size="icon" className="relative">
                 <ShoppingCart className="h-5 w-5" />
@@ -95,173 +65,79 @@ export function Header({ cartItemCount = 0 }: { cartItemCount?: number }) {
           </div>
         </div>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center justify-center gap-1 px-6 py-3 border-t">
-          {/* Customer Service Mega Menu */}
-          <div
-            className="relative"
-            onMouseEnter={() => setActiveMenu("customer-service")}
-            onMouseLeave={() => setActiveMenu(null)}
+        {/* Desktop Navigation - Product Categories */}
+        <nav className="hidden md:flex items-center justify-center gap-2 px-6 py-3 border-t">
+          <Link
+            href="/sklep?category=odziez-robocza"
+            className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-primary transition-all hover:translate-y-[-2px]"
           >
-            <button className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-gray-700 hover:text-primary transition-all hover:translate-y-[-2px]">
-              Customer Service
-              <ChevronDown className="h-4 w-4" />
-            </button>
-            {activeMenu === "customer-service" && (
-              <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-xl border animate-slide-down">
-                <div className="p-4 grid gap-2">
-                  {customerServiceLinks.map((link) => (
-                    <Link
-                      key={link.href + link.label}
-                      href={link.href}
-                      className="text-sm text-gray-700 hover:text-primary hover:translate-x-1 transition-all py-1"
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Shopping Mega Menu */}
-          <div
-            className="relative"
-            onMouseEnter={() => setActiveMenu("shopping")}
-            onMouseLeave={() => setActiveMenu(null)}
+            Odzież robocza
+          </Link>
+          <Link
+            href="/sklep?category=obuwie"
+            className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-primary transition-all hover:translate-y-[-2px]"
           >
-            <button className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-gray-700 hover:text-primary transition-all hover:translate-y-[-2px]">
-              Shopping
-              <ChevronDown className="h-4 w-4" />
-            </button>
-            {activeMenu === "shopping" && (
-              <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-xl border animate-slide-down">
-                <div className="p-4 grid gap-2">
-                  {shoppingLinks.map((link) => (
-                    <Link
-                      key={link.href + link.label}
-                      href={link.href}
-                      className="text-sm text-gray-700 hover:text-primary hover:translate-x-1 transition-all py-1"
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Support Mega Menu */}
-          <div
-            className="relative"
-            onMouseEnter={() => setActiveMenu("support")}
-            onMouseLeave={() => setActiveMenu(null)}
+            Obuwie BHP
+          </Link>
+          <Link
+            href="/sklep?category=rekawice"
+            className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-primary transition-all hover:translate-y-[-2px]"
           >
-            <button className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-gray-700 hover:text-primary transition-all hover:translate-y-[-2px]">
-              Support
-              <ChevronDown className="h-4 w-4" />
-            </button>
-            {activeMenu === "support" && (
-              <div className="absolute top-full left-0 mt-2 w-80 bg-white rounded-lg shadow-xl border animate-slide-down">
-                <div className="p-6 space-y-4">
-                  <div className="flex items-center gap-3">
-                    <Phone className="h-5 w-5 text-primary" />
-                    <div>
-                      <a href="tel:+48756756756" className="text-sm font-medium hover:text-primary transition-colors">
-                        756 756 756
-                      </a>
-                      <p className="text-xs text-gray-500">Mon-Fri 08:00-20:00</p>
-                      <p className="text-xs text-gray-500">Sat-Sun 10:00-18:00</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Mail className="h-5 w-5 text-primary" />
-                    <div>
-                      <a href="mailto:kontakt@bhpperfect.pl" className="text-sm font-medium hover:text-primary transition-colors">
-                        kontakt@bhpperfect.pl
-                      </a>
-                      <p className="text-xs text-gray-500">Response within 24 hours</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
+            Rękawice
+          </Link>
+          <Link
+            href="/sklep?category=ochrona-glowy"
+            className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-primary transition-all hover:translate-y-[-2px]"
+          >
+            Ochrona głowy
+          </Link>
+          <Link
+            href="/sklep"
+            className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-primary transition-all hover:translate-y-[-2px]"
+          >
+            Wszystkie produkty
+          </Link>
         </nav>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu - Product Categories */}
         {mobileMenuOpen && (
           <nav className="md:hidden border-t bg-white max-h-[calc(100vh-140px)] overflow-y-auto animate-slide-down">
-            <div className="py-4 px-4 space-y-3">
+            <div className="py-4 px-4 space-y-2">
               <Link
-                href="/kontakt"
-                className="block w-full"
+                href="/sklep?category=odziez-robocza"
+                className="block py-3 px-4 bg-gray-50 rounded-lg text-sm font-medium text-gray-700 hover:text-primary transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                <Button className="w-full bg-primary hover:bg-primary/90 text-black font-semibold">
-                  Contact Us
-                </Button>
+                Odzież robocza
               </Link>
-
-              {/* Mobile Accordions */}
-              <details className="group">
-                <summary className="flex items-center justify-between py-3 px-4 bg-gray-50 rounded-lg cursor-pointer text-sm font-medium">
-                  Customer Service
-                  <ChevronDown className="h-4 w-4 group-open:rotate-180 transition-transform" />
-                </summary>
-                <div className="mt-2 pl-4 space-y-2">
-                  {customerServiceLinks.map((link) => (
-                    <Link
-                      key={link.href + link.label}
-                      href={link.href}
-                      className="block py-2 text-sm text-gray-700"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
-                </div>
-              </details>
-
-              <details className="group">
-                <summary className="flex items-center justify-between py-3 px-4 bg-gray-50 rounded-lg cursor-pointer text-sm font-medium">
-                  Shopping
-                  <ChevronDown className="h-4 w-4 group-open:rotate-180 transition-transform" />
-                </summary>
-                <div className="mt-2 pl-4 space-y-2">
-                  {shoppingLinks.map((link) => (
-                    <Link
-                      key={link.href + link.label}
-                      href={link.href}
-                      className="block py-2 text-sm text-gray-700"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
-                </div>
-              </details>
-
-              <details className="group">
-                <summary className="flex items-center justify-between py-3 px-4 bg-gray-50 rounded-lg cursor-pointer text-sm font-medium">
-                  Support
-                  <ChevronDown className="h-4 w-4 group-open:rotate-180 transition-transform" />
-                </summary>
-                <div className="mt-2 pl-4 space-y-3">
-                  <div className="flex items-center gap-2">
-                    <Phone className="h-4 w-4 text-primary" />
-                    <a href="tel:+48756756756" className="text-sm">756 756 756</a>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Mail className="h-4 w-4 text-primary" />
-                    <a href="mailto:kontakt@bhpperfect.pl" className="text-sm break-all">kontakt@bhpperfect.pl</a>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-primary" />
-                    <span className="text-xs text-gray-600">Mon-Fri 08:00-20:00, Sat-Sun 10:00-18:00</span>
-                  </div>
-                </div>
-              </details>
+              <Link
+                href="/sklep?category=obuwie"
+                className="block py-3 px-4 bg-gray-50 rounded-lg text-sm font-medium text-gray-700 hover:text-primary transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Obuwie BHP
+              </Link>
+              <Link
+                href="/sklep?category=rekawice"
+                className="block py-3 px-4 bg-gray-50 rounded-lg text-sm font-medium text-gray-700 hover:text-primary transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Rękawice
+              </Link>
+              <Link
+                href="/sklep?category=ochrona-glowy"
+                className="block py-3 px-4 bg-gray-50 rounded-lg text-sm font-medium text-gray-700 hover:text-primary transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Ochrona głowy
+              </Link>
+              <Link
+                href="/sklep"
+                className="block py-3 px-4 bg-gray-50 rounded-lg text-sm font-medium text-gray-700 hover:text-primary transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Wszystkie produkty
+              </Link>
             </div>
           </nav>
         )}
