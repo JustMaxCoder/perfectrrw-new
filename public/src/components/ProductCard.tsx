@@ -17,6 +17,21 @@ export function ProductCard({ product, onAddToCart, viewMode = "grid" }: Product
   const [imageError, setImageError] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
 
+  // Structured data for SEO
+  const productSchema = {
+    "@context": "https://schema.org/",
+    "@type": "Product",
+    "name": product.name,
+    "image": product.image,
+    "description": product.description,
+    "offers": {
+      "@type": "Offer",
+      "price": price,
+      "priceCurrency": "PLN",
+      "availability": inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock"
+    }
+  };
+
   // Get second image if available
   const hasMultipleImages = product.additionalImages && product.additionalImages !== null && product.additionalImages.length > 0;
   const displayImage = isHovering && hasMultipleImages ? product.additionalImages![0] : product.image;
@@ -103,10 +118,12 @@ export function ProductCard({ product, onAddToCart, viewMode = "grid" }: Product
 
   // Grid view layout (default)
   return (
-    <div
-      className="group bg-white rounded-lg overflow-hidden border border-gray-200 product-card-hover"
-      data-testid={`card-product-${product.id}`}
-    >
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }} />
+      <div
+        className="group bg-white rounded-lg overflow-hidden border border-gray-200 product-card-hover"
+        data-testid={`card-product-${product.id}`}
+      >
       <Link
         href={`/produkt/${product.id}`}
         className="block"
@@ -180,5 +197,6 @@ export function ProductCard({ product, onAddToCart, viewMode = "grid" }: Product
         </div>
       </div>
     </div>
+    </>
   );
 }

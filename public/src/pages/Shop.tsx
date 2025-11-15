@@ -141,8 +141,28 @@ export default function Shop({
     setPriceRange([minPrice, maxPrice]);
   };
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Strona główna",
+        "item": "https://yourdomain.com/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Sklep",
+        "item": "https://yourdomain.com/sklep"
+      }
+    ]
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <div className="max-w-7xl mx-auto px-4 py-6 sm:py-8">
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Filters Sidebar - Sticky & Minimalist */}
