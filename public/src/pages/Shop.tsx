@@ -4,13 +4,12 @@ import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "wouter";
 import { ProductCard } from "../components/ProductCard";
 import { Button } from "../components/ui/button";
-import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { RadioGroup, RadioGroupItem } from "../components/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import { Badge } from "../components/ui/badge";
 import { Slider } from "../components/ui/slider";
-import { Search, Grid3x3, List, X, ArrowUpDown, Filter, Package } from "lucide-react";
+import { Grid3x3, List, X, ArrowUpDown, Filter, Package } from "lucide-react";
 import type { Product } from "../../../shared/schema";
 
 export default function Shop({
@@ -26,7 +25,6 @@ export default function Shop({
     return urlParams.get("category") || "all";
   };
 
-  const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(getInitialCategory());
   const [stockFilter, setStockFilter] = useState("all");
   const [sortBy, setSortBy] = useState("default");
@@ -82,9 +80,6 @@ export default function Shop({
   };
 
   const filteredAndSortedProducts = (products ?? []).filter((product) => {
-    const matchesSearch =
-      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory =
       selectedCategory === "all" || product.category === selectedCategory;
     const matchesStock =
@@ -95,7 +90,7 @@ export default function Shop({
       parseFloat(product.price) >= priceRange[0] &&
       parseFloat(product.price) <= priceRange[1];
 
-    return matchesSearch && matchesCategory && matchesStock && matchesPrice;
+    return matchesCategory && matchesStock && matchesPrice;
   }).sort((a, b) => {
     switch (sortBy) {
       case "price-asc":
@@ -122,9 +117,6 @@ export default function Shop({
     const label = stockFilter === "in-stock" ? "W magazynie" : "Brak w magazynie";
     activeFilters.push({ type: "stock", label, value: stockFilter });
   }
-  if (searchTerm) {
-    activeFilters.push({ type: "search", label: `"${searchTerm}"`, value: searchTerm });
-  }
   if (priceRange[0] !== minPrice || priceRange[1] !== maxPrice) {
     activeFilters.push({ 
       type: "price", 
@@ -134,7 +126,6 @@ export default function Shop({
   }
 
   const clearAllFilters = () => {
-    setSearchTerm("");
     setSelectedCategory("all");
     setStockFilter("all");
     setPriceRange([minPrice, maxPrice]);
@@ -143,22 +134,6 @@ export default function Shop({
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-6 sm:py-8">
-        {/* Hero Search Bar - 2025 Minimalist Design */}
-        <div className="mb-6 sm:mb-8 animate-fade-in">
-          <div className="max-w-3xl mx-auto">
-            <div className="relative group">
-              <Search className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 transition-colors group-focus-within:text-primary" />
-              <Input
-                type="search"
-                placeholder="Szukaj produktów BHP…"
-                className="pl-14 pr-4 py-6 text-lg rounded-full border-2 border-gray-200 focus:border-primary shadow-sm hover:shadow-md transition-all bg-white"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-          </div>
-        </div>
-
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Filters Sidebar - Sticky & Minimalist */}
           <aside className="lg:w-72 flex-shrink-0">
@@ -274,7 +249,6 @@ export default function Shop({
                     onClick={() => {
                       if (filter.type === "category") setSelectedCategory("all");
                       if (filter.type === "stock") setStockFilter("all");
-                      if (filter.type === "search") setSearchTerm("");
                       if (filter.type === "price") setPriceRange([minPrice, maxPrice]);
                     }}
                     data-testid={`badge-filter-${filter.type}`}
