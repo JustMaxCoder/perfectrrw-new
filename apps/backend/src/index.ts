@@ -52,10 +52,6 @@ app.use((req, res, next) => {
 (async () => {
   await registerRoutes(app);
 
-  // Error handling - must be after routes
-  app.use(errorHandler);
-  app.use(notFoundHandler);
-
   const server = createServer(app);
 
   // importantly only setup vite in development and after
@@ -66,6 +62,11 @@ app.use((req, res, next) => {
   } else {
     serveStatic(app);
   }
+
+  // Error handling - must be after routes AND after vite setup
+  // so vite's catch-all route can serve the frontend
+  app.use(errorHandler);
+  app.use(notFoundHandler);
 
   // ALWAYS serve the app on the port specified in the environment variable PORT
   // Other ports are firewalled. Default to 5000 if not specified.

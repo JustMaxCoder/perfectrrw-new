@@ -34,6 +34,7 @@ export interface IStorage {
   // Orders
   createOrder(order: InsertOrder): Promise<Order>;
   getAllOrders(): Promise<Order[]>;
+  getOrderById(id: string): Promise<Order | undefined>;
 
   // Gallery
   getAllGalleryImages(): Promise<Gallery[]>;
@@ -239,6 +240,10 @@ export class MemStorage implements IStorage {
 
   async getAllOrders(): Promise<Order[]> {
     return Array.from(this.orders.values());
+  }
+
+  async getOrderById(id: string): Promise<Order | undefined> {
+    return this.orders.get(id);
   }
 
   // Product update/delete methods

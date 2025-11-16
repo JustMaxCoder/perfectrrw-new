@@ -4,7 +4,7 @@ import { storage } from '../services/storage.service';
 
 export const getProducts = async (_req: Request, res: Response) => {
   try {
-    const products = await storage.getProducts();
+    const products = await storage.getAllProducts();
     res.json(products);
   } catch (error) {
     console.error('Error fetching products:', error);
@@ -14,7 +14,7 @@ export const getProducts = async (_req: Request, res: Response) => {
 
 export const getProductById = async (req: Request, res: Response) => {
   try {
-    const product = await storage.getProductById(parseInt(req.params.id));
+    const product = await storage.getProduct(req.params.id);
     if (!product) {
       return res.status(404).json({ error: 'Product not found' });
     }
@@ -55,7 +55,7 @@ export const updateProduct = async (req: Request, res: Response) => {
       images: newImages.length > 0 ? newImages : undefined
     };
 
-    const updated = await storage.updateProduct(parseInt(req.params.id), productData);
+    const updated = await storage.updateProduct(req.params.id, productData);
     res.json(updated);
   } catch (error) {
     console.error('Error updating product:', error);
@@ -65,7 +65,7 @@ export const updateProduct = async (req: Request, res: Response) => {
 
 export const deleteProduct = async (req: Request, res: Response) => {
   try {
-    await storage.deleteProduct(parseInt(req.params.id));
+    await storage.deleteProduct(req.params.id);
     res.status(204).send();
   } catch (error) {
     console.error('Error deleting product:', error);

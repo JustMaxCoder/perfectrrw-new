@@ -42,17 +42,6 @@ export default function Shop({
     queryKey: ["/api/products"],
   });
 
-  if (error) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Wystąpił błąd</h2>
-          <p className="text-gray-600">Nie udało się załadować produktów. Spróbuj odświeżyć stronę.</p>
-        </div>
-      </div>
-    );
-  }
-
   const { minPrice, maxPrice } = useMemo(() => {
     if (!products || products.length === 0) return { minPrice: 0, maxPrice: 1000 };
     const prices = products.map(p => parseFloat(p.price));
@@ -69,6 +58,17 @@ export default function Shop({
       setPriceRange([minPrice, maxPrice]);
     }
   }, [minPrice, maxPrice, products]);
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Wystąpił błąd</h2>
+          <p className="text-gray-600">Nie udało się załadować produktów. Spróbuj odświeżyć stronę.</p>
+        </div>
+      </div>
+    );
+  }
 
   const handlePriceRangeChange = (value: number[]) => {
     setPriceRange(value);
