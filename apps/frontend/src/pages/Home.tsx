@@ -9,6 +9,7 @@ import categoryRekawice from "@assets/category-rekawice.jpg";
 import categoryOchronaGlowy from "@assets/category-ochrona-glowy.jpg";
 import { BRANDING } from "../config/branding";
 import type { Product } from "../../../shared/schema";
+import GoogleReviewsCarousel from "../components/GoogleReviewsCarousel";
 
 export default function Home() {
   const { data: products = [], isLoading } = useQuery<Product[]>({
@@ -74,104 +75,7 @@ export default function Home() {
       </section>
 
       {/* Google Reviews Section */}
-      <section className="py-8 sm:py-12 md:py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-6 sm:mb-8 md:mb-12">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 text-gray-900">
-              Opinie naszych <span className="text-primary">klientów</span>
-            </h2>
-            <p className="text-sm sm:text-base md:text-lg text-gray-600 max-w-2xl mx-auto">
-              Zobacz, co mówią o nas nasi zadowoleni klienci
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Review 1 */}
-            <div className="bg-gradient-to-br from-gray-50 to-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300">
-              <div className="flex items-center mb-4">
-                <div className="flex-shrink-0">
-                  <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-black font-bold text-lg">
-                    M
-                  </div>
-                </div>
-                <div className="ml-4">
-                  <h3 className="font-semibold text-gray-900">Marek Kowalski</h3>
-                  <div className="flex items-center">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <svg key={star} className="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                        <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                      </svg>
-                    ))}
-                  </div>
-                </div>
-              </div>
-              <p className="text-gray-700 leading-relaxed">
-                Świetny sklep z odzieżą roboczą! Profesjonalna obsługa i szeroki wybór produktów. Polecam każdemu, kto szuka wysokiej jakości sprzętu BHP.
-              </p>
-            </div>
-
-            {/* Review 2 */}
-            <div className="bg-gradient-to-br from-gray-50 to-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300">
-              <div className="flex items-center mb-4">
-                <div className="flex-shrink-0">
-                  <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-black font-bold text-lg">
-                    A
-                  </div>
-                </div>
-                <div className="ml-4">
-                  <h3 className="font-semibold text-gray-900">Anna Nowak</h3>
-                  <div className="flex items-center">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <svg key={star} className="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                        <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                      </svg>
-                    ))}
-                  </div>
-                </div>
-              </div>
-              <p className="text-gray-700 leading-relaxed">
-                Zamówiłam obuwie robocze i jestem bardzo zadowolona. Szybka wysyłka, doskonała jakość produktów. Na pewno wrócę po więcej!
-              </p>
-            </div>
-
-            {/* Review 3 */}
-            <div className="bg-gradient-to-br from-gray-50 to-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300">
-              <div className="flex items-center mb-4">
-                <div className="flex-shrink-0">
-                  <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-black font-bold text-lg">
-                    P
-                  </div>
-                </div>
-                <div className="ml-4">
-                  <h3 className="font-semibold text-gray-900">Piotr Wiśniewski</h3>
-                  <div className="flex items-center">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <svg key={star} className="w-4 h-4 text-yellow-400 fill-current" viewBox="0 0 20 20">
-                        <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                      </svg>
-                    ))}
-                  </div>
-                </div>
-              </div>
-              <p className="text-gray-700 leading-relaxed">
-                Najlepszy sklep BHP w okolicy! Konkurencyjne ceny, fachowe doradztwo i zawsze mogę liczyć na pomoc. Gorąco polecam!
-              </p>
-            </div>
-          </div>
-
-          <div className="text-center mt-8">
-            <a
-              href="https://www.google.com/maps/place/Sklep+BHP+Pogotowie+BHP/@52.4328,20.6697,15z"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-semibold transition-colors"
-            >
-              Zobacz więcej opinii na Google
-              <ArrowRight className="w-4 h-4" />
-            </a>
-          </div>
-        </div>
-      </section>
+      <GoogleReviewsCarousel />
 
       {/* Categories Section - Mobile-First with Horizontal Scroll */}
       <section className="py-8 sm:py-12 md:py-16 lg:py-20 bg-gradient-to-b from-gray-50 to-white">
