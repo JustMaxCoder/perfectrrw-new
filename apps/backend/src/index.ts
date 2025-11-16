@@ -3,6 +3,11 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import { createServer } from "node:http";
 import { errorHandler, notFoundHandler } from "./middleware";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -18,6 +23,9 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// Serve static files from attached_assets
+app.use('/attached_assets', express.static(path.resolve(__dirname, '../../../attached_assets')));
 
 app.use((req, res, next) => {
   const start = Date.now();
