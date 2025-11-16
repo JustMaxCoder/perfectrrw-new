@@ -7,7 +7,7 @@
     "lint": "eslint \"apps/frontend/src/**/*.{ts,tsx}\" \"apps/backend/src/**/*.ts\" --ext .ts,.tsx --fix",
     "dev": "npm run dev:backend & npm run dev:frontend",
     "dev:frontend": "cd apps/frontend && vite",
-    "dev:backend": "cross-env NODE_ENV=development tsx apps/backend/src/index.ts",
+    "dev:backend": "cross-env NODE_ENV=development tsx --tsconfig apps/backend/tsconfig.json -r tsconfig-paths/register apps/backend/src/index.ts",
     "build": "npm run build:frontend && npm run build:backend",
     "build:frontend": "cd apps/frontend && vite build",
     "build:backend": "esbuild apps/backend/src/index.ts --platform=node --packages=external --bundle --format=esm --outdir=dist/backend",
