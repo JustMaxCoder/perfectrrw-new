@@ -40,15 +40,15 @@ export default function Home() {
                   Zobacz produkty <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
-              <Link href="/kontakt" data-testid="button-contact" className="w-full sm:w-auto">
+              <a href="tel:+48533008146" data-testid="button-contact" className="w-full sm:w-auto">
                 <Button
                   size="lg"
                   variant="outline"
                   className="w-full sm:w-auto backdrop-blur-sm bg-white/10 border-2 border-white text-white hover:bg-white hover:text-black active:bg-white active:text-black px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg font-bold shadow-xl transition-all duration-300 active:scale-95 min-h-[52px]"
                 >
-                  Skontaktuj się z nami
+                  +48 533 008 146
                 </Button>
-              </Link>
+              </a>
             </div>
           </div>
         </div>
