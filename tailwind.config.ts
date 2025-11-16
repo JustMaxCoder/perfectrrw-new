@@ -2,8 +2,8 @@ import type { Config } from "tailwindcss";
 
 export default {
   darkMode: ["class"],
-  // project uses `public/src` for frontend files (Vite root is `public`)
-  content: ["./public/index.html", "./public/src/**/*.{js,jsx,ts,tsx}"],
+  // project uses `apps/frontend` for frontend files
+  content: ["./apps/frontend/public/index.html", "./apps/frontend/src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
       borderRadius: {

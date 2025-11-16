@@ -1,11 +1,11 @@
 {
-  "include": [
-    "public/src/**/*",
-    "shared/**/*",
-    "server/**/*",
-    "tailwind.config.ts"
+  "files": [],
+  "references": [
+    { "path": "./apps/frontend" },
+    { "path": "./apps/backend" },
+    { "path": "./packages/database" },
+    { "path": "./packages/shared" }
   ],
-  "exclude": ["node_modules", "build", "dist", "**/*.test.ts"],
   "compilerOptions": {
     "incremental": true,
     "tsBuildInfoFile": "./node_modules/.cache/tsbuildinfo",
@@ -19,11 +19,6 @@
     "skipLibCheck": true,
     "allowImportingTsExtensions": true,
     "moduleResolution": "bundler",
-
-    // baseUrl and paths removed — imports migrated to relative paths
-
-    // note: ignoreDeprecations intentionally omitted to avoid TS errors on current toolchain
-
     "types": ["node", "vite/client"]
   }
 }
