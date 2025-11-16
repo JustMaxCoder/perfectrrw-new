@@ -11,7 +11,7 @@ import {
   insertOrderSchema,
   insertGallerySchema,
   insertProductSizeSchema,
-} from "../../../../packages/database/schema/index";
+} from "@database/schema";
 import { ZodError } from "zod";
 import { upload, deleteFile, validateImageFile } from "../middleware/upload.middleware";
 import path from "path";
