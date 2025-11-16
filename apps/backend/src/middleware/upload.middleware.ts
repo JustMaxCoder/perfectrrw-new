@@ -22,3 +22,17 @@ export const upload = multer({
     fileSize: 5 * 1024 * 1024 // 5MB
   }
 });
+
+export const validateImageFile = (file: Express.Multer.File): boolean => {
+  const allowedMimes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+  return allowedMimes.includes(file.mimetype);
+};
+
+export const deleteFile = (filePath: string): void => {
+  const fs = require('fs');
+  const fullPath = path.resolve(__dirname, '../../../../public', filePath);
+  
+  if (fs.existsSync(fullPath)) {
+    fs.unlinkSync(fullPath);
+  }
+};
