@@ -88,20 +88,20 @@ export function Footer() {
 
           {/* Contact */}
           <div className="col-span-1">
-            <h4 className="font-semibold text-sm mb-4 text-gray-900">Kontakt</h4>
             <div className="space-y-3">
               <div className="text-xs text-gray-500 leading-relaxed">
                 <p className="font-semibold text-gray-700 mb-1">Godziny otwarcia:</p>
                 <p>Pn-Pt: 07:00-17:00</p>
                 <p>Sobota: 09:00-13:00</p>
               </div>
-              <a href="mailto:kontakt@bhpperfect.pl" className="flex items-center gap-2 text-sm text-gray-900 hover:text-primary transition-colors group break-all">
-                <Mail className="h-4 w-4 text-primary flex-shrink-0" />
-                <span>kontakt@bhpperfect.pl</span>
-              </a>
+              <h4 className="font-semibold text-sm text-gray-900">Kontakt</h4>
               <a href="tel:+48756756756" className="flex items-center gap-2 text-sm text-gray-900 hover:text-primary transition-colors group">
                 <Phone className="h-4 w-4 text-primary" />
                 <span>756 756 756</span>
+              </a>
+              <a href="mailto:kontakt@bhpperfect.pl" className="flex items-center gap-2 text-sm text-gray-900 hover:text-primary transition-colors group break-all">
+                <Mail className="h-4 w-4 text-primary flex-shrink-0" />
+                <span>kontakt@bhpperfect.pl</span>
               </a>
             </div>
           </div>
@@ -121,13 +121,13 @@ export function Footer() {
 
           {/* Contact - Always Visible */}
           <div className="space-y-2 pb-4 border-b border-gray-100">
-            <a href="mailto:kontakt@bhpperfect.pl" className="flex items-center gap-2 text-sm text-gray-900 break-all">
-              <Mail className="h-4 w-4 text-primary" />
-              kontakt@bhpperfect.pl
-            </a>
             <a href="tel:+48756756756" className="flex items-center gap-2 text-sm text-gray-900">
               <Phone className="h-4 w-4 text-primary" />
               756 756 756
+            </a>
+            <a href="mailto:kontakt@bhpperfect.pl" className="flex items-center gap-2 text-sm text-gray-900 break-all">
+              <Mail className="h-4 w-4 text-primary" />
+              kontakt@bhpperfect.pl
             </a>
           </div>
 
