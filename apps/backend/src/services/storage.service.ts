@@ -95,7 +95,6 @@ export class MemStorage implements IStorage {
     this.seedGallery();
     this.seedSizes();
     this.seedProductSizes();
-    this.seedReviews();
   }
 
   private seedData() {
@@ -596,42 +595,6 @@ export class MemStorage implements IStorage {
     }
 
     return true; // Successfully deleted
-  }
-
-  // New method to seed reviews
-  private seedReviews() {
-    const sampleReviews = [
-      {
-        productId: Array.from(this.products.keys())[0], // First product
-        userId: "user1",
-        rating: 5,
-        comment: "Świetna bluza, bardzo wytrzymała i wygodna!",
-        createdAt: new Date(Date.now() - 86400000).toISOString(), // Yesterday
-      },
-      {
-        productId: Array.from(this.products.keys())[1], // Second product
-        userId: "user2",
-        rating: 4,
-        comment: "Dobre buty, trochę ciężkie, ale warte swojej ceny.",
-        createdAt: new Date(Date.now() - 2 * 86400000).toISOString(), // Two days ago
-      },
-      {
-        productId: Array.from(this.products.keys())[0], // First product again
-        userId: "user3",
-        rating: 4,
-        comment: "Solidna robota, polecam.",
-        createdAt: new Date(Date.now() - 3 * 86400000).toISOString(), // Three days ago
-      },
-    ];
-
-    sampleReviews.forEach((review) => {
-      const id = randomUUID();
-      this.reviews.set(id, {
-        id,
-        ...review,
-        createdAt: review.createdAt,
-      });
-    });
   }
 }
 

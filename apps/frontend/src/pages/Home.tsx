@@ -7,7 +7,6 @@ import categoryOdziezRobocza from "@assets/category-odziez-robocza.jpg";
 import categoryObuwie from "@assets/category-obuwie.jpg";
 import categoryRekawice from "@assets/category-rekawice.jpg";
 import categoryOchronaGlowy from "@assets/category-ochrona-glowy.jpg";
-import GoogleReviews from "../components/GoogleReviews";
 import { BRANDING } from "../config/branding";
 import type { Product } from "../../../shared/schema";
 
@@ -74,8 +73,17 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Google Reviews Section */}
-      <GoogleReviews />
+      {/* Google Reviews Widget */}
+      <section className="py-8 sm:py-12 md:py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-6 sm:mb-8">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 text-gray-900">
+              Opinie naszych klientów
+            </h2>
+          </div>
+          <div className="elfsight-app-63b4774e-c8d4-43ca-b098-265b95994e97" data-elfsight-app-lazy></div>
+        </div>
+      </section>
 
       {/* Categories Section - Mobile-First with Horizontal Scroll */}
       <section className="py-8 sm:py-12 md:py-16 lg:py-20 bg-gradient-to-b from-gray-50 to-white">
