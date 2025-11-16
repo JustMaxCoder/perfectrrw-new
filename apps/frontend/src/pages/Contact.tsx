@@ -1,4 +1,3 @@
-
 import { Card } from "../components/ui/card";
 import { Mail, Phone, MapPin, Clock } from "lucide-react";
 import { MapComponent } from "../components/MapComponent";
@@ -50,8 +49,8 @@ export default function Contact() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
             {contactInfo.map((info, index) => (
-              <Card 
-                key={index} 
+              <Card
+                key={index}
                 className="p-6 text-center bg-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 hover:-translate-y-1 group animate-slide-up"
                 style={{ animationDelay: `${index * 100}ms` }}
               >
@@ -93,7 +92,7 @@ export default function Contact() {
                 Oferujemy również doradztwo w zakresie doboru środków ochrony
                 osobistej oraz możliwość zamówień hurtowych z atrakcyjnymi rabatami.
               </p>
-              
+
               {/* B2B Special Block - Yellow Accent */}
               <div className="bg-primary/10 border-l-4 border-primary p-6 rounded-lg hover:bg-primary/15 transition-colors duration-300">
                 <div className="flex items-start gap-3">
@@ -104,10 +103,12 @@ export default function Contact() {
                     <p className="font-bold text-black text-lg mb-2">
                       Zamówienia hurtowe
                     </p>
-                    <p className="text-sm text-gray-700 leading-relaxed">
-                      Dla firm oferujemy specjalne warunki współpracy i rabaty. 
-                      Skontaktuj się z nami, aby uzyskać ofertę dopasowaną do Twoich potrzeb.
+                    <p className="text-sm text-gray-700 leading-relaxed mb-3">
+                      Dla firm oferujemy specjalne warunki współpracy i rabaty.
                     </p>
+                    <a href="tel:+48533008146" className="text-xl font-bold text-black hover:text-primary transition-colors">
+                      533 008 146
+                    </a>
                   </div>
                 </div>
               </div>
