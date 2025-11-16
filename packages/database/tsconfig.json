@@ -1,16 +1,11 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "noEmit": true,
-    "module": "ESNext",
-    "target": "ESNext",
-    "strict": true,
-    "lib": ["esnext"],
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "allowImportingTsExtensions": true,
-    "moduleResolution": "bundler",
-    "types": ["node"]
+    "outDir": "../../dist/database",
+    "rootDir": ".",
+    "declaration": true,
+    "moduleResolution": "node"
   },
-  "include": ["schema/**/*", "index.ts"],
-  "exclude": ["node_modules", "migrations"]
+  "include": ["./**/*"],
+  "exclude": ["node_modules", "dist"]
 }

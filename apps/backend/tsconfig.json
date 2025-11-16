@@ -5,6 +5,7 @@
     "outDir": "../../dist/backend",
     "rootDir": "./src",
     "baseUrl": ".",
+    "moduleResolution": "node",
     "paths": {
       "@shared/*": ["../../packages/shared/*"],
       "@database/*": ["../../packages/database/*"]
