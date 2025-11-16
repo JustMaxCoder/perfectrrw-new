@@ -19,28 +19,47 @@ export default function Home() {
     <div className="min-h-screen">
       {/* Hero Section - Mobile-First Design */}
       <section className="relative text-white min-h-[400px] sm:min-h-[500px] md:min-h-[600px] lg:min-h-[700px] flex items-center overflow-hidden">
-        <div className="absolute inset-0 bg-cover bg-center animate-fade-in" style={{ backgroundImage: `url(${bhpBackground})` }} />
+        <div
+          className="absolute inset-0 bg-cover bg-center animate-fade-in"
+          style={{ backgroundImage: `url(${bhpBackground})` }}
+        />
         <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40 animate-gradient" />
 
         <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 md:py-20 lg:py-24 w-full">
           <div className="max-w-3xl">
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-3 sm:mb-4 md:mb-6 leading-tight animate-slide-in-left">
-              <span className="text-white drop-shadow-2xl">Sklep BHP</span>{" "}
+              <span className="text-black drop-shadow-2xl">BHP </span>
               <span className="text-primary drop-shadow-2xl">PERFECT</span>
             </h1>
-            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-100 mb-5 sm:mb-6 md:mb-8 drop-shadow-lg leading-relaxed animate-slide-in-left" style={{ animationDelay: '0.2s', animationFillMode: 'both' }}>
-              Profesjonalna odzież robocza i środki ochrony osobistej. Szeroki wybór produktów BHP w najlepszych cenach z wysyłką 24h.
+            <p
+              className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-100 mb-5 sm:mb-6 md:mb-8 drop-shadow-lg leading-relaxed animate-slide-in-left"
+              style={{ animationDelay: "0.2s", animationFillMode: "both" }}
+            >
+              Profesjonalna odzież robocza i środki ochrony osobistej. Szeroki
+              wybór produktów BHP w najlepszych cenach z wysyłką 24h.
             </p>
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 animate-slide-in-left" style={{ animationDelay: '0.4s', animationFillMode: 'both' }}>
-              <Link href="/sklep" data-testid="button-shop-now" className="w-full sm:w-auto">
+            <div
+              className="flex flex-col sm:flex-row gap-3 sm:gap-4 animate-slide-in-left"
+              style={{ animationDelay: "0.4s", animationFillMode: "both" }}
+            >
+              <Link
+                href="/sklep"
+                data-testid="button-shop-now"
+                className="w-full sm:w-auto"
+              >
                 <Button
                   size="lg"
                   className="w-full sm:w-auto bg-primary text-black font-bold px-6 sm:px-8 py-5 sm:py-6 text-base sm:text-lg hover:bg-primary/90 shadow-xl hover:shadow-2xl transition-all duration-300 active:scale-95 group min-h-[52px]"
                 >
-                  Zobacz produkty <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  Zobacz produkty{" "}
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
-              <a href="tel:+48533008146" data-testid="button-contact" className="w-full sm:w-auto">
+              <a
+                href="tel:+48533008146"
+                data-testid="button-contact"
+                className="w-full sm:w-auto"
+              >
                 <Button
                   size="lg"
                   variant="outline"
@@ -62,7 +81,8 @@ export default function Home() {
               Nasze kategorie
             </h2>
             <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Szeroki wybór profesjonalnego sprzętu BHP. Wybierz kategorię i poznaj naszą ofertę.
+              Szeroki wybór profesjonalnego sprzętu BHP. Wybierz kategorię i
+              poznaj naszą ofertę.
             </p>
           </div>
 
@@ -70,7 +90,10 @@ export default function Home() {
             <div className="px-4 sm:px-6 lg:px-8">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
                 {[1, 2, 3, 4].map((i) => (
-                  <div key={i} className="bg-white rounded-2xl shadow-lg overflow-hidden h-80 sm:h-96 animate-pulse">
+                  <div
+                    key={i}
+                    className="bg-white rounded-2xl shadow-lg overflow-hidden h-80 sm:h-96 animate-pulse"
+                  >
                     <div className="h-48 sm:h-56 md:h-64 bg-gray-200" />
                     <div className="p-4 sm:p-6 space-y-3">
                       <div className="h-5 sm:h-6 bg-gray-200 rounded w-3/4" />
@@ -89,28 +112,30 @@ export default function Home() {
                     slug: "odziez-robocza",
                     label: "Odzież robocza",
                     description: "Profesjonalna odzież dla każdego pracownika",
-                    image: categoryOdziezRobocza
+                    image: categoryOdziezRobocza,
                   },
                   {
                     slug: "obuwie",
                     label: "Obuwie BHP",
                     description: "Bezpieczne i wytrzymałe obuwie robocze",
-                    image: categoryObuwie
+                    image: categoryObuwie,
                   },
                   {
                     slug: "rekawice",
                     label: "Rękawice",
                     description: "Ochrona rąk w każdych warunkach",
-                    image: categoryRekawice
+                    image: categoryRekawice,
                   },
                   {
                     slug: "ochrona-glowy",
                     label: "Ochrona głowy",
                     description: "Kaski i akcesoria ochronne",
-                    image: categoryOchronaGlowy
-                  }
+                    image: categoryOchronaGlowy,
+                  },
                 ].map((category) => {
-                  const categoryProducts = products.filter(p => p.category === category.slug);
+                  const categoryProducts = products.filter(
+                    (p) => p.category === category.slug,
+                  );
 
                   return (
                     <Link
@@ -140,7 +165,10 @@ export default function Home() {
                           </p>
                           <div className="flex items-center justify-between mt-auto">
                             <span className="text-sm font-semibold text-primary group-hover:scale-105 transition-transform duration-300 inline-block">
-                              {categoryProducts.length} {categoryProducts.length === 1 ? 'produkt' : 'produktów'}
+                              {categoryProducts.length}{" "}
+                              {categoryProducts.length === 1
+                                ? "produkt"
+                                : "produktów"}
                             </span>
                             <div className="bg-primary/10 rounded-full px-3 py-1 text-xs font-bold text-gray-700 group-hover:bg-primary group-hover:text-black transition-all duration-300">
                               BHP
@@ -156,7 +184,6 @@ export default function Home() {
           )}
         </div>
       </section>
-
     </div>
   );
 }
