@@ -1,41 +1,72 @@
-
 import { Star, MapPin } from "lucide-react";
 import { Card } from "./ui/card";
 
+// Placeholder for actual review data
 const reviews = [
   {
     id: 1,
-    author: "Jan Kowalski",
+    customerName: "Jan Kowalski",
     rating: 5,
-    date: "2 tygodnie temu",
-    text: "Świetny sklep z profesjonalnym sprzętem BHP. Obsługa bardzo pomocna, a ceny konkurencyjne. Polecam!",
-    avatar: "JK"
+    createdAt: "2024-07-10T10:00:00Z",
+    comment: "Świetny sklep z profesjonalnym sprzętem BHP. Obsługa bardzo pomocna, a ceny konkurencyjne. Polecam!",
   },
   {
     id: 2,
-    author: "Anna Nowak",
+    customerName: "Anna Nowak",
     rating: 5,
-    date: "1 miesiąc temu",
-    text: "Zamówiłam odzież roboczą dla całego zespołu. Szybka wysyłka, świetna jakość produktów. Na pewno wrócę!",
-    avatar: "AN"
+    createdAt: "2024-06-15T12:30:00Z",
+    comment: "Zamówiłam odzież roboczą dla całego zespołu. Szybka wysyłka, świetna jakość produktów. Na pewno wrócę!",
   },
   {
     id: 3,
-    author: "Piotr Wiśniewski",
+    customerName: "Piotr Wiśniewski",
     rating: 5,
-    date: "3 tygodnie temu",
-    text: "Bardzo dobra jakość butów roboczych. Wygodne i trwałe. Obsługa klienta na najwyższym poziomie.",
-    avatar: "PW"
+    createdAt: "2024-07-01T09:00:00Z",
+    comment: "Bardzo dobra jakość butów roboczych. Wygodne i trwałe. Obsługa klienta na najwyższym poziomie.",
   },
   {
     id: 4,
-    author: "Maria Lewandowska",
+    customerName: "Maria Lewandowska",
     rating: 4,
-    date: "2 miesiące temu",
-    text: "Duży wybór produktów BHP. Ceny mogłyby być nieco niższe, ale jakość rekompensuje to w pełni.",
-    avatar: "ML"
+    createdAt: "2024-05-20T15:00:00Z",
+    comment: "Duży wybór produktów BHP. Ceny mogłyby być nieco niższe, ale jakość rekompensuje to w pełni.",
   }
 ];
+
+// Helper function to get initials from a name
+const getInitials = (name) => {
+  if (!name) return '';
+  const parts = name.split(' ');
+  if (parts.length === 1) return name.substring(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+};
+
+// Helper function to format date to "time ago"
+const getTimeAgo = (dateString) => {
+  const now = new Date();
+  const past = new Date(dateString);
+  const diffInSeconds = Math.floor((now - past) / 1000);
+
+  if (diffInSeconds < 60) {
+    return `${diffInSeconds} sekund temu`;
+  } else if (diffInSeconds < 3600) {
+    const minutes = Math.floor(diffInSeconds / 60);
+    return `${minutes} minut temu`;
+  } else if (diffInSeconds < 86400) {
+    const hours = Math.floor(diffInSeconds / 3600);
+    return `${hours} godzin temu`;
+  } else if (diffInSeconds < 2592000) { // Approximately 30 days
+    const days = Math.floor(diffInSeconds / 86400);
+    return `${days} dni temu`;
+  } else if (diffInSeconds < 31536000) { // Approximately 365 days
+    const months = Math.floor(diffInSeconds / 2592000);
+    return `${months} miesięcy temu`;
+  } else {
+    const years = Math.floor(diffInSeconds / 31536000);
+    return `${years} lat temu`;
+  }
+};
+
 
 export default function GoogleReviews() {
   const averageRating = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
@@ -94,16 +125,16 @@ export default function GoogleReviews() {
                 {/* Avatar */}
                 <div className="flex-shrink-0">
                   <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-yellow-500 flex items-center justify-center text-white font-bold text-lg">
-                    {review.avatar}
+                    {getInitials(review.customerName)}
                   </div>
                 </div>
 
                 {/* Content */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between mb-2">
-                    <h3 className="font-semibold text-gray-900">{review.author}</h3>
+                    <h3 className="font-semibold text-gray-900">{review.customerName}</h3>
                   </div>
-                  
+
                   <div className="flex items-center gap-2 mb-3">
                     <div className="flex">
                       {[1, 2, 3, 4, 5].map((star) => (
@@ -117,10 +148,10 @@ export default function GoogleReviews() {
                         />
                       ))}
                     </div>
-                    <span className="text-sm text-gray-500">{review.date}</span>
+                    <span className="text-sm text-gray-500">{getTimeAgo(review.createdAt)}</span>
                   </div>
 
-                  <p className="text-gray-700 leading-relaxed">{review.text}</p>
+                  <p className="text-gray-700 leading-relaxed">{review.comment}</p>
                 </div>
               </div>
             </Card>
